@@ -11,7 +11,7 @@ public class RegisterControllerTest extends SpringBootMvcBaseTest {
     @Test
     public void testRegisterSuccess() throws Exception {
         // given
-        var rqDto = TestFixtures.builRegisterRqDto();
+        var rqDto = TestFixtures.buildRegisterRqDto();
 
         // when-then
         performPostWithDto("/api/v1/auth/register", rqDto, status().isCreated());
@@ -20,7 +20,7 @@ public class RegisterControllerTest extends SpringBootMvcBaseTest {
     @Test
     public void testRegisterInvalidData() throws Exception {
         // given
-        var rqDto = TestFixtures.builRegisterRqDto();
+        var rqDto = TestFixtures.buildRegisterRqDto();
         rqDto.setPassword("abc"); // invalid email
 
         // when-then
@@ -30,7 +30,7 @@ public class RegisterControllerTest extends SpringBootMvcBaseTest {
     @Test
     public void testRegisterConflict() throws Exception {
         // given
-        var rqDto = TestFixtures.builRegisterRqDto();
+        var rqDto = TestFixtures.buildRegisterRqDto();
 
         // when
         performPostWithDto("/api/v1/auth/register", rqDto, status().isCreated());

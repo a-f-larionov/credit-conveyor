@@ -27,23 +27,31 @@ public abstract class SpringBootMvcBaseTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
-
     protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz, ResultMatcher expectedStatus) throws Exception {
-        var result = mockMvc.perform(postWithDto(url, rqDto))
+        return performPostWithDto(url, rqDto, rsDTOClazz, expectedStatus, "");
+    }
+
+    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) throws Exception {
+        var result = mockMvc.perform(postWithDto(url, rqDto, token))
                 .andExpect(expectedStatus)
                 .andReturn();
-        return objectMapper.readValue(result.getResponse().getContentAsString(), rsDTOClazz);
+
+        if (result.getResponse().getContentAsString().length() == 0) {
+            return null;
+        }
+        return objectMapper.readValue(result.getResponse().getContentAsString(), rsDtoClazz);
     }
 
     protected <RQ> void performPostWithDto(String url, RQ rqDTO, ResultMatcher expectedStatus) throws Exception {
-        mockMvc.perform(postWithDto(url, rqDTO))
+        mockMvc.perform(postWithDto(url, rqDTO, ""))
                 .andExpect(expectedStatus)
                 .andReturn();
     }
 
-    protected <RQ> MockHttpServletRequestBuilder postWithDto(String url, RQ rqDto) throws JsonProcessingException {
-        return post(url)
-                .contentType(MediaType.APPLICATION_JSON)
+    protected <RQ> MockHttpServletRequestBuilder postWithDto(String url, RQ rqDto, String token) throws JsonProcessingException {
+        var requestBuilder = post(url);
+        requestBuilder.header("Authorization", "Bearer " + token);
+        return requestBuilder.contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(rqDto));
     }
 }

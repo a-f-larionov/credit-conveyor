@@ -6,7 +6,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.creditbank.apigateway.core.UserModel;
 
@@ -18,7 +17,7 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-public class JWTService {
+public class JwtService {
 
     @Value("${jwt.signing.key}")
     String jwtSigningKey;
@@ -39,14 +38,14 @@ public class JWTService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public boolean isTokenValid(String token, String targetUserEmail) {
-        final String userEmail = extractUserEmail(token);
-        return (userEmail.equals(targetUserEmail) && !isTokenExpired(token));
+    public boolean isTokenValid(String token, String forUserEmail) {
+        final String tokenEmail = extractUserEmail(token);
+        return (tokenEmail.equals(forUserEmail) && !isTokenExpired(token));
     }
 
-    private String generateToken(Map<String, Object> claims, UserDetails userDetails) {
+    private String generateToken(Map<String, Object> claims, UserModel user) {
         return Jwts.builder().claims(claims)
-                .subject(userDetails.getUsername())
+                .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtSigningExpirationSec))
                 .signWith(getSigningKey())

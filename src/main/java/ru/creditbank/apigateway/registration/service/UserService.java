@@ -1,6 +1,8 @@
 package ru.creditbank.apigateway.registration.service;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,8 +10,8 @@ import ru.creditbank.apigateway.core.UserModel;
 import ru.creditbank.apigateway.exceptions.UserAlreadyExistsException;
 import ru.creditbank.apigateway.exceptions.UserDoesNotExistsException;
 import ru.creditbank.apigateway.exceptions.WrongPasswordException;
-import ru.creditbank.apigateway.jwt.service.JWTService;
-import ru.creditbank.apigateway.repositories.UsersReposity;
+import ru.creditbank.apigateway.jwt.service.JwtService;
+import ru.creditbank.apigateway.repositories.UsersRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +19,8 @@ import ru.creditbank.apigateway.repositories.UsersReposity;
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UsersReposity userReposity;
-    private final JWTService jwtService;
+    private final UsersRepository userReposity;
+    private final JwtService jwtService;
     private final TokenStoreService tokenStoreService;
 
     public void register(UserModel user, String password) {
@@ -46,5 +48,10 @@ public class UserService {
         tokenStoreService.store(user, token);
 
         return token;
+    }
+
+    public UserModel getUserByEmail(@NotBlank @Email String email) {
+        return userReposity.findByEmail(email)
+                .orElseThrow(UserDoesNotExistsException::new);
     }
 }

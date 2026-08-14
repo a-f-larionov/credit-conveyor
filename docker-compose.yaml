@@ -1,6 +1,14 @@
 services:
 
-
+  apigateway:
+      build: .
+      ports:
+        - "80:80"
+      environment:
+          DATA_SOURCE_USERNAME: ${DATA_SOURCE_USERNAME}
+          DATA_SOURCE_PASSWORD: ${DATA_SOURCE_PASSWORD}
+          DATA_SOURCE_DB_NAME: ${DATA_SOURCE_DB_NAME}
+          DATA_SOURCE_DB_HOST: db
   db:
     image: postgres:latest
     ports:

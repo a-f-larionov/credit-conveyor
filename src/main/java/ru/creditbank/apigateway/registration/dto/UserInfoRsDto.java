@@ -8,7 +8,8 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class LoginRqDto extends AuthDto {
+@EqualsAndHashCode(callSuper = false)
+public class UserInfoRsDto extends AuthDto {
 
+    private FullNameDto fullNameDto;
 }

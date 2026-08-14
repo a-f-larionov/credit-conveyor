@@ -7,7 +7,7 @@ import ru.creditbank.apigateway.core.UserModel;
 import java.util.Optional;
 
 @Repository
-public interface UsersReposity extends PagingAndSortingRepository<UserModel, Long> {
+public interface UsersRepository extends PagingAndSortingRepository<UserModel, Long> {
 
     boolean existsByEmail(String email);
 
