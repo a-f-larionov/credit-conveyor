@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-users-table
+      author: a_f_larionov
+      comment: create users table
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE IF NOT EXISTS users (
+                  id BIGSERIAL PRIMARY KEY,
+                  
+                  email VARCHAR(100) NOT NULL UNIQUE,
+                  password_hash VARCHAR(255) NOT NULL,                  
+                  role VARCHAR(20) NOT NULL,
+              
+                  first_name VARCHAR(50) NOT NULL,
+                  last_name VARCHAR(50) NOT NULL,
+                  middle_name VARCHAR(50) NOT NULL
+              );
+      rollback:
+        - sql:
+            comment: drop table users
+            sql: DROP TABLE IF EXISTS users;

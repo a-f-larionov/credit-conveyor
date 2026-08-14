@@ -1,5 +1,14 @@
 services:
-  app:
-    build: .
+  db:
+    image: postgres:latest
     ports:
-      - "80:80"
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DATA_SOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${DATA_SOURCE_PASSWORD}
+      POSTGRES_DB: ${DATA_SOURCE_DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/
+
+volumes:
+  pgdata:
