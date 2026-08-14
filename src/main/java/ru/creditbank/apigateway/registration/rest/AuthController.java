@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import ru.creditbank.apigateway.exceptions.UserDoesNotExistsException;
 import ru.creditbank.apigateway.exceptions.WrongPasswordException;
-import ru.creditbank.apigateway.registration.dto.LoginRqDTO;
+import ru.creditbank.apigateway.registration.dto.LoginRqDto;
 import ru.creditbank.apigateway.registration.dto.LoginRsDto;
 import ru.creditbank.apigateway.registration.service.UserService;
 
@@ -23,7 +23,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/api/v1/auth/login")
-    public LoginRsDto login(@Valid @RequestBody LoginRqDTO rqDto) {
+    public LoginRsDto login(@Valid @RequestBody LoginRqDto rqDto) {
 
         try {
             var token = userService.login(rqDto.getEmail(), rqDto.getPassword());

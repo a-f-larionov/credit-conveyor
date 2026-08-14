@@ -3,7 +3,7 @@ package ru.creditbank.apigateway.registration.rest;
 import org.junit.jupiter.api.Test;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
 import ru.creditbank.apigateway.TestFixtures;
-import ru.creditbank.apigateway.registration.dto.LoginRqDTO;
+import ru.creditbank.apigateway.registration.dto.LoginRqDto;
 import ru.creditbank.apigateway.registration.dto.LoginRsDto;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,7 +14,7 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
     void testLogin() throws Exception {
         // given
         var registerRqDto = TestFixtures.builRegisterRqDto();
-        var loginRqDTO = LoginRqDTO.builder()
+        var loginRqDTO = LoginRqDto.builder()
                 .email(registerRqDto.getEmail())
                 .password(registerRqDto.getPassword())
                 .build();

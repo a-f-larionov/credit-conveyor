@@ -1,16 +1,16 @@
 package ru.creditbank.apigateway;
 
-import ru.creditbank.apigateway.registration.dto.RegisterRqDTO;
+import ru.creditbank.apigateway.registration.dto.RegisterRqDto;
 
 public class TestFixtures {
 
-    public static RegisterRqDTO builRegisterRqDto() {
+    public static RegisterRqDto builRegisterRqDto() {
         return builRegisterRqDto(1);
     }
 
-    public static RegisterRqDTO builRegisterRqDto(int unique) {
-        return RegisterRqDTO.builder()
-                .fullName(RegisterRqDTO.FullNameRqDTO.builder()
+    public static RegisterRqDto builRegisterRqDto(int unique) {
+        return RegisterRqDto.builder()
+                .fullName(RegisterRqDto.FullNameRqDTO.builder()
                         .firstName("firstName-" + unique)
                         .middleName("middleName-" + unique)
                         .lastName("lastName-" + unique)

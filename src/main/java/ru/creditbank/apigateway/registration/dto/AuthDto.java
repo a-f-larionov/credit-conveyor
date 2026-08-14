@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public class AuthDTO {
+public class AuthDto {
 
     @NotBlank
     @Email

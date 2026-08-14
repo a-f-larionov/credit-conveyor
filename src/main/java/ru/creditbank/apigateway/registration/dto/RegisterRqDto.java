@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class RegisterRqDTO extends AuthDTO{
+public class RegisterRqDto extends AuthDto {
 
     @NotNull
     private FullNameRqDTO fullName;

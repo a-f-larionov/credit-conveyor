@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class LoginRqDTO extends AuthDto {
+public class LoginRqDto extends AuthDto {
 
 }

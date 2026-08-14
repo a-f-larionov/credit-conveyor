@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.creditbank.apigateway.core.UserRole;
 import ru.creditbank.apigateway.core.UserModel;
 import ru.creditbank.apigateway.exceptions.UserAlreadyExistsException;
-import ru.creditbank.apigateway.registration.dto.RegisterRqDTO;
+import ru.creditbank.apigateway.registration.dto.RegisterRqDto;
 import ru.creditbank.apigateway.registration.service.UserService;
 
 @RestController
@@ -24,7 +24,7 @@ public class RegisterController {
 
     @PostMapping("/api/v1/auth/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@Valid @RequestBody RegisterRqDTO rqDto) {
+    public void register(@Valid @RequestBody RegisterRqDto rqDto) {
 
         try {
             var user = UserModel.builder()
