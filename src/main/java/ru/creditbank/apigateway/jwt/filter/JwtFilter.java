@@ -12,12 +12,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.creditbank.apigateway.config.ErrorResponseWriter;
+import ru.creditbank.apigateway.config.SecurityConfig;
 import ru.creditbank.apigateway.core.UserModel;
+import ru.creditbank.apigateway.exceptions.WrongOrInvalidJwtTokenException;
 import ru.creditbank.apigateway.jwt.service.JwtService;
 import ru.creditbank.apigateway.registration.service.UserService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final UserService userService;
     private final JwtService jwtService;
+    private final ErrorResponseWriter errorResponseWriter;
 
     @Override
     protected void doFilterInternal(
@@ -36,31 +39,52 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        var authHeader = request.getHeader(HEADER_NAME);
+        try {
+            doFilter(request);
+        } catch (Exception e) {
+            errorResponseWriter.sendError(response, HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+            return;
+        }
+        filterChain.doFilter(request, response);
+    }
+
+    private void doFilter(HttpServletRequest request) {
+
+        if (SecurityConfig.PUBLIC_URLS.contains(request.getRequestURI())) {
+            return;
+        }
+
+        String authHeader = request.getHeader(HEADER_NAME);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX)) {
-            filterChain.doFilter(request, response);
             return;
         }
 
         var jwtToken = authHeader.substring(BEARER_PREFIX.length());
-        if (!StringUtils.isEmpty(jwtToken)) {
-            var userEmail = jwtService.extractUserEmail(jwtToken);
-
-            if (StringUtils.isNotEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserModel userModel = userService.getUserByEmail(userEmail);
-
-                if (jwtService.isTokenValid(jwtToken, userModel.getEmail())) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userModel,
-                            null,
-                            new ArrayList<>()
-                    );
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
-            }
+        if (StringUtils.isEmpty(jwtToken)) {
+            throw new WrongOrInvalidJwtTokenException("Empty JWT Token");
         }
-        filterChain.doFilter(request, response);
+
+        var userEmail = jwtService.extractUserEmail(jwtToken);
+        if (StringUtils.isEmpty(userEmail)) {
+            throw new WrongOrInvalidJwtTokenException("Empty userEmail");
+        }
+
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            return;
+        }
+
+        UserModel userModel = userService.getUserByEmail(userEmail);
+        if (!jwtService.isTokenValid(jwtToken, userModel.getEmail())) {
+            throw new WrongOrInvalidJwtTokenException("Token Invalid");
+        }
+
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                userModel,
+                null,
+                userModel.getAuthorities()
+        );
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+        SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 }

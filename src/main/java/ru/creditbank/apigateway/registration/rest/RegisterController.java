@@ -4,25 +4,23 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.creditbank.apigateway.core.UserRole;
 import ru.creditbank.apigateway.core.UserModel;
 import ru.creditbank.apigateway.exceptions.UserAlreadyExistsException;
-import ru.creditbank.apigateway.registration.dto.RegisterRqDto;
+import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;
 import ru.creditbank.apigateway.registration.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
 @Transactional
+@RequestMapping("/api/v1/auth")
 public class RegisterController {
 
     private final UserService userService;
 
-    @PostMapping("/api/v1/auth/register")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@Valid @RequestBody RegisterRqDto rqDto) {
 

@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.registration.dto;
+package ru.creditbank.apigateway.registration.dto.rs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

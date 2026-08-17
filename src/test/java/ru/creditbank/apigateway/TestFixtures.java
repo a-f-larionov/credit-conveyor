@@ -1,9 +1,9 @@
 package ru.creditbank.apigateway;
 
 import ru.creditbank.apigateway.registration.dto.FullNameDto;
-import ru.creditbank.apigateway.registration.dto.LoginRqDto;
-import ru.creditbank.apigateway.registration.dto.RegisterRqDto;
-import ru.creditbank.apigateway.registration.dto.UserInfoRqDto;
+import ru.creditbank.apigateway.registration.dto.rq.LoginRqDto;
+import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;
+import ru.creditbank.apigateway.registration.dto.rq.UserInfoRqDto;
 
 public class TestFixtures {
 

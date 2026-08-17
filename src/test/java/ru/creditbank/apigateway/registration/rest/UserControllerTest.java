@@ -3,8 +3,8 @@ package ru.creditbank.apigateway.registration.rest;
 import org.junit.jupiter.api.Test;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
 import ru.creditbank.apigateway.TestFixtures;
-import ru.creditbank.apigateway.registration.dto.LoginRsDto;
-import ru.creditbank.apigateway.registration.dto.UserInfoRsDto;
+import ru.creditbank.apigateway.registration.dto.rs.LoginRsDto;
+import ru.creditbank.apigateway.registration.dto.rs.UserInfoRsDto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,9 +28,10 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
 
         assertEquals(registerRqDto.getEmail(), userInfoRsDto.getEmail());
 
-        var fullNameDto = registerRqDto.getFullName();
-        assertEquals(fullNameDto.getFirstName(), fullNameDto.getFirstName());
-        assertEquals(fullNameDto.getLastName(), fullNameDto.getLastName());
-        assertEquals(fullNameDto.getMiddleName(), fullNameDto.getMiddleName());
+        var rqFNDto = registerRqDto.getFullName();
+        var rsFNDto = userInfoRsDto.getFullNameDto();
+        assertEquals(rqFNDto.getFirstName(), rsFNDto.getFirstName());
+        assertEquals(rqFNDto.getLastName(), rsFNDto.getLastName());
+        assertEquals(rqFNDto.getMiddleName(), rsFNDto.getMiddleName());
     }
 }

@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
 import ru.creditbank.apigateway.jwt.service.JwtService;
-import ru.creditbank.apigateway.registration.dto.LoginRsDto;
+import ru.creditbank.apigateway.registration.dto.rs.ErrorRsDto;
+import ru.creditbank.apigateway.registration.dto.rs.LoginRsDto;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.creditbank.apigateway.TestFixtures.*;
@@ -31,11 +33,12 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    void testForbiddenRequest() throws Exception {
+    void testForbiddenRequestNoToken    () throws Exception {
         // given
         var userInfoRqDto = buildUserInfoRqDto("email@email.com");
 
         // when-then
-        performPostWithDto("/api/v1/user/info", userInfoRqDto, LoginRsDto.class, status().isForbidden());
+        var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isForbidden());
+        assertEquals("Unauthorized", rsDto.getError());
     }
 }
