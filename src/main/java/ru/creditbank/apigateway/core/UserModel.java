@@ -22,7 +22,7 @@ public class UserModel implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true, length = 100)
     private String email;
 
     @Column(name = "password_hash")

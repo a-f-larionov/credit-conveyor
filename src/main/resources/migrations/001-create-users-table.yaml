@@ -17,6 +17,8 @@ databaseChangeLog:
                   last_name VARCHAR(50) NOT NULL,
                   middle_name VARCHAR(50) NOT NULL
               );
+              
+              CREATE UNIQUE INDEX idx_users_email ON users (email);
       rollback:
         - sql:
             comment: drop table users
