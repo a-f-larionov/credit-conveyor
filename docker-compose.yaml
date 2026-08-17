@@ -11,9 +11,8 @@ services:
           DATA_SOURCE_DB_HOST: db
           JWT_SIGNING_KEY: ${JWT_SIGNING_KEY}
           JWT_EXPIRATION_SEC: ${JWT_EXPIRATION_SEC}
-          DEFAULT_USER_NAME: ${DEFAULT_USER_NAME}
-          DEFAULT_USER_PASSWORD: ${DEFAULT_USER_PASSWORD}
-          DEFAULT_USER_ROLES: ${DEFAULT_USER_ROLES}
+      depends_on: [ "db" ]
+
   db:
     image: postgres:latest
     ports:

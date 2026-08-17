@@ -7,12 +7,6 @@ spring:
   application:
     name: apigateway
 
-  security:
-    user:
-      name: ${DEFAULT_USER_NAME}
-      password: ${DEFAULT_USER_PASSWORD}
-      roles: ${DEFAULT_USER_ROLES}
-
   datasource:
     url: jdbc:postgresql://${DATA_SOURCE_DB_HOST}:5432/${DATA_SOURCE_DB_NAME}
     username: ${DATA_SOURCE_USERNAME}
