@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-users-table
+      author: a_f_larionov
+      comment: create users table
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE user_roles(
+              
+                user_id BIGINT NOT NULL,
+                role VARCHAR(50) NOT NULL,
+
+                PRIMARY KEY(user_id, role),
+              
+                CONSTRAINT fk_user_roles_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+              );
+
+      rollback:
+        - sql:
+            comment: drop table users
+            sql: DROP TABLE IF EXISTS user_roles;

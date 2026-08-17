@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-default-admin-user
+      author: a_f_larionov
+      comment: create users table
+      changes:
+        - sql:
+            sql: |
+              insert into users (email, password_hash) values ( 'admin@admin.ru', '$2a$12$wBSwQr4Es44j7tcnttqOUuX/xGdE/NqhVqNyFo4jNBQGVcf9qtB4W');
+              insert into user_roles ( user_id, role ) values ( (select id from users where email='admin@admin.ru'), 'ROLE_USER');
+              insert into user_roles ( user_id, role ) values ( (select id from users where email='admin@admin.ru'), 'ROLE_ADMIN');
+
+      rollback:
+        - sql:
+            comment: drop table users
+            sql: DROP TABLE IF EXISTS users;

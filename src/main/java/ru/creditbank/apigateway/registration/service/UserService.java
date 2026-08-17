@@ -19,7 +19,7 @@ import ru.creditbank.apigateway.repositories.UsersRepository;
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UsersRepository userReposity;
+    private final UsersRepository userRepository;
     private final JwtService jwtService;
     private final TokenStoreService tokenStoreService;
 
@@ -27,16 +27,16 @@ public class UserService {
 
         user.setPasswordHash(passwordEncoder.encode(password));
 
-        if (userReposity.existsByEmail(user.getUsername())) {
+        if (userRepository.existsByEmail(user.getUsername())) {
             throw new UserAlreadyExistsException();
         }
 
-        userReposity.save(user);
+        userRepository.save(user);
     }
 
     public String login(String email, String password) {
 
-        var user = userReposity.findByEmail(email)
+        var user = userRepository.findByEmail(email)
                 .orElseThrow(UserDoesNotExistsException::new);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -51,7 +51,7 @@ public class UserService {
     }
 
     public UserModel getUserByEmail(@NotBlank @Email String email) {
-        return userReposity.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(UserDoesNotExistsException::new);
     }
 }

@@ -11,6 +11,8 @@ import ru.creditbank.apigateway.exceptions.UserAlreadyExistsException;
 import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;
 import ru.creditbank.apigateway.registration.service.UserService;
 
+import java.util.Set;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
@@ -28,7 +30,7 @@ public class RegisterController {
                     .lastName(rqDto.getFullName().getLastName())
                     .middleName(rqDto.getFullName().getMiddleName())
                     .email(rqDto.getEmail())
-                    .userRole(UserRole.USER)
+                    .roles(Set.of(UserRole.ROLE_USER))
                     .build();
 
             userService.register(user, rqDto.getPassword());

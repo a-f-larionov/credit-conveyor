@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,6 +16,7 @@ import ru.creditbank.apigateway.jwt.filter.JwtFilter;
 import java.util.Set;
 
 @Configuration
+@EnableMethodSecurity
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -40,7 +42,10 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
                             errorResponseWriter.sendError(response, HttpServletResponse.SC_FORBIDDEN, "Unauthorized");
-                        }))
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                errorResponseWriter.sendError(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         ;
 

@@ -46,4 +46,11 @@ public class TestFixtures {
                 .lastName(rqDto.getFullName().getLastName())
                 .build();
     }
+
+    public static LoginRqDto buildLoginRqDto(String email, String password) {
+        return LoginRqDto.builder()
+                .email(email)
+                .password(password)
+                .build();
+    }
 }
