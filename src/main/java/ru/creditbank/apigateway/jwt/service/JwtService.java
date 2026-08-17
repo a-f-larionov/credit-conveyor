@@ -47,13 +47,13 @@ public class JwtService {
         return Jwts.builder().claims(claims)
                 .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + jwtSigningExpirationSec))
+                .expiration(new Date(System.currentTimeMillis() + jwtSigningExpirationSec * 1000))
                 .signWith(getSigningKey())
                 .compact();
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return extractExpiration(token).before(new Date(System.currentTimeMillis()));
     }
 
     private Date extractExpiration(String token) {
