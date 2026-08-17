@@ -20,8 +20,9 @@
 
 ---
 
-## 🚀 Запуск
+## 🚀 Настройка & Запуск
 ```bash
 git clone https://github.com/a-f-larionov/credit-conveyor.git
 cd credit-conveyor
-docker-compose up -d
+cp .env.example .env
+docker-compose up -d --build
