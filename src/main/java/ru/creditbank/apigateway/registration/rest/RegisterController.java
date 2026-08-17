@@ -3,18 +3,16 @@ package ru.creditbank.apigateway.registration.rest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.creditbank.apigateway.core.UserRole;
 import ru.creditbank.apigateway.core.UserModel;
+import ru.creditbank.apigateway.core.UserRole;
 import ru.creditbank.apigateway.exceptions.UserAlreadyExistsException;
 import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;
 import ru.creditbank.apigateway.registration.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
-@Transactional
 @RequestMapping("/api/v1/auth")
 public class RegisterController {
 

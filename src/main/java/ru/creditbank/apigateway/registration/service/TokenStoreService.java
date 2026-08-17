@@ -8,13 +8,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class TokenStoreService {
 
-    private final ConcurrentHashMap<String, Integer> store = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Long> store = new ConcurrentHashMap<>();
 
     public void store(UserModel userModel, String token) {
         store.put(token, userModel.getId());
     }
 
-    public Integer geUserIdByToken(String token) {
+    public Long geUserIdByToken(String token) {
         return store.get(token);
     }
 }
