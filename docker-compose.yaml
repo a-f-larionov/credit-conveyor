@@ -9,6 +9,8 @@ services:
           DATA_SOURCE_PASSWORD: ${DATA_SOURCE_PASSWORD}
           DATA_SOURCE_DB_NAME: ${DATA_SOURCE_DB_NAME}
           DATA_SOURCE_DB_HOST: db
+          JWT_SIGNING_KEY: ${JWT_SIGNING_KEY}
+          JWT_EXPIRATION_SEC: ${JWT_EXPIRATION_SEC}
   db:
     image: postgres:latest
     ports:
