@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.creditbank.apigateway.core.UserModel;
 
@@ -38,9 +39,9 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public boolean isTokenValid(String token, String forUserEmail) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String tokenEmail = extractUserEmail(token);
-        return (tokenEmail.equals(forUserEmail) && !isTokenExpired(token));
+        return (tokenEmail.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private String generateToken(Map<String, Object> claims, UserModel user) {

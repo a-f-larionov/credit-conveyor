@@ -3,6 +3,7 @@ package ru.creditbank.apigateway.registration.rest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
+import ru.creditbank.apigateway.TestFixtures;
 import ru.creditbank.apigateway.jwt.service.JwtService;
 import ru.creditbank.apigateway.registration.dto.rs.ErrorRsDto;
 import ru.creditbank.apigateway.registration.dto.rs.LoginRsDto;
@@ -22,6 +23,7 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         // given
         var registerRqDto = buildRegisterRqDto();
         var loginRqDto = buildLoginRqDto(registerRqDto);
+        var userModel = TestFixtures.builUserModel(registerRqDto);
 
         performPostWithDto("/api/v1/auth/register", registerRqDto, status().isCreated());
 
@@ -29,7 +31,7 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDto, LoginRsDto.class, status().isOk());
 
         // then
-        assertTrue(jwtService.isTokenValid(rsDto.getToken(), loginRqDto.getEmail()));
+        assertTrue(jwtService.isTokenValid(rsDto.getToken(), userModel));
     }
 
     @Test

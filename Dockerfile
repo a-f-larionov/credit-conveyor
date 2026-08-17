@@ -7,7 +7,7 @@ COPY mvnw .
 RUN chmod +x mvnw
 COPY .mvn ./.mvn
 
-# it's a trick, download the wrapper
+# it's a trick, download and cache the wrapper
 RUN ./mvnw --version
 
 COPY pom.xml .
