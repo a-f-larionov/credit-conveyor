@@ -26,7 +26,6 @@ public class UserService {
     public void register(UserModel user, String password) {
 
         user.setPasswordHash(passwordEncoder.encode(password));
-        System.out.println(user.getPasswordHash());
 
         if (userReposity.existsByEmail(user.getUsername())) {
             throw new UserAlreadyExistsException();
