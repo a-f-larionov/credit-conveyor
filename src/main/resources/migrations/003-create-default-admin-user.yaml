@@ -13,4 +13,4 @@ databaseChangeLog:
       rollback:
         - sql:
             comment: drop table users
-            sql: DROP TABLE IF EXISTS users;
+            sql: delete from user_roles where id in( (select id from users where email='admin@admin.ru') );

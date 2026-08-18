@@ -19,4 +19,4 @@ databaseChangeLog:
       rollback:
         - sql:
             comment: drop table users
-            sql: DROP TABLE IF EXISTS user_roles;
+            sql: DROP TABLE  user_roles;
