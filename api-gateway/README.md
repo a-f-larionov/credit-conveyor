@@ -1,4 +1,4 @@
-# 🔐 Credit Conveyor – Monorepository
+# 🔐 Credit Conveyor – Auth Service
 
 [![Java](https://img.shields.io/badge/Java-17%2B-blue)](https://adoptium.net/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-brightgreen)](https://spring.io/projects/spring-boot)
