@@ -1,17 +1,22 @@
 package ru.creditbank.apigateway.registration.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.creditbank.apigateway.core.UserModel;
+import ru.creditbank.apigateway.core.UserRole;
 import ru.creditbank.apigateway.exceptions.UserAlreadyExistsException;
 import ru.creditbank.apigateway.exceptions.UserDoesNotExistsException;
 import ru.creditbank.apigateway.exceptions.WrongPasswordException;
 import ru.creditbank.apigateway.jwt.service.JwtService;
+import ru.creditbank.apigateway.registration.dto.FullNameDto;
+import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;
+import ru.creditbank.apigateway.registration.dto.rq.UserInfoRqDto;
+import ru.creditbank.apigateway.registration.dto.rs.UserInfoRsDto;
 import ru.creditbank.apigateway.repositories.UsersRepository;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +28,11 @@ public class UserService {
     private final JwtService jwtService;
     private final TokenStoreService tokenStoreService;
 
-    public void register(UserModel user, String password) {
+    public void register(RegisterRqDto rqDto) {
 
-        user.setPasswordHash(passwordEncoder.encode(password));
+        var user = UserService.mapRegisterRqDtoToUserModel(rqDto);
+
+        user.setPasswordHash(passwordEncoder.encode(rqDto.getPassword()));
 
         if (userRepository.existsByEmail(user.getUsername())) {
             throw new UserAlreadyExistsException();
@@ -50,8 +57,30 @@ public class UserService {
         return token;
     }
 
-    public UserModel getUserByEmail(@NotBlank @Email String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(UserDoesNotExistsException::new);
+    public UserInfoRsDto getUserByEmail(UserInfoRqDto rqDto) {
+        return mapUserToUserInfoRsDto(userRepository.findByEmail(rqDto.getEmail())
+                .orElseThrow(UserDoesNotExistsException::new));
+    }
+
+    public static UserModel mapRegisterRqDtoToUserModel(RegisterRqDto rqDto) {
+        return UserModel.builder()
+                .firstName(rqDto.getFullName().getFirstName())
+                .lastName(rqDto.getFullName().getLastName())
+                .middleName(rqDto.getFullName().getMiddleName())
+                .email(rqDto.getEmail())
+                .roles(Set.of(UserRole.ROLE_USER))
+                .build();
+    }
+
+    public static UserInfoRsDto mapUserToUserInfoRsDto(UserModel user) {
+        return UserInfoRsDto.builder()
+                .email(user.getEmail())
+                .fullNameDto(FullNameDto.builder()
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .middleName(user.getMiddleName())
+                        .build()
+                )
+                .build();
     }
 }

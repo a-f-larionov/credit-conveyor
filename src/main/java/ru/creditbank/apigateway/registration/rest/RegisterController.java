@@ -5,13 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.creditbank.apigateway.core.UserModel;
-import ru.creditbank.apigateway.core.UserRole;
 import ru.creditbank.apigateway.exceptions.UserAlreadyExistsException;
 import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;
 import ru.creditbank.apigateway.registration.service.UserService;
-
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,18 +21,12 @@ public class RegisterController {
     public void register(@Valid @RequestBody RegisterRqDto rqDto) {
 
         try {
-            var user = UserModel.builder()
-                    .firstName(rqDto.getFullName().getFirstName())
-                    .lastName(rqDto.getFullName().getLastName())
-                    .middleName(rqDto.getFullName().getMiddleName())
-                    .email(rqDto.getEmail())
-                    .roles(Set.of(UserRole.ROLE_USER))
-                    .build();
 
-            userService.register(user, rqDto.getPassword());
+            userService.register(rqDto);
 
         } catch (UserAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
     }
+
 }

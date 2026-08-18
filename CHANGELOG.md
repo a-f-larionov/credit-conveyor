@@ -9,4 +9,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.0.2] - 2026-08-18
  ### Fixed
     - PasswordConfig change annotation from @Service to @Configuration
-    - Use 6 annotated Dto-s. Boilerplate, support inheritance, not convinient(callSuper, SuperBuilder(experimental)). Should bereplaced by records.
+    - Use 6 annotated Dto-s. Boilerplate, support inheritance, not convinient(callSuper, SuperBuilder(experimental)). Should bereplaced by records. 
+    - Move logic to services
