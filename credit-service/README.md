@@ -1,4 +1,4 @@
-# 🔐 Credit Conveyor – Monorepository
+# 🔐 Credit Conveyor – Auth Service
 
 [![Java](https://img.shields.io/badge/Java-17%2B-blue)](https://adoptium.net/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-brightgreen)](https://spring.io/projects/spring-boot)
@@ -6,9 +6,10 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)](https://www.docker.com/)
 
-#  Credit Conveyor – Monorepository
+#  Credit Conveyor – Auth Service
 
-Монорепозиторий Кредитного Конвейра  
+Микросервис аутентификации на **Spring Boot 3 + JWT**.  
+Регистрация, логин, выдача токенов.
 
 ---
 

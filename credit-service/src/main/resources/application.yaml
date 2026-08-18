@@ -1,0 +1,22 @@
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  application:
+    name: apigateway
+
+  datasource:
+    url: jdbc:postgresql://${DATA_SOURCE_DB_HOST}:5432/${DATA_SOURCE_DB_NAME}
+    username: ${DATA_SOURCE_USERNAME}
+    password: ${DATA_SOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    enabled: true
+    change-log: classpath:migrations/master.yaml
+
+jwt:
+  signing:
+    key: ${JWT_SIGNING_KEY}
+    expiration_sec: ${JWT_EXPIRATION_SEC}
