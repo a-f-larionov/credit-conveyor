@@ -4,8 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import ru.creditbank.apigateway.exceptions.UserAlreadyExistsException;
 import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;
 import ru.creditbank.apigateway.registration.service.UserService;
 
