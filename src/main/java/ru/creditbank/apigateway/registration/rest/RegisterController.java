@@ -20,13 +20,6 @@ public class RegisterController {
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@Valid @RequestBody RegisterRqDto rqDto) {
 
-        try {
-
             userService.register(rqDto);
-
-        } catch (UserAlreadyExistsException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
-        }
     }
-
 }
