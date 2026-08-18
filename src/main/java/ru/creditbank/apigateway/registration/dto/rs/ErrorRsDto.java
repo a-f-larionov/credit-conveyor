@@ -1,11 +1,16 @@
 package ru.creditbank.apigateway.registration.dto.rs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.jackson.Jacksonized;
 
 
-@AllArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
+@ToString
+@EqualsAndHashCode
+@Builder
+@Jacksonized
 public class ErrorRsDto {
-    private final String error;
+    String error;
 }

@@ -1,13 +1,20 @@
 package ru.creditbank.apigateway.registration.dto.rq;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 import ru.creditbank.apigateway.registration.dto.AuthDto;
 
-@Data
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-@NoArgsConstructor
+@Jacksonized
 public class LoginRqDto extends AuthDto {
 
 }

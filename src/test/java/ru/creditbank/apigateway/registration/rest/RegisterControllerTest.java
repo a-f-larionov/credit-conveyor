@@ -20,8 +20,7 @@ public class RegisterControllerTest extends SpringBootMvcBaseTest {
     @Test
     public void testRegisterInvalidData() throws Exception {
         // given
-        var rqDto = TestFixtures.buildRegisterRqDto();
-        rqDto.setPassword("abc"); // invalid email
+        var rqDto = TestFixtures.buildRegisterRqDto(1,"no_upper_case_password");
 
         // when-then
         performPostWithDto("/api/v1/auth/register", rqDto, status().isBadRequest());

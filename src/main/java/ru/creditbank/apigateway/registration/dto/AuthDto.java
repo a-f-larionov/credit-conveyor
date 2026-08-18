@@ -4,21 +4,29 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
-@Data
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Getter
+@ToString
+@EqualsAndHashCode
 @SuperBuilder
-@NoArgsConstructor
+@Jacksonized
 public class AuthDto {
 
     @NotBlank
     @Email
-    private String email;
+    String email;
 
     @NotBlank
     @Size(min = 8, max = 64)
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")
-    private String password;
+    String password;
 
 }

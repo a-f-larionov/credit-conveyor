@@ -26,7 +26,7 @@ public class AuthController {
 
         try {
             var token = userService.login(rqDto.getEmail(), rqDto.getPassword());
-            return new LoginRsDto(token);
+            return LoginRsDto.builder().token(token).build();
 
         } catch (UserDoesNotExistsException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exists");

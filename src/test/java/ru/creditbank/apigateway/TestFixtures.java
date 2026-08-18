@@ -8,11 +8,13 @@ import ru.creditbank.apigateway.registration.dto.rq.UserInfoRqDto;
 
 public class TestFixtures {
 
+
     public static RegisterRqDto buildRegisterRqDto() {
-        return buildRegisterRqDto(1);
+        var unique = 1;
+        return buildRegisterRqDto(unique, "Password" + unique);
     }
 
-    public static RegisterRqDto buildRegisterRqDto(int unique) {
+    public static RegisterRqDto buildRegisterRqDto(int unique, String password) {
         return RegisterRqDto.builder()
                 .fullName(FullNameDto.builder()
                         .firstName("firstName-" + unique)
@@ -20,7 +22,7 @@ public class TestFixtures {
                         .lastName("lastName-" + unique)
                         .build())
                 .email("email_" + unique + "@mail.com")
-                .password("Password" + unique)
+                .password(password)
                 .build();
     }
 

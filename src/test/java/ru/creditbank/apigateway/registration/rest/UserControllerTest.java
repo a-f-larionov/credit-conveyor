@@ -17,14 +17,14 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
     void testUserInfo() throws Exception {
         // given
         var registerRqDto = TestFixtures.buildRegisterRqDto();
-        var loginRqDTO = TestFixtures.buildLoginRqDto(registerRqDto);
+        var loginRqDto = TestFixtures.buildLoginRqDto(registerRqDto);
 
         performPostWithDto("/api/v1/auth/register", registerRqDto, status().isCreated());
-        var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDTO, LoginRsDto.class, status().isOk());
+        var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDto, LoginRsDto.class, status().isOk());
         var token = rsDto.getToken();
 
         // when
-        var userInfoRsDto = performPostWithDto("/api/v1/user/info", loginRqDTO, UserInfoRsDto.class, status().isOk(), token);
+        var userInfoRsDto = performPostWithDto("/api/v1/user/info", loginRqDto, UserInfoRsDto.class, status().isOk(), token);
 
         // then
         assertEquals(registerRqDto.getEmail(), userInfoRsDto.getEmail());

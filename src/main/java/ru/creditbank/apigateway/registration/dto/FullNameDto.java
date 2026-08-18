@@ -3,11 +3,17 @@ package ru.creditbank.apigateway.registration.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
-@Builder
+@ToString
+@EqualsAndHashCode
+@SuperBuilder
+@Jacksonized
 public class FullNameDto {
 
     @NotBlank
