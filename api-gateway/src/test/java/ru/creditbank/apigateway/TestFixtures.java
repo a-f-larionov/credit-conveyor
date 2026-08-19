@@ -1,6 +1,6 @@
 package ru.creditbank.apigateway;
 
-import ru.creditbank.apigateway.core.UserModel;
+import ru.creditbank.apigateway.entities.UserModel;
 import ru.creditbank.apigateway.registration.dto.FullNameDto;
 import ru.creditbank.apigateway.registration.dto.rq.LoginRqDto;
 import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;

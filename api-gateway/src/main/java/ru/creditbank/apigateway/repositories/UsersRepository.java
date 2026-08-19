@@ -2,7 +2,7 @@ package ru.creditbank.apigateway.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.creditbank.apigateway.core.UserModel;
+import ru.creditbank.apigateway.entities.UserModel;
 
 import java.util.Optional;
 

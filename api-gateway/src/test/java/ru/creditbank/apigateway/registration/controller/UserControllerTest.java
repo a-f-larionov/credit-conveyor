@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.registration.rest;
+package ru.creditbank.apigateway.registration.controller;
 
 import org.junit.jupiter.api.Test;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
