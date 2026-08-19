@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.creditbank.apigateway.config.ErrorResponseWriter;
 import ru.creditbank.apigateway.config.SecurityConfig;
-import ru.creditbank.apigateway.exceptions.WrongOrInvalidJwtTokenException;
+import ru.creditbank.apigateway.exception.WrongOrInvalidJwtTokenException;
 import ru.creditbank.apigateway.jwt.service.JwtService;
-import ru.creditbank.apigateway.registration.service.UserService;
+import ru.creditbank.apigateway.service.UserService;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.registration.dto.rs;
+package ru.creditbank.apigateway.dto.rs;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,6 +11,6 @@ import lombok.extern.jackson.Jacksonized;
 @EqualsAndHashCode
 @Builder
 @Jacksonized
-public class LoginRsDto {
-    private final String token;
+public class ErrorRsDto {
+    String error;
 }

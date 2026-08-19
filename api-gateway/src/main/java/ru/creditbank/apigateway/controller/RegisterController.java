@@ -1,11 +1,11 @@
-package ru.creditbank.apigateway.registration.controller;
+package ru.creditbank.apigateway.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;
-import ru.creditbank.apigateway.registration.service.UserService;
+import ru.creditbank.apigateway.dto.rq.RegisterRqDto;
+import ru.creditbank.apigateway.service.UserService;
 
 @RestController
 @RequiredArgsConstructor

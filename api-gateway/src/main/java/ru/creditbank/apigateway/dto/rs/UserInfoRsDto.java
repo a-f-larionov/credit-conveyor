@@ -1,13 +1,11 @@
-package ru.creditbank.apigateway.registration.dto.rq;
+package ru.creditbank.apigateway.dto.rs;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
-import ru.creditbank.apigateway.registration.dto.AuthDto;
+import ru.creditbank.apigateway.dto.AuthDto;
+import ru.creditbank.apigateway.dto.FullNameDto;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Getter
@@ -15,6 +13,7 @@ import ru.creditbank.apigateway.registration.dto.AuthDto;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Jacksonized
-public class LoginRqDto extends AuthDto {
+public class UserInfoRsDto extends AuthDto {
 
+    FullNameDto fullNameDto;
 }

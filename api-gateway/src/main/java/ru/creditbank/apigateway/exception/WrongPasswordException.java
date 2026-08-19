@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.exceptions;
+package ru.creditbank.apigateway.exception;
 
 public class WrongPasswordException extends RuntimeException {
 }

@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.registration.service;
+package ru.creditbank.apigateway.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -6,19 +6,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ru.creditbank.apigateway.entities.UserModel;
-import ru.creditbank.apigateway.entities.UserRole;
-import ru.creditbank.apigateway.exceptions.UserAlreadyExistsException;
-import ru.creditbank.apigateway.exceptions.UserDoesNotExistsException;
-import ru.creditbank.apigateway.exceptions.WrongPasswordException;
+import ru.creditbank.apigateway.entitiy.UserModel;
+import ru.creditbank.apigateway.entitiy.UserRole;
+import ru.creditbank.apigateway.exception.UserAlreadyExistsException;
+import ru.creditbank.apigateway.exception.UserDoesNotExistsException;
+import ru.creditbank.apigateway.exception.WrongPasswordException;
 import ru.creditbank.apigateway.jwt.service.JwtService;
-import ru.creditbank.apigateway.registration.dto.FullNameDto;
-import ru.creditbank.apigateway.registration.dto.rq.LoginRqDto;
-import ru.creditbank.apigateway.registration.dto.rq.RegisterRqDto;
-import ru.creditbank.apigateway.registration.dto.rq.UserInfoRqDto;
-import ru.creditbank.apigateway.registration.dto.rs.LoginRsDto;
-import ru.creditbank.apigateway.registration.dto.rs.UserInfoRsDto;
-import ru.creditbank.apigateway.repositories.UsersRepository;
+import ru.creditbank.apigateway.dto.FullNameDto;
+import ru.creditbank.apigateway.dto.rq.LoginRqDto;
+import ru.creditbank.apigateway.dto.rq.RegisterRqDto;
+import ru.creditbank.apigateway.dto.rq.UserInfoRqDto;
+import ru.creditbank.apigateway.dto.rs.LoginRsDto;
+import ru.creditbank.apigateway.dto.rs.UserInfoRsDto;
+import ru.creditbank.apigateway.repository.UsersRepository;
 
 import java.util.Set;
 

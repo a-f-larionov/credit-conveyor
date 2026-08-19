@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.entities;
+package ru.creditbank.apigateway.entitiy;
 
 import jakarta.persistence.*;
 import lombok.*;

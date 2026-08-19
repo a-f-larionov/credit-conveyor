@@ -1,7 +1,7 @@
-package ru.creditbank.apigateway.registration.service;
+package ru.creditbank.apigateway.service;
 
 import org.springframework.stereotype.Service;
-import ru.creditbank.apigateway.entities.UserModel;
+import ru.creditbank.apigateway.entitiy.UserModel;
 
 import java.util.concurrent.ConcurrentHashMap;
 
