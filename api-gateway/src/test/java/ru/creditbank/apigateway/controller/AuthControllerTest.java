@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.registration.controller;
+package ru.creditbank.apigateway.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Use MapStruct
     - Use UUID for UserModel.id
 
+[0.0.3] - 2026-08-19
+    - Add CreditProxyContoller. Simple RestTemplate proxy
+
 [0.0.2] - 2026-08-18
  ### Fixed
     - PasswordConfig change annotation from @Service to @Configuration

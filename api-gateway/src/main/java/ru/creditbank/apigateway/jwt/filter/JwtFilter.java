@@ -9,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.creditbank.apigateway.config.ErrorResponseWriter;
 import ru.creditbank.apigateway.config.SecurityConfig;
+import ru.creditbank.apigateway.entitiy.UserModel;
 import ru.creditbank.apigateway.exception.WrongOrInvalidJwtTokenException;
 import ru.creditbank.apigateway.jwt.service.JwtService;
 import ru.creditbank.apigateway.service.UserService;
@@ -56,15 +56,8 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String authHeader = request.getHeader(HEADER_NAME);
-        if (isNotBearer(authHeader)) {
-            return;
-        }
-
-        var jwtToken = authHeader.substring(BEARER_PREFIX.length());
-        if (isEmpty(jwtToken)) {
-            throw new WrongOrInvalidJwtTokenException("Empty JWT Token");
-        }
+        var jwtToken = resolveJwtToken(request);
+        if (jwtToken == null) return;
 
         var userEmail = jwtService.extractUserEmail(jwtToken);
         if (isEmpty(userEmail)) {
@@ -75,16 +68,16 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        UserDetails userModel = userService.getUserByEmail(userEmail);
+        UserModel userModel = userService.getUserByEmail(userEmail);
         if (!jwtService.isTokenValid(jwtToken, userModel)) {
             throw new WrongOrInvalidJwtTokenException("Token Invalid");
         }
 
-        setAuthenticationToken(request, userModel);
+        setSecurityContextAuthentication(request, userModel);
     }
 
-    private static void setAuthenticationToken(HttpServletRequest request, UserDetails userModel) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+    private void setSecurityContextAuthentication(HttpServletRequest request, UserModel userModel) {
+        var authToken = new UsernamePasswordAuthenticationToken(
                 userModel,
                 null,
                 userModel.getAuthorities()
@@ -94,11 +87,24 @@ public class JwtFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
-    private static boolean isNotBearer(String authHeader) {
+    private String resolveJwtToken(HttpServletRequest request) {
+        String authHeader = request.getHeader(HEADER_NAME);
+        if (isNotBearer(authHeader)) {
+            return null;
+        }
+
+        var jwtToken = authHeader.substring(BEARER_PREFIX.length());
+        if (isEmpty(jwtToken)) {
+            throw new WrongOrInvalidJwtTokenException("Empty JWT Token");
+        }
+        return jwtToken;
+    }
+
+    private boolean isNotBearer(String authHeader) {
         return isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX);
     }
 
-    private static boolean isPublicPath(HttpServletRequest request) {
+    private boolean isPublicPath(HttpServletRequest request) {
         return SecurityConfig.PUBLIC_URLS.contains(request.getRequestURI());
     }
 }

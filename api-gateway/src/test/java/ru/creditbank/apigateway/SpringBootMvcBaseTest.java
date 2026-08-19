@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -29,6 +30,20 @@ public abstract class SpringBootMvcBaseTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
+    protected <RQ> void performPostWithDto(String url, RQ rqDto) throws Exception {
+        performPostWithDto(url, rqDto, status().is2xxSuccessful());
+    }
+
+    protected <RQ> void performPostWithDto(String url, RQ rqDTO, ResultMatcher expectedStatus) throws Exception {
+        mockMvc.perform(postWithDto(url, rqDTO, null))
+                .andExpect(expectedStatus)
+                .andReturn();
+    }
+
+    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz) throws Exception {
+        return performPostWithDto(url, rqDto, rsDTOClazz, status().is2xxSuccessful());
+    }
+
     protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz, ResultMatcher expectedStatus) throws Exception {
         return performPostWithDto(url, rqDto, rsDTOClazz, expectedStatus, null);
     }
@@ -38,12 +53,6 @@ public abstract class SpringBootMvcBaseTest {
                 .andExpect(expectedStatus)
                 .andReturn();
         return objectMapper.readValue(result.getResponse().getContentAsString(), rsDtoClazz);
-    }
-
-    protected <RQ> void performPostWithDto(String url, RQ rqDTO, ResultMatcher expectedStatus) throws Exception {
-        mockMvc.perform(postWithDto(url, rqDTO, null))
-                .andExpect(expectedStatus)
-                .andReturn();
     }
 
     protected <RQ> MockHttpServletRequestBuilder postWithDto(String url, RQ rqDto, String token) throws JsonProcessingException {

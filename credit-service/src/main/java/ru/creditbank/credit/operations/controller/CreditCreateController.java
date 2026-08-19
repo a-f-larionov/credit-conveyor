@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/credit-service/api/v1/")
 public class CreditCreateController {
 
-    @PostMapping("/credit")
+    @PostMapping("/create")
     public void credit() {
 
     }
