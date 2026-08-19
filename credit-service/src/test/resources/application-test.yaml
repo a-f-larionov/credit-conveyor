@@ -1,5 +1,5 @@
 spring:
 
   application:
-    name: creditservice-test
+    name: credit-service-test
 

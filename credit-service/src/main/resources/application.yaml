@@ -1,10 +1,9 @@
-
 spring:
   config:
     import: optional:file:.env[.properties]
 
   application:
-    name: apigateway
+    name: credit-service
 
   datasource:
     url: jdbc:postgresql://${DATA_SOURCE_DB_HOST}:5432/${DATA_SOURCE_DB_NAME}

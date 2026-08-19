@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway;
+package ru.creditbank.credit.operations;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;

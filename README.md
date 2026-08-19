@@ -24,4 +24,6 @@
 git clone https://github.com/a-f-larionov/credit-conveyor.git
 cd credit-conveyor
 cp .env.example .env
+cp ./api-gateway/.env.example ./api-gateway/.env
+cp ./credit-service/.env.example ./credit-service/.env
 docker-compose up -d --build

@@ -1,4 +1,4 @@
-# 🔐 Credit Conveyor – Auth Service
+# 🔐 Credit Conveyor – Credit Service
 
 [![Java](https://img.shields.io/badge/Java-17%2B-blue)](https://adoptium.net/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-brightgreen)](https://spring.io/projects/spring-boot)
@@ -6,10 +6,9 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)](https://www.docker.com/)
 
-#  Credit Conveyor – Auth Service
+#  Credit Conveyor – Credit Service
 
-Микросервис аутентификации на **Spring Boot 3 + JWT**.  
-Регистрация, логин, выдача токенов.
+Микросервис кредитов на **Spring Boot 3 + JWT**.  
 
 ---
 
@@ -25,4 +24,6 @@
 git clone https://github.com/a-f-larionov/credit-conveyor.git
 cd credit-conveyor
 cp .env.example .env
+cp ./api-gateway/.env.example ./api-gateway/.env
+cp ./credit-service/.env.example ./credit-service/.env
 docker-compose up -d --build

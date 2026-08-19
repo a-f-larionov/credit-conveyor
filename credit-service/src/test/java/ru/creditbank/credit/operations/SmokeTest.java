@@ -1,7 +1,6 @@
-package ru.creditbank.creditservice;
+package ru.creditbank.credit.operations;
 
 import org.junit.jupiter.api.Test;
-import ru.creditbank.apigateway.SpringBootMvcBaseTest;
 
 class SmokeTest extends SpringBootMvcBaseTest {
 
