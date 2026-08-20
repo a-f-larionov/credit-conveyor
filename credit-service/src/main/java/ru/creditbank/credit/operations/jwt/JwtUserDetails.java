@@ -8,12 +8,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 
 @Builder
 public class JwtUserDetails implements UserDetails {
 
     @Getter
-    private final Long userId;
+    private final UUID userId;
     private final String username;
     private final Set<String> userRoles;
 

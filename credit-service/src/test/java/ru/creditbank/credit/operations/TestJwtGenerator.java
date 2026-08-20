@@ -11,10 +11,7 @@ import ru.creditbank.credit.operations.jwt.JwtUserDetails;
 import ru.creditbank.credit.operations.service.JwtService;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,15 +23,19 @@ public class TestJwtGenerator {
     @Value("${jwt.signing.expiration_sec}")
     Long jwtSigningExpirationSec;
 
-    public String generateDefault() {
+    public String generate(){
+        return generate(UUID.randomUUID());
+    }
+
+    public String generate(UUID userId) {
 
         var userDetails = JwtUserDetails.builder()
-                .userId(123L)
+                .userId(userId)
                 .username("username@email.ru")
                 .userRoles(Set.of("ROLE_USER"))
                 .build();
 
-        return generateToken(userDetails, String.valueOf(123L));
+        return generateToken(userDetails, userDetails.getUserId().toString());
     }
 
     public String generateToken(UserDetails userDetails, String userId) {

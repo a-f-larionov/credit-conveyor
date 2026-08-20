@@ -13,42 +13,40 @@ import ru.creditbank.credit.operations.jwt.JwtUserDetails;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
 public class JwtService {
 
-    public static final String CLAIMS_FIELD_NAME_USER_ID = "user_id";
+    public static final String CLAIMS_FIELD_NAME_USER_ID = "userId";
     public static final String CLAIMS_FIELD_NAME_USERNAME = "username";
     public static final String CLAIMS_FIELD_NAME_ROLES = "roles";
 
     @Value("${jwt.signing.key}")
     String jwtSigningKey;
-
-    @Value("${jwt.signing.expiration_sec}")
-    Long jwtSigningExpirationSec;
-
+    
     public boolean isTokenValid(String token) {
         Claims claims = extractAllClaims(token);
         return
                 claims.get(CLAIMS_FIELD_NAME_USER_ID) != null &&
-                claims.get(CLAIMS_FIELD_NAME_USERNAME) != null &&
-                claims.get(CLAIMS_FIELD_NAME_ROLES) != null &&
-                !isTokenExpired(token);
+                        claims.get(CLAIMS_FIELD_NAME_USERNAME) != null &&
+                        claims.get(CLAIMS_FIELD_NAME_ROLES) != null &&
+                        !isTokenExpired(token);
     }
 
     public UserDetails getUserDetailsByToken(String jwtToken) {
 
         return JwtUserDetails.builder()
-                .userId(extractUserId(jwtToken))
+                .userId(UUID.fromString(extractUserId(jwtToken)))
                 .username(extractUsername(jwtToken))
                 .userRoles(Set.of(extractRoles(jwtToken).split(",")))
                 .build();
     }
 
-    public Long extractUserId(String token) {
-        return Long.valueOf(extractField(token, CLAIMS_FIELD_NAME_USER_ID, String.class));
+    public String extractUserId(String token) {
+        return extractField(token, CLAIMS_FIELD_NAME_USER_ID, String.class);
     }
 
     public String extractUsername(String token) {
