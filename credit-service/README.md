@@ -9,6 +9,7 @@
 #  Credit Conveyor – Credit Service
 
 Микросервис кредитов на **Spring Boot 3 + JWT**.  
+Создание заявки на кредит
 
 ---
 
