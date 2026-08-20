@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.jwt.filter;
+package ru.creditbank.apigateway.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,15 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.creditbank.apigateway.config.ErrorResponseWriter;
 import ru.creditbank.apigateway.config.SecurityConfig;
-import ru.creditbank.apigateway.entitiy.UserModel;
 import ru.creditbank.apigateway.exception.WrongOrInvalidJwtTokenException;
-import ru.creditbank.apigateway.jwt.service.JwtService;
-import ru.creditbank.apigateway.service.UserService;
+import ru.creditbank.apigateway.service.JwtService;
 
 import java.io.IOException;
 
@@ -30,9 +27,9 @@ public class JwtFilter extends OncePerRequestFilter {
     public static final String HEADER_NAME = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
 
-    private final UserService userService;
     private final JwtService jwtService;
     private final ErrorResponseWriter errorResponseWriter;
+    private final JwtStore jwtStore;
 
     @Override
     protected void doFilterInternal(
@@ -59,32 +56,23 @@ public class JwtFilter extends OncePerRequestFilter {
         var jwtToken = resolveJwtToken(request);
         if (jwtToken == null) return;
 
-        var userEmail = jwtService.extractUserEmail(jwtToken);
-        if (isEmpty(userEmail)) {
-            throw new WrongOrInvalidJwtTokenException("Empty userEmail");
-        }
-
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            return;
-        }
-
-        UserModel userModel = userService.getUserByEmail(userEmail);
-        if (!jwtService.isTokenValid(jwtToken, userModel)) {
+        if (!jwtService.isTokenValid(jwtToken)) {
             throw new WrongOrInvalidJwtTokenException("Token Invalid");
         }
 
-        setSecurityContextAuthentication(request, userModel);
+        setSecurityContextAuthentication(jwtToken);
     }
 
-    private void setSecurityContextAuthentication(HttpServletRequest request, UserModel userModel) {
-        var authToken = new UsernamePasswordAuthenticationToken(
-                userModel,
-                null,
-                userModel.getAuthorities()
-        );
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+    private void setSecurityContextAuthentication(String jwtToken) {
+        var userDetails = jwtStore.getUserDetailsByToken(jwtToken);
 
-        SecurityContextHolder.getContext().setAuthentication(authToken);
+        var auth = new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     private String resolveJwtToken(HttpServletRequest request) {
@@ -100,11 +88,11 @@ public class JwtFilter extends OncePerRequestFilter {
         return jwtToken;
     }
 
-    private boolean isNotBearer(String authHeader) {
-        return isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX);
-    }
-
     private boolean isPublicPath(HttpServletRequest request) {
         return SecurityConfig.PUBLIC_URLS.contains(request.getRequestURI());
+    }
+
+    private boolean isNotBearer(String authHeader) {
+        return isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX);
     }
 }

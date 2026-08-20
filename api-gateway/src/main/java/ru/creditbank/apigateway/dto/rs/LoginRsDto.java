@@ -12,5 +12,6 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @Jacksonized
 public class LoginRsDto {
-    private final String token;
+
+    String token;
 }
