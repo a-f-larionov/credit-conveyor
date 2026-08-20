@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.creditbank.apigateway.jwt.filter.JwtFilter;
+import ru.creditbank.apigateway.jwt.JwtFilter;
 
 import java.util.Set;
 
@@ -27,7 +27,7 @@ public class SecurityConfig {
             "/error"
     );
 
-    private final JwtFilter jwtAuthenticationFilter;
+    private final JwtFilter jwtFilter;
     private final ErrorResponseWriter errorResponseWriter;
 
     @Bean
@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .accessDeniedHandler((request, response, accessDeniedException) ->
                                 errorResponseWriter.sendError(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         ;
 
         return http.build();

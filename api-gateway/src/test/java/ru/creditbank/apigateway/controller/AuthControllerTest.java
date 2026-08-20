@@ -3,10 +3,9 @@ package ru.creditbank.apigateway.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
-import ru.creditbank.apigateway.TestFixtures;
-import ru.creditbank.apigateway.jwt.service.JwtService;
 import ru.creditbank.apigateway.dto.rs.ErrorRsDto;
 import ru.creditbank.apigateway.dto.rs.LoginRsDto;
+import ru.creditbank.apigateway.service.JwtService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,7 +22,6 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         // given
         var registerRqDto = buildRegisterRqDto();
         var loginRqDto = buildLoginRqDto(registerRqDto);
-        var userModel = TestFixtures.builUserModel(registerRqDto);
 
         performPostWithDto("/api/v1/auth/register", registerRqDto, status().isCreated());
 
@@ -31,11 +29,11 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDto, LoginRsDto.class, status().isOk());
 
         // then
-        assertTrue(jwtService.isTokenValid(rsDto.getToken(), userModel));
+        assertTrue(jwtService.isTokenValid(rsDto.getToken()));
     }
 
     @Test
-    void testForbiddenRequestNoToken    () throws Exception {
+    void testForbiddenRequestNoToken() throws Exception {
         // given
         var userInfoRqDto = buildUserInfoRqDto("email@email.com");
 

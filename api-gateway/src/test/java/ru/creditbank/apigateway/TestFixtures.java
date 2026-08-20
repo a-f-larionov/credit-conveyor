@@ -1,6 +1,5 @@
 package ru.creditbank.apigateway;
 
-import ru.creditbank.apigateway.entitiy.UserModel;
 import ru.creditbank.apigateway.dto.FullNameDto;
 import ru.creditbank.apigateway.dto.rq.LoginRqDto;
 import ru.creditbank.apigateway.dto.rq.RegisterRqDto;
@@ -36,16 +35,6 @@ public class TestFixtures {
     public static UserInfoRqDto buildUserInfoRqDto(String email) {
         return UserInfoRqDto.builder()
                 .email(email)
-                .build();
-    }
-
-    public static UserModel builUserModel(RegisterRqDto rqDto) {
-        return UserModel.builder()
-                .email(rqDto.getEmail())
-                .passwordHash(rqDto.getPassword())
-                .firstName(rqDto.getFullName().getFirstName())
-                .middleName(rqDto.getFullName().getMiddleName())
-                .lastName(rqDto.getFullName().getLastName())
                 .build();
     }
 
