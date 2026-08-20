@@ -29,7 +29,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final ErrorResponseWriter errorResponseWriter;
     private final JwtService jwtService;
-    private final JwtStore jwtStore;
 
     @Override
     protected void doFilterInternal(
@@ -64,7 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private void setSecurityContextAuthentication(String jwtToken) {
-        var userDetails = jwtStore.getUserDetailsByToken(jwtToken);
+        var userDetails = jwtService.getUserDetailsByToken(jwtToken);
 
         var auth = new UsernamePasswordAuthenticationToken(
                 userDetails,

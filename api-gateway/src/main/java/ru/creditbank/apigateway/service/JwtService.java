@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.creditbank.apigateway.jwt.JwtStore;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,12 +54,19 @@ public class JwtService {
         return extractField(token, CLAIMS_FIELD_NAME_USERNAME, String.class);
     }
 
+    public UserDetails getUserDetailsByToken(String jwtToken) {
+        return jwtStore.getUserDetailsByToken(jwtToken);
+    }
+
     private Map<String, ?> generateClaims(UserDetails userDetails, String userId) {
         Map<String, Object> claims = new HashMap<>();
 
         claims.put(CLAIMS_FIELD_NAME_USER_ID, userId);
         claims.put(CLAIMS_FIELD_NAME_USERNAME, userDetails.getUsername());
-        claims.put(CLAIMS_FIELD_NAME_ROLES, userDetails.getAuthorities());
+        var userRoles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+        claims.put(CLAIMS_FIELD_NAME_ROLES, userRoles);
 
         return claims;
     }
