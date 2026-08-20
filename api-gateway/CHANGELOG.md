@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Use records for DTO as a gold Java standard since Java 14(2020). LTS 17(2021)
     - Use AdviceController
     - Use MapStruct
-    - Use UUID for UserModel.id
 
 [0.0.3] - 2026-08-19
     - Add CreditProxyContoller. Simple RestTemplate proxy

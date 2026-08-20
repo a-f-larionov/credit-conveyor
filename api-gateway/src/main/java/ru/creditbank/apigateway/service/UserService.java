@@ -18,17 +18,19 @@ import ru.creditbank.apigateway.exception.UserAlreadyExistsException;
 import ru.creditbank.apigateway.exception.UserDoesNotExistsException;
 import ru.creditbank.apigateway.exception.WrongPasswordException;
 import ru.creditbank.apigateway.jwt.JwtStore;
-import ru.creditbank.apigateway.repository.UsersRepository;
+import ru.creditbank.apigateway.repository.UserRepository;
 
 import java.util.Set;
 
+import static jakarta.transaction.Transactional.TxType.REQUIRES_NEW;
+
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(REQUIRES_NEW)
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UsersRepository userRepository;
+    private final UserRepository userRepository;
     private final JwtService jwtService;
     private final JwtStore jwtStore;
 

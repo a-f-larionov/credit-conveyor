@@ -24,6 +24,7 @@ public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @EqualsAndHashCode.Include
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "email", nullable = false, unique = true, length = 100)

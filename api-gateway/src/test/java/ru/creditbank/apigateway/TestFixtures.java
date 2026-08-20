@@ -9,11 +9,16 @@ public class TestFixtures {
 
 
     public static RegisterRqDto buildRegisterRqDto() {
-        var unique = 1;
+        var unique = 1L;
         return buildRegisterRqDto(unique, "Password" + unique);
     }
 
-    public static RegisterRqDto buildRegisterRqDto(int unique, String password) {
+    public static RegisterRqDto buildRegisterRqDto(String password) {
+        var unique = 1L;
+        return buildRegisterRqDto(unique, password);
+    }
+
+    public static RegisterRqDto buildRegisterRqDto(Long unique, String password) {
         return RegisterRqDto.builder()
                 .fullName(FullNameDto.builder()
                         .firstName("firstName-" + unique)

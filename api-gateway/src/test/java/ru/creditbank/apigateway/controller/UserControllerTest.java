@@ -1,6 +1,8 @@
 package ru.creditbank.apigateway.controller;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
 import ru.creditbank.apigateway.TestFixtures;
 import ru.creditbank.apigateway.dto.rs.ErrorRsDto;
@@ -37,6 +39,7 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
+    @Sql(scripts = "/sql/create-admin-user.sql", config = @SqlConfig(separator = ";;"))
     void testUserInfoAdmin() throws Exception {
         // given
 
