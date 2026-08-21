@@ -41,12 +41,6 @@ public abstract class SpringBootMvcBaseTest {
         return objectMapper.readValue(result.getResponse().getContentAsString(), rsDtoClazz);
     }
 
-    protected <RQ> void performPostWithDto(String url, RQ rqDTO, ResultMatcher expectedStatus) throws Exception {
-        mockMvc.perform(postWithDto(url, rqDTO, null))
-                .andExpect(expectedStatus)
-                .andReturn();
-    }
-
     protected <RQ> MockHttpServletRequestBuilder postWithDto(String url, RQ rqDto, String token) throws JsonProcessingException {
         var requestBuilder = post(url);
         if (token != null) {

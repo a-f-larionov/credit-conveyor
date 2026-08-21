@@ -29,7 +29,7 @@ public class CreditEntity {
     @Column(name = "user_full_name", nullable = false, length = 100)
     private String userFullName;
 
-    @Column(name = "requested_amount", nullable = false)
+    @Column(name = "requested_amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal requestedAmount;
 
     @Column(name = "term_months", nullable = false)
