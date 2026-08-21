@@ -18,8 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
-@Rollback
 @ActiveProfiles("test")
 public abstract class SpringBootMvcBaseTest {
 
