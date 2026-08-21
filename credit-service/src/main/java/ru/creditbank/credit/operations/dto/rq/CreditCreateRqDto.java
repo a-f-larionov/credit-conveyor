@@ -16,7 +16,7 @@ public record CreditCreateRqDto(
         @NotNull
         @Positive
         @Digits(integer = 15, fraction = 2)
-        BigDecimal requestAmount,
+        BigDecimal requestedAmount,
 
         @NotNull
         @Min(1)

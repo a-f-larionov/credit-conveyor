@@ -12,7 +12,6 @@ import java.util.UUID;
 public record CreditCreateRsDto(
 
         UUID id,
-
         CreditStatusEnum status,
 
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")

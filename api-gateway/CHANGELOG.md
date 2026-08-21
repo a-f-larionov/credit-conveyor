@@ -5,8 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
     - Use AdviceController
-    - Use MapStruct
     - Add Swagger UI
+
+[0.0.4] - 2026-08-21
+### Added
+    - Use MapStruct
 
 [0.0.3] - 2026-08-19
 ### Added

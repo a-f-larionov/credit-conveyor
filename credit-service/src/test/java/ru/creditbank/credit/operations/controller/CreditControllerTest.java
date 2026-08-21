@@ -92,7 +92,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         assertThat(infoRsDto.status()).isEqualTo(CreditStatusEnum.PENDING);
         assertThat(infoRsDto.userId()).isEqualTo(userId);
         assertThat(infoRsDto.userFullName()).isEqualTo(rqDto.fullName());
-        assertThat(infoRsDto.requestedAmount()).isEqualTo(rqDto.requestAmount());
+        assertThat(infoRsDto.requestedAmount()).isEqualTo(rqDto.requestedAmount());
         assertThat(infoRsDto.termMonths()).isEqualTo(rqDto.termMonths());
     }
 }

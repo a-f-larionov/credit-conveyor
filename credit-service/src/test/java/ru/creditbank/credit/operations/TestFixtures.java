@@ -16,7 +16,7 @@ public class TestFixtures {
 
         return CreditCreateRqDto.builder()
                 .fullName(fullName)
-                .requestAmount(new BigDecimal("123.23"))
+                .requestedAmount(new BigDecimal("123.23"))
                 .termMonths(12)
                 .build();
     }

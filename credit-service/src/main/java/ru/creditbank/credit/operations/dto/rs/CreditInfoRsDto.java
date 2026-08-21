@@ -15,12 +15,12 @@ public record CreditInfoRsDto(
         UUID userId,
         String userFullName,
         BigDecimal requestedAmount,
-
         Integer termMonths,
-
         CreditStatusEnum status,
+
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
         Instant creationDate,
+
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
         Instant lastUpdated
 ) {
