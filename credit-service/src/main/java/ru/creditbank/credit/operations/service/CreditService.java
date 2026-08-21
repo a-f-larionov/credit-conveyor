@@ -16,36 +16,22 @@ import ru.creditbank.credit.operations.repository.CreditRepository;
 
 import java.time.Instant;
 
-import static jakarta.transaction.Transactional.TxType.REQUIRES_NEW;
-
 @Service
 @RequiredArgsConstructor
-@Transactional(REQUIRES_NEW)
 public class CreditService {
 
     private final CreditRepository creditRepository;
 
+    @Transactional
     public CreditCreateRsDto create(CreditCreateRqDto rqDto) {
 
         var userDetails = (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        var credit = CreditEntity.builder()
-                .userId(userDetails.getUserId())
-                .userFullName(rqDto.fullName())
-                .requestedAmount(rqDto.requestAmount())
-                .termMonths(rqDto.termMonths())
-                .status(CreditStatusEnum.PENDING)
-                .lastUpdated(Instant.now())
-                .creationDate(Instant.now())
-                .build();
+        var credit = mapRqDtoToEntity(rqDto, userDetails);
 
         creditRepository.save(credit);
 
-        return CreditCreateRsDto.builder()
-                .id(credit.getId())
-                .createdAt(credit.getCreationDate())
-                .status(credit.getStatus())
-                .build();
+        return mapEntityToCreateRsDto(credit);
     }
 
     public CreditInfoRsDto info(CreditInfoRqDto rqDto) {
@@ -53,6 +39,10 @@ public class CreditService {
         var creditEntity = creditRepository.findById(rqDto.id())
                 .orElseThrow(() -> new CreditException("Credit not found"));
 
+        return mapEntityToInfoRsDto(creditEntity);
+    }
+
+    private static CreditInfoRsDto mapEntityToInfoRsDto(CreditEntity creditEntity) {
         return CreditInfoRsDto.builder()
                 .id(creditEntity.getId())
                 .userId(creditEntity.getUserId())
@@ -62,6 +52,26 @@ public class CreditService {
                 .status(creditEntity.getStatus())
                 .creationDate(creditEntity.getCreationDate())
                 .lastUpdated(creditEntity.getLastUpdated())
+                .build();
+    }
+
+    private static CreditCreateRsDto mapEntityToCreateRsDto(CreditEntity credit) {
+        return CreditCreateRsDto.builder()
+                .id(credit.getId())
+                .createdAt(credit.getCreationDate())
+                .status(credit.getStatus())
+                .build();
+    }
+
+    private static CreditEntity mapRqDtoToEntity(CreditCreateRqDto rqDto, JwtUserDetails userDetails) {
+        return CreditEntity.builder()
+                .userId(userDetails.getUserId())
+                .userFullName(rqDto.fullName())
+                .requestedAmount(rqDto.requestAmount())
+                .termMonths(rqDto.termMonths())
+                .status(CreditStatusEnum.PENDING)
+                .lastUpdated(Instant.now())
+                .creationDate(Instant.now())
                 .build();
     }
 }

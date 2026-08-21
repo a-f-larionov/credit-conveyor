@@ -22,11 +22,8 @@ import ru.creditbank.apigateway.repository.UserRepository;
 
 import java.util.Set;
 
-import static jakarta.transaction.Transactional.TxType.REQUIRES_NEW;
-
 @Service
 @RequiredArgsConstructor
-@Transactional(REQUIRES_NEW)
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
@@ -34,10 +31,11 @@ public class UserService {
     private final JwtService jwtService;
     private final JwtStore jwtStore;
 
+    @Transactional
     public void register(RegisterRqDto rqDto) {
 
         try {
-            var user = UserService.mapRegisterRqDtoToUserModel(rqDto);
+            var user = mapRegisterRqDtoToUserModel(rqDto);
 
             user.setPasswordHash(passwordEncoder.encode(rqDto.getPassword()));
 
@@ -51,6 +49,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public LoginRsDto login(LoginRqDto rqDto) {
 
         try {
@@ -74,16 +73,17 @@ public class UserService {
         }
     }
 
+    @Transactional
     public UserInfoRsDto getUserByEmail(UserInfoRqDto rqDto) {
         return mapUserToUserInfoRsDto(getUserByEmail(rqDto.getEmail()));
     }
 
-    public UserEntity getUserByEmail(String email) {
+    private UserEntity getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(UserDoesNotExistsException::new);
     }
 
-    public static UserEntity mapRegisterRqDtoToUserModel(RegisterRqDto rqDto) {
+    private static UserEntity mapRegisterRqDtoToUserModel(RegisterRqDto rqDto) {
         return UserEntity.builder()
                 .firstName(rqDto.getFullName().getFirstName())
                 .lastName(rqDto.getFullName().getLastName())
@@ -93,7 +93,7 @@ public class UserService {
                 .build();
     }
 
-    public static UserInfoRsDto mapUserToUserInfoRsDto(UserEntity user) {
+    private static UserInfoRsDto mapUserToUserInfoRsDto(UserEntity user) {
         return UserInfoRsDto.builder()
                 .email(user.getEmail())
                 .fullName(FullNameDto.builder()
