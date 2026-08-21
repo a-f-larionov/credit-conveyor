@@ -1,19 +1,12 @@
 package ru.creditbank.apigateway.dto.rs;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
-import lombok.extern.jackson.Jacksonized;
-import ru.creditbank.apigateway.dto.AuthDto;
+import lombok.Builder;
 import ru.creditbank.apigateway.dto.FullNameDto;
 
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Getter
-@ToString
-@EqualsAndHashCode(callSuper = true)
-@SuperBuilder
-@Jacksonized
-public class UserInfoRsDto extends AuthDto {
-
-    FullNameDto fullName;
+@Builder
+public record UserInfoRsDto(
+        String email,
+        String password,
+        FullNameDto fullName
+) {
 }

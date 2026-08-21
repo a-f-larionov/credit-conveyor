@@ -32,8 +32,8 @@ public class TestFixtures {
 
     public static LoginRqDto buildLoginRqDto(RegisterRqDto registerRqDto) {
         return LoginRqDto.builder()
-                .email(registerRqDto.getEmail())
-                .password(registerRqDto.getPassword())
+                .email(registerRqDto.email())
+                .password(registerRqDto.password())
                 .build();
     }
 

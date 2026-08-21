@@ -4,7 +4,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
-    - Use records for DTO as a gold Java standard since Java 14(2020). LTS 17(2021)
     - Use AdviceController
     - Use MapStruct
     - Add Swagger UI

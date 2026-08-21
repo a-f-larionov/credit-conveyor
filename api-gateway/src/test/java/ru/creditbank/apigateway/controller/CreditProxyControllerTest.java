@@ -41,7 +41,7 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
         // then
-        assertEquals("Token Invalid", rsDto.getError());
+        assertEquals("Token Invalid", rsDto.error());
     }
 
     @Test
@@ -50,10 +50,10 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
         var registerRqDto = buildRegisterRqDto();
         var loginRqDto = buildLoginRqDto(registerRqDto);
         performPostWithDto("/api/v1/auth/register", registerRqDto);
-        var token = performPostWithDto("/api/v1/auth/login", loginRqDto, LoginRsDto.class).getToken();
+        var token = performPostWithDto("/api/v1/auth/login", loginRqDto, LoginRsDto.class).token();
 
         // when
-        var rqDto = TestFixtures.buildRegisterRqDto();
+        var rqDto = buildRegisterRqDto();
         var creditServiceRsDto = TestFixtures.buildUserInfoRqDto("admin@mail.ru");
 
         mockServer.expect(ExpectedCount.once(), requestTo(creditServiceUrl + "/credit-service/api/v1/create"))
@@ -64,6 +64,6 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
         // then
         var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, creditServiceRsDto.getClass(), status().isOk(), token);
 
-        assertEquals(creditServiceRsDto.getEmail(), rsDto.getEmail());
+        assertEquals(creditServiceRsDto.email(), rsDto.email());
     }
 }

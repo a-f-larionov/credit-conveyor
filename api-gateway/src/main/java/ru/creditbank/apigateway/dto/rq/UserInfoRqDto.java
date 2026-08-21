@@ -2,19 +2,13 @@ package ru.creditbank.apigateway.dto.rq;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.jackson.Jacksonized;
+import lombok.Builder;
 
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Getter
-@ToString
-@EqualsAndHashCode
 @Builder
-@Jacksonized
-public class UserInfoRqDto {
+public record UserInfoRqDto(
 
-    @NotBlank
-    @Email
-    String email;
+        @NotBlank
+        @Email
+        String email
+) {
 }

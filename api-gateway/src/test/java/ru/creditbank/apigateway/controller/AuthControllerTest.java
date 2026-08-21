@@ -29,7 +29,7 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDto, LoginRsDto.class, status().isOk());
 
         // then
-        assertTrue(jwtService.isTokenValid(rsDto.getToken()));
+        assertTrue(jwtService.isTokenValid(rsDto.token()));
     }
 
     @Test
@@ -41,6 +41,6 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized());
 
         // then
-        assertEquals("Unauthorized", rsDto.getError());
+        assertEquals("Unauthorized", rsDto.error());
     }
 }

@@ -1,20 +1,21 @@
 package ru.creditbank.apigateway.dto.rq;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
-import lombok.extern.jackson.Jacksonized;
-import ru.creditbank.apigateway.dto.AuthDto;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Getter
-@ToString
-@EqualsAndHashCode(callSuper = true)
-@SuperBuilder
-@Jacksonized
-public class LoginRqDto extends AuthDto {
+@Builder
+public record LoginRqDto(
 
+        @NotBlank
+        @Email
+        String email,
+
+        @NotBlank
+        @Size(min = 8, max = 64)
+        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")
+        String password
+) {
 }

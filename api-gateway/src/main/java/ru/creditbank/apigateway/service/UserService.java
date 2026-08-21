@@ -37,7 +37,7 @@ public class UserService {
         try {
             var user = mapRegisterRqDtoToUserModel(rqDto);
 
-            user.setPasswordHash(passwordEncoder.encode(rqDto.getPassword()));
+            user.setPasswordHash(passwordEncoder.encode(rqDto.password()));
 
             if (userRepository.existsByEmail(user.getUsername())) {
                 throw new UserAlreadyExistsException();
@@ -53,10 +53,10 @@ public class UserService {
     public LoginRsDto login(LoginRqDto rqDto) {
 
         try {
-            var user = userRepository.findByEmail(rqDto.getEmail())
+            var user = userRepository.findByEmail(rqDto.email())
                     .orElseThrow(UserDoesNotExistsException::new);
 
-            if (!passwordEncoder.matches(rqDto.getPassword(), user.getPassword())) {
+            if (!passwordEncoder.matches(rqDto.password(), user.getPassword())) {
                 throw new WrongPasswordException();
             }
 
@@ -75,7 +75,7 @@ public class UserService {
 
     @Transactional
     public UserInfoRsDto getUserByEmail(UserInfoRqDto rqDto) {
-        return mapUserToUserInfoRsDto(getUserByEmail(rqDto.getEmail()));
+        return mapUserToUserInfoRsDto(getUserByEmail(rqDto.email()));
     }
 
     private UserEntity getUserByEmail(String email) {
@@ -85,10 +85,10 @@ public class UserService {
 
     private static UserEntity mapRegisterRqDtoToUserModel(RegisterRqDto rqDto) {
         return UserEntity.builder()
-                .firstName(rqDto.getFullName().getFirstName())
-                .lastName(rqDto.getFullName().getLastName())
-                .middleName(rqDto.getFullName().getMiddleName())
-                .email(rqDto.getEmail())
+                .firstName(rqDto.fullName().firstName())
+                .lastName(rqDto.fullName().lastName())
+                .middleName(rqDto.fullName().middleName())
+                .email(rqDto.email())
                 .roles(Set.of(UserRole.ROLE_USER))
                 .build();
     }

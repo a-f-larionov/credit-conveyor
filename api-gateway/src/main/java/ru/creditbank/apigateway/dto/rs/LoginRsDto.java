@@ -1,17 +1,7 @@
 package ru.creditbank.apigateway.dto.rs;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.jackson.Jacksonized;
+import lombok.Builder;
 
-
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Getter
-@ToString
-@EqualsAndHashCode
 @Builder
-@Jacksonized
-public class LoginRsDto {
-
-    String token;
+public record LoginRsDto(String token) {
 }
