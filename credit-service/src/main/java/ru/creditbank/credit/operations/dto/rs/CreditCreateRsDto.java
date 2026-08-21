@@ -1,6 +1,7 @@
 package ru.creditbank.credit.operations.dto.rs;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 
@@ -11,6 +12,9 @@ import java.util.UUID;
 public record CreditCreateRsDto(
 
         UUID id,
+
         CreditStatusEnum status,
+
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
         Instant createdAt) {
 }
