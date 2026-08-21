@@ -37,8 +37,10 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         // given
         var userInfoRqDto = buildUserInfoRqDto("email@email.com");
 
-        // when-then
-        var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isForbidden());
+        // when
+        var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized());
+
+        // then
         assertEquals("Unauthorized", rsDto.getError());
     }
 }

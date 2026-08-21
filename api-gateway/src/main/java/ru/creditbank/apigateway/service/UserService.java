@@ -96,7 +96,7 @@ public class UserService {
     public static UserInfoRsDto mapUserToUserInfoRsDto(UserEntity user) {
         return UserInfoRsDto.builder()
                 .email(user.getEmail())
-                .fullNameDto(FullNameDto.builder()
+                .fullName(FullNameDto.builder()
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
                         .middleName(user.getMiddleName())

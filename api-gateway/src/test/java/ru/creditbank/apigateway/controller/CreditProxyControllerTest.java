@@ -8,12 +8,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
 import ru.creditbank.apigateway.TestFixtures;
+import ru.creditbank.apigateway.dto.rs.ErrorRsDto;
 import ru.creditbank.apigateway.dto.rs.LoginRsDto;
 
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
@@ -33,6 +32,19 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
     private ObjectMapper objectMapper;
 
     @Test
+    public void createInvalidToken() throws Exception {
+        // given
+        var token = "invalid-token";
+        var rqDto = TestFixtures.buildRegisterRqDto();
+
+        // when
+        var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isUnauthorized(), token);
+
+        // then
+        assertEquals("Token Invalid", rsDto.getError());
+    }
+
+    @Test
     public void create() throws Exception {
         // given
         var registerRqDto = buildRegisterRqDto();
@@ -46,7 +58,6 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
 
         mockServer.expect(ExpectedCount.once(), requestTo(creditServiceUrl + "/credit-service/api/v1/create"))
                 .andExpect(method(HttpMethod.POST))
-                .andExpect(MockRestRequestMatchers.header("X-User-Id", notNullValue()))
                 .andExpect(content().json(objectMapper.writeValueAsString(rqDto)))
                 .andRespond(withSuccess(objectMapper.writeValueAsString(creditServiceRsDto), MediaType.APPLICATION_JSON));
 

@@ -40,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             doFilter(request);
         } catch (Exception e) {
-            errorResponseWriter.sendError(response, HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+            errorResponseWriter.sendError(response, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
             return;
         }
         filterChain.doFilter(request, response);

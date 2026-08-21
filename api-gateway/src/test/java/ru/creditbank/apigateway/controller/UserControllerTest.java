@@ -32,17 +32,28 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
         assertEquals(registerRqDto.getEmail(), userInfoRsDto.getEmail());
 
         var rqFNDto = registerRqDto.getFullName();
-        var rsFNDto = userInfoRsDto.getFullNameDto();
+        var rsFNDto = userInfoRsDto.getFullName();
         assertEquals(rqFNDto.getFirstName(), rsFNDto.getFirstName());
         assertEquals(rqFNDto.getLastName(), rsFNDto.getLastName());
         assertEquals(rqFNDto.getMiddleName(), rsFNDto.getMiddleName());
     }
 
     @Test
+    void testUserIsUnAuthorized() throws Exception {
+        // given
+        var token = "invalid-token";
+        var userInfoRqDto = TestFixtures.buildUserInfoRqDto("user@user.ru");
+
+        // when-then
+        var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
+
+        assertEquals("Token Invalid", rsDto.getError());
+    }
+
+    @Test
     @Sql(scripts = "/sql/create-admin-user.sql", config = @SqlConfig(separator = ";;"))
     void testUserInfoAdmin() throws Exception {
         // given
-
         var loginRqDTO = TestFixtures.buildLoginRqDto("admin@admin.ru", "Admin123");
         var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDTO, LoginRsDto.class, status().isOk());
         var token = rsDto.getToken();
@@ -53,7 +64,7 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
         // then
         assertEquals(loginRqDTO.getEmail(), userInfoRsDto.getEmail());
 
-        var rsFNDto = userInfoRsDto.getFullNameDto();
+        var rsFNDto = userInfoRsDto.getFullName();
         assertNull(rsFNDto.getFirstName());
         assertNull(rsFNDto.getLastName());
         assertNull(rsFNDto.getMiddleName());
@@ -72,6 +83,7 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
         // when
         var errorRsDto = performPostWithDto("/api/v1/user/info-admin", loginRqDTO, ErrorRsDto.class, status().isForbidden(), token);
 
+        // then
         assertEquals("Forbidden", errorRsDto.getError());
     }
 }

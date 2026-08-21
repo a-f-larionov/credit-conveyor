@@ -15,5 +15,5 @@ import ru.creditbank.apigateway.dto.FullNameDto;
 @Jacksonized
 public class UserInfoRsDto extends AuthDto {
 
-    FullNameDto fullNameDto;
+    FullNameDto fullName;
 }
