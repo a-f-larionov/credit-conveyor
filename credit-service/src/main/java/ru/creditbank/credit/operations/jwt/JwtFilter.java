@@ -40,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             doFilter(request);
         } catch (Exception e) {
-            errorResponseWriter.sendError(response, HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+            errorResponseWriter.sendError(response, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
             return;
         }
         filterChain.doFilter(request, response);
@@ -63,7 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private void setSecurityContextAuthentication(String jwtToken) {
-        var userDetails = jwtService.getUserDetailsByToken(jwtToken);
+        var userDetails = jwtService.extractUserDetailFromToken(jwtToken);
 
         var auth = new UsernamePasswordAuthenticationToken(
                 userDetails,

@@ -9,9 +9,13 @@ import java.util.UUID;
 public class TestFixtures {
 
     public static CreditCreateRqDto buildCreditCreateRqDto() {
+        return buildCreditCreateRqDto("Иванов Иван Иванович");
+    }
+
+    public static CreditCreateRqDto buildCreditCreateRqDto(String fullName) {
 
         return CreditCreateRqDto.builder()
-                .fullName("Иванов Иван Иванович")
+                .fullName(fullName)
                 .requestAmount(BigDecimal.valueOf(1234, 2))
                 .termMonths(12)
                 .build();

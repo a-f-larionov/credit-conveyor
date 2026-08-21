@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ru.creditbank.credit.operations.exception.WrongOrInvalidJwtTokenException;
 import ru.creditbank.credit.operations.jwt.JwtUserDetails;
 
 import javax.crypto.SecretKey;
@@ -26,17 +27,21 @@ public class JwtService {
 
     @Value("${jwt.signing.key}")
     String jwtSigningKey;
-    
+
     public boolean isTokenValid(String token) {
-        Claims claims = extractAllClaims(token);
-        return
-                claims.get(CLAIMS_FIELD_NAME_USER_ID) != null &&
-                        claims.get(CLAIMS_FIELD_NAME_USERNAME) != null &&
-                        claims.get(CLAIMS_FIELD_NAME_ROLES) != null &&
-                        !isTokenExpired(token);
+        try {
+            Claims claims = extractAllClaims(token);
+            return
+                    claims.get(CLAIMS_FIELD_NAME_USER_ID) != null &&
+                            claims.get(CLAIMS_FIELD_NAME_USERNAME) != null &&
+                            claims.get(CLAIMS_FIELD_NAME_ROLES) != null &&
+                            !isTokenExpired(token);
+        } catch (Exception e) {
+            throw new WrongOrInvalidJwtTokenException("Token Invalid");
+        }
     }
 
-    public UserDetails getUserDetailsByToken(String jwtToken) {
+    public UserDetails extractUserDetailFromToken(String jwtToken) {
 
         return JwtUserDetails.builder()
                 .userId(UUID.fromString(extractUserId(jwtToken)))

@@ -5,7 +5,7 @@ import lombok.*;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -39,10 +39,10 @@ public class CreditEntity {
     @Enumerated(EnumType.STRING)
     private CreditStatusEnum status;
 
-    @Column(name = "creation_date")
-    private Date creationDate;
+    @Column(name = "creation_date", nullable = false)
+    private Instant creationDate;
 
-    @Column(name = "last_updated")
-    private Date lastUpdated;
+    @Column(name = "last_updated", nullable = false)
+    private Instant lastUpdated;
 
 }

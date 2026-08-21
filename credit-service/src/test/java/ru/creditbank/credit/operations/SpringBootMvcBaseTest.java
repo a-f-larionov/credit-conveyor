@@ -37,6 +37,7 @@ public abstract class SpringBootMvcBaseTest {
         var result = mockMvc.perform(postWithDto(url, rqDto, token))
                 .andExpect(expectedStatus)
                 .andReturn();
+        if (rsDtoClazz == null) return null;
         return objectMapper.readValue(result.getResponse().getContentAsString(), rsDtoClazz);
     }
 

@@ -4,7 +4,7 @@ import lombok.Builder;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 
 @Builder
@@ -16,7 +16,7 @@ public record CreditInfoRsDto(
         BigDecimal requestedAmount,
         Integer termMonths,
         CreditStatusEnum status,
-        Date creationDate,
-        Date lastUpdated
+        Instant creationDate,
+        Instant lastUpdated
 ) {
 }

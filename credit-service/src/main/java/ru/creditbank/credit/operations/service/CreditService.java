@@ -14,7 +14,7 @@ import ru.creditbank.credit.operations.exception.CreditException;
 import ru.creditbank.credit.operations.jwt.JwtUserDetails;
 import ru.creditbank.credit.operations.repository.CreditRepository;
 
-import java.util.Date;
+import java.time.Instant;
 
 import static jakarta.transaction.Transactional.TxType.REQUIRES_NEW;
 
@@ -35,15 +35,15 @@ public class CreditService {
                 .requestedAmount(rqDto.requestAmount())
                 .termMonths(rqDto.termMonths())
                 .status(CreditStatusEnum.PENDING)
-                .lastUpdated(new Date(System.currentTimeMillis()))
-                .creationDate(new Date(System.currentTimeMillis()))
+                .lastUpdated(Instant.now())
+                .creationDate(Instant.now())
                 .build();
 
         creditRepository.save(credit);
 
         return CreditCreateRsDto.builder()
                 .id(credit.getId())
-                .createAt(credit.getCreationDate())
+                .createdAt(credit.getCreationDate())
                 .status(credit.getStatus())
                 .build();
     }

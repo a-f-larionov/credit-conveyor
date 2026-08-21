@@ -38,9 +38,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            errorResponseWriter.sendError(response, HttpServletResponse.SC_FORBIDDEN, "Unauthorized");
-                        })
+                        .authenticationEntryPoint((request, response, authException) ->
+                                errorResponseWriter.sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
                         .accessDeniedHandler((request, response, accessDeniedException) ->
                                 errorResponseWriter.sendError(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
                 )

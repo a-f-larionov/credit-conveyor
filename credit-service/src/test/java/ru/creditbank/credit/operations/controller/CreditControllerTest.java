@@ -8,12 +8,14 @@ import ru.creditbank.credit.operations.TestJwtGenerator;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
+import ru.creditbank.credit.operations.dto.rs.ErrorRsDto;
 
 import java.util.UUID;
 
 import static java.time.Instant.now;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class CreditControllerTest extends SpringBootMvcBaseTest {
@@ -26,8 +28,11 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         // given
         var rqDto = TestFixtures.buildCreditCreateRqDto();
 
-        // when - then
-        performPostWithDto("/credit-service/api/v1/create", rqDto, CreditCreateRsDto.class, status().isForbidden());
+        // when
+        var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isUnauthorized());
+
+        // then
+        assertEquals("Unauthorized", rsDto.error());
     }
 
     @Test
@@ -36,8 +41,21 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var rqDto = TestFixtures.buildCreditCreateRqDto();
         var token = "invalid-token";
 
-        // when - then
-        performPostWithDto("/credit-service/api/v1/create", rqDto, CreditCreateRsDto.class, status().isForbidden(), token);
+        // when
+        var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isUnauthorized(), token);
+
+        // then
+        assertEquals("Token Invalid", rsDto.error());
+    }
+
+    @Test
+    void create401IncorrectData() throws Exception {
+        // given
+        var rqDto = TestFixtures.buildCreditCreateRqDto(""); // blank fullName is invalid
+        var token = jwtGenerator.generate();
+
+        // when
+        performPostWithDto("/credit-service/api/v1/create", rqDto, null, status().isBadRequest(), token);
     }
 
     @Test
@@ -51,7 +69,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
 
         // then
         assertThat(rsDto.id()).isNotNull();
-        assertThat(rsDto.createAt()).isBetween(now().minus(10, MINUTES), now());
+        assertThat(rsDto.createdAt()).isBetween(now().minus(10, MINUTES), now());
         assertThat(rsDto.status()).isEqualTo(CreditStatusEnum.PENDING);
     }
 
