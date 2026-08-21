@@ -17,7 +17,7 @@ import ru.creditbank.apigateway.exception.UserAlreadyExistsException;
 import ru.creditbank.apigateway.exception.UserDoesNotExistsException;
 import ru.creditbank.apigateway.exception.WrongPasswordException;
 import ru.creditbank.apigateway.jwt.JwtStore;
-import ru.creditbank.apigateway.mappers.AuthMapper;
+import ru.creditbank.apigateway.mapper.AuthMapper;
 import ru.creditbank.apigateway.repository.UserRepository;
 
 import java.util.Set;
