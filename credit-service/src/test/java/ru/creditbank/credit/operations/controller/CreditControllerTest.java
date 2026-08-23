@@ -24,7 +24,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
     TestJwtGenerator jwtGenerator;
 
     @Test
-    void createNoToken() throws Exception {
+    void createNoToken() {
         // given
         var rqDto = TestFixtures.buildCreditCreateRqDto();
 
@@ -36,7 +36,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    void createInvalidToken() throws Exception {
+    void createInvalidToken() {
         // given
         var rqDto = TestFixtures.buildCreditCreateRqDto();
         var token = "invalid-token";
@@ -49,17 +49,20 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    void create401IncorrectData() throws Exception {
+    void create401IncorrectData() {
         // given
         var rqDto = TestFixtures.buildCreditCreateRqDto(""); // blank fullName is invalid
         var token = jwtGenerator.generate();
 
         // when
-        performPostWithDto("/credit-service/api/v1/create", rqDto, null, status().isBadRequest(), token);
+        var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isBadRequest(), token);
+
+        // then
+        assertEquals("Bad request", rsDto.error());
     }
 
     @Test
-    void create() throws Exception {
+    void create() {
         // given
         var rqDto = TestFixtures.buildCreditCreateRqDto();
         var token = jwtGenerator.generate();
@@ -74,7 +77,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    void createAndRead() throws Exception {
+    void createAndRead() {
         // given
         var userId = UUID.randomUUID();
         var token = jwtGenerator.generate(userId);

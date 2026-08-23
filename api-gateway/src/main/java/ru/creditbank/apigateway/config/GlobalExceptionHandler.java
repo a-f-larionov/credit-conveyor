@@ -40,14 +40,14 @@ public class GlobalExceptionHandler {
         doHandle(e, response, SC_UNAUTHORIZED, "Wrong password");
     }
 
-    @ExceptionHandler(AuthorizationDeniedException.class)
-    public void handle(AuthorizationDeniedException e, HttpServletResponse response) {
-        doHandle(e, response, SC_FORBIDDEN, "Forbidden");
-    }
-
     @ExceptionHandler(WrongOrInvalidJwtTokenException.class)
     public void handle(WrongOrInvalidJwtTokenException e, HttpServletResponse response) {
         doHandle(e, response, SC_UNAUTHORIZED, "Invalid token");
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public void handle(AuthorizationDeniedException e, HttpServletResponse response) {
+        doHandle(e, response, SC_FORBIDDEN, "Forbidden");
     }
 
     private void doHandle(Exception e, HttpServletResponse response, int status, String message) {

@@ -9,7 +9,7 @@ import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
 import ru.creditbank.credit.operations.dto.rq.CreditInfoRqDto;
 import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
-import ru.creditbank.credit.operations.exception.CreditException;
+import ru.creditbank.credit.operations.exception.CreditNotFoundException;
 import ru.creditbank.credit.operations.jwt.JwtUserDetails;
 import ru.creditbank.credit.operations.mappers.CreditMapper;
 import ru.creditbank.credit.operations.repository.CreditRepository;
@@ -44,7 +44,7 @@ public class CreditService {
     public CreditInfoRsDto info(CreditInfoRqDto rqDto) {
 
         var creditEntity = creditRepository.findById(rqDto.id())
-                .orElseThrow(() -> new CreditException("Credit not found"));
+                .orElseThrow(() -> new CreditNotFoundException("Credit not found"));
 
         return creditMapper.mapEntityToInfoRsDto(creditEntity);
     }
