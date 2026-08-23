@@ -23,13 +23,13 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public UserInfoRsDto info(@Valid @RequestBody UserInfoRqDto rqDto) {
 
-        return userService.getUserByEmail(rqDto);
+        return userService.findUserInfo(rqDto);
     }
 
     @PostMapping("/info-admin")
     @PreAuthorize("hasRole('ADMIN')")
     public UserInfoRsDto infoAdmin(@Valid @RequestBody UserInfoRqDto rqDto) {
 
-        return  userService.getUserByEmail(rqDto);
+        return  userService.findUserInfo(rqDto);
     }
 }

@@ -3,6 +3,7 @@ package ru.creditbank.apigateway.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
+import ru.creditbank.apigateway.TestFixtures;
 import ru.creditbank.apigateway.dto.rs.ErrorRsDto;
 import ru.creditbank.apigateway.dto.rs.LoginRsDto;
 import ru.creditbank.apigateway.service.JwtService;
@@ -18,7 +19,19 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
     JwtService jwtService;
 
     @Test
-    void testLoginWithValidToken() throws Exception {
+    void testUserDoesNotExists() {
+        // given
+        var loginRqDto = TestFixtures.buildLoginRqDto("not-exists@mail.ru", "Password123");
+
+        // when
+        var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDto, ErrorRsDto.class, status().isNotFound());
+
+        // then
+        assertEquals("User does not exists", rsDto.error());
+    }
+
+    @Test
+    void testLoginWithValidToken() {
         // given
         var registerRqDto = buildRegisterRqDto();
         var loginRqDto = buildLoginRqDto(registerRqDto);

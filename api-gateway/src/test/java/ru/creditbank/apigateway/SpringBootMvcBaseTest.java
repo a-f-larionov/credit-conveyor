@@ -1,8 +1,8 @@
 package ru.creditbank.apigateway;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,32 +28,35 @@ public abstract class SpringBootMvcBaseTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    protected <RQ> void performPostWithDto(String url, RQ rqDto) throws Exception {
+    protected <RQ> void performPostWithDto(String url, RQ rqDto) {
         performPostWithDto(url, rqDto, status().is2xxSuccessful());
     }
 
-    protected <RQ> void performPostWithDto(String url, RQ rqDTO, ResultMatcher expectedStatus) throws Exception {
+    @SneakyThrows
+    protected <RQ> void performPostWithDto(String url, RQ rqDTO, ResultMatcher expectedStatus) {
         mockMvc.perform(postWithDto(url, rqDTO, null))
                 .andExpect(expectedStatus)
                 .andReturn();
     }
 
-    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz) throws Exception {
+    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz) {
         return performPostWithDto(url, rqDto, rsDTOClazz, status().is2xxSuccessful());
     }
 
-    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz, ResultMatcher expectedStatus) throws Exception {
+    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz, ResultMatcher expectedStatus) {
         return performPostWithDto(url, rqDto, rsDTOClazz, expectedStatus, null);
     }
 
-    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) throws Exception {
+    @SneakyThrows
+    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
         var result = mockMvc.perform(postWithDto(url, rqDto, token))
                 .andExpect(expectedStatus)
                 .andReturn();
         return objectMapper.readValue(result.getResponse().getContentAsString(), rsDtoClazz);
     }
 
-    protected <RQ> MockHttpServletRequestBuilder postWithDto(String url, RQ rqDto, String token) throws JsonProcessingException {
+    @SneakyThrows
+    protected <RQ> MockHttpServletRequestBuilder postWithDto(String url, RQ rqDto, String token) {
         var requestBuilder = post(url);
         if (token != null) {
             requestBuilder.header("Authorization", "Bearer " + token);
