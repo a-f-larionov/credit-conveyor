@@ -1,5 +1,6 @@
 package ru.creditbank.apigateway.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void createInvalidToken() throws Exception {
+    public void proxyCreateInvalidToken() {
         // given
         var token = "invalid-token";
         var rqDto = TestFixtures.buildRegisterRqDto();
@@ -45,8 +46,9 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    public void create() throws Exception {
+    public void proxyCreate() throws JsonProcessingException {
         // given
+        var methodUrl = "/credit-service/api/v1/create";
         var registerRqDto = buildRegisterRqDto();
         var loginRqDto = buildLoginRqDto(registerRqDto);
         performPostWithDto("/api/v1/auth/register", registerRqDto);
@@ -56,13 +58,13 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
         var rqDto = buildRegisterRqDto();
         var creditServiceRsDto = TestFixtures.buildUserInfoRqDto("admin@mail.ru");
 
-        mockServer.expect(ExpectedCount.once(), requestTo(creditServiceUrl + "/credit-service/api/v1/create"))
+        mockServer.expect(ExpectedCount.once(), requestTo(creditServiceUrl + methodUrl))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(content().json(objectMapper.writeValueAsString(rqDto)))
                 .andRespond(withSuccess(objectMapper.writeValueAsString(creditServiceRsDto), MediaType.APPLICATION_JSON));
 
         // then
-        var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, creditServiceRsDto.getClass(), status().isOk(), token);
+        var rsDto = performPostWithDto(methodUrl, rqDto, creditServiceRsDto.getClass(), status().isOk(), token);
 
         assertEquals(creditServiceRsDto.email(), rsDto.email());
     }

@@ -1,10 +1,12 @@
 package ru.creditbank.apigateway.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +24,15 @@ public class CreditProxyController {
     private final RestTemplate restTemplate;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createCredit(@RequestBody Object requestBody) {
+    public ResponseEntity<?> createCredit(HttpServletRequest request, @RequestBody Object requestBody) {
 
+        return proxyRequest(request, requestBody);
+    }
+
+    @NonNull
+    private ResponseEntity<Object> proxyRequest(HttpServletRequest request, Object requestBody) {
         return restTemplate.exchange(
-                creditServiceUrl + "/credit-service/api/v1/create",
+                creditServiceUrl + request.getRequestURI(),
                 HttpMethod.POST,
                 new HttpEntity<>(requestBody),
                 Object.class
