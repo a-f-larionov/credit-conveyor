@@ -32,7 +32,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isUnauthorized());
 
         // then
-        assertEquals("Unauthorized", rsDto.error());
+        assertEquals("Unauthorized", rsDto.message());
     }
 
     @Test
@@ -45,7 +45,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
         // then
-        assertEquals("Token Invalid", rsDto.error());
+        assertEquals("Token Invalid", rsDto.message());
     }
 
     @Test
@@ -58,7 +58,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isBadRequest(), token);
 
         // then
-        assertEquals("Bad request", rsDto.error());
+        assertEquals("fullName : must match \"^[А-Яа-яЁёA-Za-z\\s-]+$\"; fullName : must not be blank; fullName : size must be between 5 and 100", rsDto.message());
     }
 
     @Test

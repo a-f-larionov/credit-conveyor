@@ -28,7 +28,6 @@ public class UserEntity implements UserDetails {
     private UUID id;
 
     @Column(name = "email", nullable = false, unique = true, length = 100)
-    @EqualsAndHashCode.Include
     private String email;
 
     @Column(name = "password_hash", nullable = false)

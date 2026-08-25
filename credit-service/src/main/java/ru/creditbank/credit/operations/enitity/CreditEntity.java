@@ -21,6 +21,7 @@ public class CreditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
+    @EqualsAndHashCode.Include
     private UUID id;
 
     @Column(name = "user_id", nullable = false)

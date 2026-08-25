@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.creditbank.credit.operations.dto.rs.ErrorRsDto;
-
-import java.io.IOException;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -16,9 +14,13 @@ public class ErrorResponseWriter {
 
     private final ObjectMapper objectMapper;
 
+    public void sendError(HttpServletResponse response, HttpStatus httpStatus) {
+        sendError(response, httpStatus, httpStatus.getReasonPhrase());
+    }
+
     @SneakyThrows
-    public void sendError(HttpServletResponse response, int status, String message) {
-        response.setStatus(status);
+    public void sendError(HttpServletResponse response, HttpStatus httpStatus, String message) {
+        response.setStatus(httpStatus.value());
         response.setContentType("application/json");
 
         objectMapper.writeValue(response.getWriter(), buildErrorRsDto(message));
@@ -28,7 +30,7 @@ public class ErrorResponseWriter {
 
     private ErrorRsDto buildErrorRsDto(String message) {
         return ErrorRsDto.builder()
-                .error(message)
+                .message(message)
                 .build();
     }
 }

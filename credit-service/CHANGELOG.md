@@ -6,7 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
     - Use AdviceController
     - Add Swagger UI
-     
+
+[0.0.3] - 2026-08-25
+### Fixed
+    - use CreditEntity.id for EqualsAndHash
+
+### Changed
+    - creditService .info() -> getInfo()
+    - use HttpStatus instead HttpRequstResponse.SC_{CODE}
+    - use abstract RestException instead of handle every exception individually. (Polymorphism)
+
 [0.0.2] - 2026-08-21
 ### Added
     - Map struct

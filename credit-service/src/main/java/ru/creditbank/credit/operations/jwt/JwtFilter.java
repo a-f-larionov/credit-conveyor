@@ -19,6 +19,7 @@ import ru.creditbank.credit.operations.service.JwtService;
 import java.io.IOException;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.springframework.http.HttpStatus.*;
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             doFilter(request);
         } catch (Exception e) {
-            errorResponseWriter.sendError(response, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+            errorResponseWriter.sendError(response, UNAUTHORIZED, e.getMessage());
             return;
         }
         filterChain.doFilter(request, response);
@@ -56,7 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (jwtToken == null) return;
 
         if (!jwtService.isTokenValid(jwtToken)) {
-            throw new WrongOrInvalidJwtTokenException("Token Invalid");
+            throw new WrongOrInvalidJwtTokenException("Token Invalid", UNAUTHORIZED);
         }
 
         setSecurityContextAuthentication(jwtToken);
@@ -82,7 +83,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         var jwtToken = authHeader.substring(BEARER_PREFIX.length());
         if (isEmpty(jwtToken)) {
-            throw new WrongOrInvalidJwtTokenException("Empty JWT Token");
+            throw new WrongOrInvalidJwtTokenException("Empty JWT Token", UNAUTHORIZED);
         }
         return jwtToken;
     }

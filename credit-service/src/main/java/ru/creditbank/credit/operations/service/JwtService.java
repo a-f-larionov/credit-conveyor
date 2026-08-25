@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.creditbank.credit.operations.exception.WrongOrInvalidJwtTokenException;
@@ -37,7 +38,7 @@ public class JwtService {
                             claims.get(CLAIMS_FIELD_NAME_ROLES) != null &&
                             !isTokenExpired(token);
         } catch (Exception e) {
-            throw new WrongOrInvalidJwtTokenException("Token Invalid");
+            throw new WrongOrInvalidJwtTokenException("Token Invalid", HttpStatus.UNAUTHORIZED);
         }
     }
 

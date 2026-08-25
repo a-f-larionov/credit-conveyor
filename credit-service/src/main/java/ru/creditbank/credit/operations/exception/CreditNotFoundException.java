@@ -1,8 +1,9 @@
 package ru.creditbank.credit.operations.exception;
 
-public class CreditNotFoundException extends RuntimeException{
+import org.springframework.http.HttpStatus;
 
-    public CreditNotFoundException(String msg) {
-        super(msg);
+public class CreditNotFoundException extends RestException {
+    public CreditNotFoundException(String msg, HttpStatus httpStatus) {
+        super(msg, httpStatus);
     }
 }

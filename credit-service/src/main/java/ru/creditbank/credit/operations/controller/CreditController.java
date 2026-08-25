@@ -30,6 +30,6 @@ public class CreditController {
     @PostMapping("/info")
     public CreditInfoRsDto info(@Valid @RequestBody CreditInfoRqDto rqDto) {
 
-        return creditService.info(rqDto);
+        return creditService.getInfo(rqDto);
     }
 }

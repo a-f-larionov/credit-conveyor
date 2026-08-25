@@ -16,6 +16,8 @@ import ru.creditbank.credit.operations.repository.CreditRepository;
 
 import java.time.Instant;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class CreditService {
@@ -41,10 +43,10 @@ public class CreditService {
         return creditMapper.mapEntityToCreateRsDto(credit);
     }
 
-    public CreditInfoRsDto info(CreditInfoRqDto rqDto) {
+    public CreditInfoRsDto getInfo(CreditInfoRqDto rqDto) {
 
         var creditEntity = creditRepository.findById(rqDto.id())
-                .orElseThrow(() -> new CreditNotFoundException("Credit not found"));
+                .orElseThrow(() -> new CreditNotFoundException("Credit not found", NOT_FOUND));
 
         return creditMapper.mapEntityToInfoRsDto(creditEntity);
     }
