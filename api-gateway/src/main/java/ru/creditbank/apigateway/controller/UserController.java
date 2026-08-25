@@ -11,7 +11,6 @@ import ru.creditbank.apigateway.dto.rq.UserInfoRqDto;
 import ru.creditbank.apigateway.dto.rs.UserInfoRsDto;
 import ru.creditbank.apigateway.service.UserService;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user/")
@@ -23,13 +22,13 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public UserInfoRsDto info(@Valid @RequestBody UserInfoRqDto rqDto) {
 
-        return userService.findUserInfo(rqDto);
+        return userService.getInfo(rqDto);
     }
 
     @PostMapping("/info-admin")
     @PreAuthorize("hasRole('ADMIN')")
     public UserInfoRsDto infoAdmin(@Valid @RequestBody UserInfoRqDto rqDto) {
 
-        return  userService.findUserInfo(rqDto);
+        return  userService.getInfo(rqDto);
     }
 }

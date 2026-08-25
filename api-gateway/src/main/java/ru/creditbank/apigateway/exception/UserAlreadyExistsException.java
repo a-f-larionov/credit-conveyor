@@ -1,4 +1,9 @@
 package ru.creditbank.apigateway.exception;
 
-public class UserAlreadyExistsException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class UserAlreadyExistsException extends RestException {
+    public UserAlreadyExistsException(String msg, HttpStatus httpStatus) {
+        super(msg, httpStatus);
+    }
 }

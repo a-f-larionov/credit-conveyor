@@ -39,7 +39,7 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    void testUserIsUnAuthorized() throws Exception {
+    void testUserIsUnAuthorized() {
         // given
         var token = "invalid-token";
         var userInfoRqDto = TestFixtures.buildUserInfoRqDto("user@user.ru");
@@ -47,7 +47,7 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
         // when-then
         var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
-        assertEquals("Token Invalid", rsDto.error());
+        assertEquals("Token Invalid", rsDto.message());
     }
 
     @Test
@@ -84,6 +84,6 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
         var errorRsDto = performPostWithDto("/api/v1/user/info-admin", loginRqDTO, ErrorRsDto.class, status().isForbidden(), token);
 
         // then
-        assertEquals("Forbidden", errorRsDto.error());
+        assertEquals("Forbidden", errorRsDto.message());
     }
 }

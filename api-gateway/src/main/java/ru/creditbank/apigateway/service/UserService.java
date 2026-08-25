@@ -2,6 +2,7 @@ package ru.creditbank.apigateway.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.creditbank.apigateway.dto.rq.LoginRqDto;
@@ -19,6 +20,8 @@ import ru.creditbank.apigateway.repository.UserRepository;
 
 import java.util.Set;
 
+import static org.springframework.http.HttpStatus.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -34,7 +37,7 @@ public class UserService {
 
         userRepository.findByEmail(rqDto.email())
                 .ifPresent((user) -> {
-                    throw new UserAlreadyExistsException();
+                    throw new UserAlreadyExistsException("User already exists", CONFLICT);
                 });
 
         var user = authMapper.mapRegisterRqDtoToUserEntity(rqDto, Set.of(UserRole.ROLE_USER));
@@ -47,10 +50,10 @@ public class UserService {
     public LoginRsDto login(LoginRqDto rqDto) {
 
         var user = userRepository.findByEmail(rqDto.email())
-                .orElseThrow(UserDoesNotExistsException::new);
+                .orElseThrow(() -> new UserDoesNotExistsException("User does not exists", NOT_FOUND));
 
         if (!passwordEncoder.matches(rqDto.password(), user.getPassword())) {
-            throw new WrongPasswordException();
+            throw new WrongPasswordException("Wrong password", UNAUTHORIZED);
         }
 
         var token = jwtService.generateToken(user, user.getId().toString());
@@ -60,9 +63,9 @@ public class UserService {
     }
 
     @Transactional
-    public UserInfoRsDto findUserInfo(UserInfoRqDto rqDto) {
+    public UserInfoRsDto getInfo(UserInfoRqDto rqDto) {
         var user = userRepository.findByEmail(rqDto.email())
-                .orElseThrow(UserDoesNotExistsException::new);
+                .orElseThrow(() -> new UserDoesNotExistsException("User does not exits", NOT_FOUND));
         return authMapper.mapUserToUserInfoRsDto(user);
     }
 }

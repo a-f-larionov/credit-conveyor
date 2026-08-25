@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RegisterControllerTest extends SpringBootMvcBaseTest {
 
     @Test
-    public void testRegisterSuccess() throws Exception {
+    public void testRegisterSuccess() {
         // given
         var rqDto = TestFixtures.buildRegisterRqDto();
 
@@ -18,7 +18,7 @@ public class RegisterControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    public void testRegisterInvalidData() throws Exception {
+    public void testRegisterInvalidData() {
         // given
         var rqDto = TestFixtures.buildRegisterRqDto("no_upper_case_password");
 
@@ -27,7 +27,7 @@ public class RegisterControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    public void testRegisterConflict() throws Exception {
+    public void testRegisterConflict() {
         // given
         var rqDto = TestFixtures.buildRegisterRqDto();
 

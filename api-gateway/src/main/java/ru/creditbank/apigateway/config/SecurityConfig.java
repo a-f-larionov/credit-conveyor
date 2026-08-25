@@ -1,6 +1,5 @@
 package ru.creditbank.apigateway.config;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +13,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import ru.creditbank.apigateway.jwt.JwtFilter;
 
 import java.util.Set;
+
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Configuration
 @EnableMethodSecurity
@@ -41,9 +43,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) ->
-                                errorResponseWriter.sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                                errorResponseWriter.sendError(response, UNAUTHORIZED))
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                errorResponseWriter.sendError(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
+                                errorResponseWriter.sendError(response, FORBIDDEN))
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         ;

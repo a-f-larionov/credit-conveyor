@@ -3,15 +3,17 @@ package ru.creditbank.apigateway.config;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.creditbank.apigateway.exception.UserAlreadyExistsException;
-import ru.creditbank.apigateway.exception.UserDoesNotExistsException;
-import ru.creditbank.apigateway.exception.WrongOrInvalidJwtTokenException;
-import ru.creditbank.apigateway.exception.WrongPasswordException;
+import ru.creditbank.apigateway.exception.RestException;
 
-import static jakarta.servlet.http.HttpServletResponse.*;
+import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -22,36 +24,30 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public void handle(Exception e, HttpServletResponse response) {
-        doHandle(e, response, SC_BAD_REQUEST, "Bad request");
+        log.error(e.toString());
+        errorResponseWriter.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public void handle(UserAlreadyExistsException e, HttpServletResponse response) {
-        doHandle(e, response, SC_CONFLICT, "User already exists");
-    }
-
-    @ExceptionHandler(UserDoesNotExistsException.class)
-    public void handle(UserDoesNotExistsException e, HttpServletResponse response) {
-        doHandle(e, response, SC_NOT_FOUND, "User does not exists");
-    }
-
-    @ExceptionHandler(WrongPasswordException.class)
-    public void handle(WrongPasswordException e, HttpServletResponse response) {
-        doHandle(e, response, SC_UNAUTHORIZED, "Wrong password");
-    }
-
-    @ExceptionHandler(WrongOrInvalidJwtTokenException.class)
-    public void handle(WrongOrInvalidJwtTokenException e, HttpServletResponse response) {
-        doHandle(e, response, SC_UNAUTHORIZED, "Invalid token");
-    }
-
-    @ExceptionHandler(AuthorizationDeniedException.class)
-    public void handle(AuthorizationDeniedException e, HttpServletResponse response) {
-        doHandle(e, response, SC_FORBIDDEN, "Forbidden");
-    }
-
-    private void doHandle(Exception e, HttpServletResponse response, int status, String message) {
+    @ExceptionHandler(RestException.class)
+    public void handle(RestException e, HttpServletResponse response) {
         log.warn(e.toString());
-        errorResponseWriter.sendError(response, status, message);
+        errorResponseWriter.sendError(response, e.getHttpStatus(), e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public void handle(MethodArgumentNotValidException e, HttpServletResponse response) {
+        var errors = e.getBindingResult().getFieldErrors().stream()
+                .map(fe -> fe.getField() + " 4: " + fe.getDefaultMessage())
+                .collect(Collectors.joining("; "));
+
+        log.warn("Validation failed: {}", errors);
+
+        errorResponseWriter.sendError(response, BAD_REQUEST, errors);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public void handle(AccessDeniedException e, HttpServletResponse response) {
+        log.warn(e.toString());
+        errorResponseWriter.sendError(response, FORBIDDEN);
     }
 }

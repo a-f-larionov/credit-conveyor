@@ -1,8 +1,9 @@
 package ru.creditbank.apigateway.exception;
 
-public class WrongOrInvalidJwtTokenException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-    public WrongOrInvalidJwtTokenException(String msg) {
-        super(msg);
+public class WrongOrInvalidJwtTokenException extends RestException {
+    public WrongOrInvalidJwtTokenException(String msg, HttpStatus httpStatus) {
+        super(msg, httpStatus);
     }
 }

@@ -27,7 +27,7 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDto, ErrorRsDto.class, status().isNotFound());
 
         // then
-        assertEquals("User does not exists", rsDto.error());
+        assertEquals("User does not exists", rsDto.message());
     }
 
     @Test
@@ -46,7 +46,7 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    void testForbiddenRequestNoToken() throws Exception {
+    void testUnauthorizedRequestNoToken() {
         // given
         var userInfoRqDto = buildUserInfoRqDto("email@email.com");
 
@@ -54,6 +54,6 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized());
 
         // then
-        assertEquals("Unauthorized", rsDto.error());
+        assertEquals("Unauthorized", rsDto.message());
     }
 }
