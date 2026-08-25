@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Use AdviceController
     - Add Swagger UI
 
+[0.0.5] - 2026-08-25
+### Changed
+    - userService .findUserinfo() -> getInfo()
+    - use HttpStatus instead HttpRequstResponse.SC_{CODE}
+    - use abstract RestException instead of handle every exception individually. (Polymorphism)
+
 [0.0.4] - 2026-08-21
 ### Added
     - Use MapStruct

@@ -37,7 +37,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public void handle(MethodArgumentNotValidException e, HttpServletResponse response) {
         var errors = e.getBindingResult().getFieldErrors().stream()
-                .map(fe -> fe.getField() + " 4: " + fe.getDefaultMessage())
+                .map(fe -> fe.getField() + " : " + fe.getDefaultMessage())
+                .sorted()
                 .collect(Collectors.joining("; "));
 
         log.warn("Validation failed: {}", errors);
