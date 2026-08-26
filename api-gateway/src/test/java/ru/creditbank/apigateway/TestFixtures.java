@@ -4,6 +4,7 @@ import ru.creditbank.apigateway.dto.FullNameDto;
 import ru.creditbank.apigateway.dto.rq.LoginRqDto;
 import ru.creditbank.apigateway.dto.rq.RegisterRqDto;
 import ru.creditbank.apigateway.dto.rq.UserInfoRqDto;
+import ru.creditbank.apigateway.dto.rs.UserInfoRsDto;
 
 public class TestFixtures {
 
@@ -47,6 +48,12 @@ public class TestFixtures {
         return LoginRqDto.builder()
                 .email(email)
                 .password(password)
+                .build();
+    }
+
+    public static UserInfoRsDto buildRsDto() {
+        return UserInfoRsDto.builder()
+                .email("email@mail.ru")
                 .build();
     }
 }

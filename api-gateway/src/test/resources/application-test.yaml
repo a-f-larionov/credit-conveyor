@@ -8,3 +8,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+services:
+  credit-service:
+    url: "http://localhost:8081"

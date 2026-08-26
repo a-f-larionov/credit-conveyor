@@ -22,7 +22,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-    public static final String CLAIMS_FIELD_NAME_USER_ID = "userId";
+    public static final String CLAIMS_FIELD_NAME_USER_ID = "user_id";
     public static final String CLAIMS_FIELD_NAME_USERNAME = "username";
     public static final String CLAIMS_FIELD_NAME_ROLES = "roles";
 

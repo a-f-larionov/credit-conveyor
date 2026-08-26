@@ -1,11 +1,14 @@
 services:
 
   credit-service:
+    hostname: credit-service
     build: ./credit-service/
     env_file:
       - ./credit-service/.env
     environment:
       DATA_SOURCE_DB_HOST: db
+    ports:
+        - "8081:8081"
     depends_on: [ "db" ]
 
   api-gateway:
