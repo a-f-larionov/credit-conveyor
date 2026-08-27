@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="credit-service-001-create-credit-table" author="a_f_larionov">
+        <comment>Create credit table</comment>
+        <sqlFile path="db/changelog/changes/001-create-credit-table.sql"/>
+        <rollback>
+            <sqlFile path="db/changelog/changes/001-create-credit-table-rollback.sql"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="credit-service-002-updated-credit-table" author="a_f_larionov">
+        <comment>Update credit table</comment>
+        <sqlFile path="db/changelog/changes/002-update-credit-table-for-managers.sql"/>
+        <rollback>
+            <sqlFile path="db/changelog/changes/002-update-credit-table-for-managers-rollback.sql"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

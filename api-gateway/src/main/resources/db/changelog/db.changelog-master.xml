@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="api-gateway-001-create-user-table" author="a_f_larionov">
+        <comment>Create user table</comment>
+        <sqlFile path="db/changelog/changes/001-create-users-table.sql"/>
+        <rollback>
+            <sqlFile path="db/changelog/changes/001-create-users-table-rollback.sql"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="api-gateway-002-crate-user-roles-table" author="a_f_larionov">
+        <comment>Create user roles table</comment>
+        <sqlFile path="db/changelog/changes/002-create-user-roles-table.sql"/>
+        <rollback>
+            <sqlFile path="db/changelog/changes/002-create-user-roles-table-rollback.sql"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
