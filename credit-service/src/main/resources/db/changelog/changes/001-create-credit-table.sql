@@ -1,6 +1,5 @@
 CREATE TABLE credit
 (
-
     id               UUID PRIMARY KEY,
     user_id          UUID                     NOT NULL,
     user_full_name   VARCHAR(100)             NOT NULL,
