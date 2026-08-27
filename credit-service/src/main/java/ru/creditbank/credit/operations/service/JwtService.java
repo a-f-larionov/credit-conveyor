@@ -38,7 +38,7 @@ public class JwtService {
                             claims.get(CLAIMS_FIELD_NAME_ROLES) != null &&
                             !isTokenExpired(token);
         } catch (Exception e) {
-            throw new WrongOrInvalidJwtTokenException("Token Invalid", HttpStatus.UNAUTHORIZED);
+            throw new WrongOrInvalidJwtTokenException("Token invalid", HttpStatus.UNAUTHORIZED);
         }
     }
 

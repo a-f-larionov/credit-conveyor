@@ -3,15 +3,14 @@ package ru.creditbank.credit.operations.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
-import ru.creditbank.credit.operations.dto.rq.CreditInfoRqDto;
+import ru.creditbank.credit.operations.dto.rq.StatusUpdateRqDto;
 import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.service.CreditService;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/credit-service/api/v1/")
@@ -27,9 +26,17 @@ public class CreditController {
         return creditService.create(rqDto);
     }
 
-    @PostMapping("/info")
-    public CreditInfoRsDto info(@Valid @RequestBody CreditInfoRqDto rqDto) {
+    @GetMapping("/info/{creditId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'CREDIT_MANAGER')")
+    public CreditInfoRsDto info(@PathVariable UUID creditId) {
 
-        return creditService.getInfo(rqDto);
+        return creditService.getInfo(creditId);
+    }
+
+    @PatchMapping("/status/update/{creditId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CREDIT_MANAGER')")
+    public void statusUpdate(@Valid @RequestBody StatusUpdateRqDto statusUpdateRqDto, @PathVariable UUID creditId){
+
+        creditService.statusUpdate(statusUpdateRqDto, creditId);
     }
 }

@@ -19,16 +19,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/info")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or #rqDto.email == authentication.principal.username ")
     public UserInfoRsDto info(@Valid @RequestBody UserInfoRqDto rqDto) {
 
         return userService.getInfo(rqDto);
-    }
-
-    @PostMapping("/info-admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public UserInfoRsDto infoAdmin(@Valid @RequestBody UserInfoRqDto rqDto) {
-
-        return  userService.getInfo(rqDto);
     }
 }

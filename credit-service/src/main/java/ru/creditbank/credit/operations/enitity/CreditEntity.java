@@ -27,6 +27,9 @@ public class CreditEntity {
     @Column(name = "user_id", nullable = false)
     private UUID userId;
 
+    @Column(name = "user_email", nullable = false, length = 100)
+    private String userEmail;
+
     @Column(name = "user_full_name", nullable = false, length = 100)
     private String userFullName;
 
@@ -35,6 +38,12 @@ public class CreditEntity {
 
     @Column(name = "term_months", nullable = false)
     private Integer termMonths;
+
+    @Column(name = "interest_rate", nullable = false, precision = 15, scale = 2)
+    private BigDecimal interestRate;
+
+    @Column(name = "manager_comment", length = 500)
+    private String managerComment;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)

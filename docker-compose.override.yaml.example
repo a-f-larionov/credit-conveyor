@@ -1,0 +1,5 @@
+services:
+
+  credit-service:
+    ports:
+      - "8081:8081"

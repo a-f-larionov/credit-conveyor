@@ -10,15 +10,16 @@ import ru.creditbank.apigateway.dto.rs.LoginRsDto;
 import ru.creditbank.apigateway.dto.rs.UserInfoRsDto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.creditbank.apigateway.TestFixtures.buildRegisterRqDto;
+import static ru.creditbank.apigateway.TestFixtures.buildUserInfoRqDto;
 
 public class UserControllerTest extends SpringBootMvcBaseTest {
 
     @Test
-    void testUserInfo() throws Exception {
+    void testUserInfo() {
         // given
-        var registerRqDto = TestFixtures.buildRegisterRqDto();
+        var registerRqDto = buildRegisterRqDto();
         var loginRqDto = TestFixtures.buildLoginRqDto(registerRqDto);
 
         performPostWithDto("/api/v1/auth/register", registerRqDto, status().isCreated());
@@ -42,46 +43,52 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
     void testUserIsUnAuthorized() {
         // given
         var token = "invalid-token";
-        var userInfoRqDto = TestFixtures.buildUserInfoRqDto("user@user.ru");
+        var userInfoRqDto = buildUserInfoRqDto("user@user.ru");
 
         // when-then
         var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
-        assertEquals("Token Invalid", rsDto.message());
+        assertEquals("Token invalid", rsDto.message());
     }
 
     @Test
     @Sql(scripts = "/sql/create-admin-user.sql", config = @SqlConfig(separator = ";;"))
-    void testUserInfoAdmin() throws Exception {
+    void testUserInfoAdmin() {
         // given
-        var loginRqDTO = TestFixtures.buildLoginRqDto("admin@admin.ru", "Admin123");
-        var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDTO, LoginRsDto.class, status().isOk());
+        var targetUserRegisterRqDto = buildRegisterRqDto("targetUser@server.org", "Password123");
+        performPostWithDto("/api/v1/auth/register", targetUserRegisterRqDto, status().isCreated());
+        var targetUserInfoRqDTO = buildUserInfoRqDto(targetUserRegisterRqDto.email());
+
+        var adminLoginRqDto = TestFixtures.buildLoginRqDto("admin@admin.ru", "Admin123");
+        var rsDto = performPostWithDto("/api/v1/auth/login", adminLoginRqDto, LoginRsDto.class, status().isOk());
         var token = rsDto.token();
 
         // when
-        var userInfoRsDto = performPostWithDto("/api/v1/user/info-admin", loginRqDTO, UserInfoRsDto.class, status().isOk(), token);
+        var userInfoRsDto = performPostWithDto("/api/v1/user/info", targetUserInfoRqDTO, UserInfoRsDto.class, status().isOk(), token);
 
         // then
-        assertEquals(loginRqDTO.email(), userInfoRsDto.email());
+        assertEquals(targetUserInfoRqDTO.email(), userInfoRsDto.email());
 
         var rsFNDto = userInfoRsDto.fullName();
-        assertNull(rsFNDto.firstName());
-        assertNull(rsFNDto.lastName());
-        assertNull(rsFNDto.middleName());
+        var targetFNDto = targetUserRegisterRqDto.fullName();
+        assertEquals(targetFNDto.firstName(), rsFNDto.firstName());
+        assertEquals(targetFNDto.middleName(), rsFNDto.middleName());
+        assertEquals(targetFNDto.lastName(), rsFNDto.lastName());
     }
 
     @Test
-    void testUserInfoAdminForbidden() throws Exception {
+    void testUserInfoAdminForbidden() {
         // given
-        var registerRqDto = TestFixtures.buildRegisterRqDto();
-        var loginRqDTO = TestFixtures.buildLoginRqDto(registerRqDto);
+        var registerUser1RqDto = buildRegisterRqDto("user1@server.org", "Password1");
+        var loginUser1RqDto = TestFixtures.buildLoginRqDto(registerUser1RqDto);
+        var userInfo2RqDto = buildUserInfoRqDto("user2@server.org");
 
-        performPostWithDto("/api/v1/auth/register", registerRqDto, status().isCreated());
-        var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDTO, LoginRsDto.class, status().isOk());
+        performPostWithDto("/api/v1/auth/register", registerUser1RqDto, status().isCreated());
+        var rsDto = performPostWithDto("/api/v1/auth/login", loginUser1RqDto, LoginRsDto.class, status().isOk());
         var token = rsDto.token();
 
         // when
-        var errorRsDto = performPostWithDto("/api/v1/user/info-admin", loginRqDTO, ErrorRsDto.class, status().isForbidden(), token);
+        var errorRsDto = performPostWithDto("/api/v1/user/info", userInfo2RqDto, ErrorRsDto.class, status().isForbidden(), token);
 
         // then
         assertEquals("Forbidden", errorRsDto.message());

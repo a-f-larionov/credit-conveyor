@@ -7,6 +7,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import ru.creditbank.credit.operations.exception.RestException;
 
 import java.util.stream.Collectors;
@@ -48,5 +49,11 @@ public class GlobalExceptionHandler {
     public void handle(AccessDeniedException e, HttpServletResponse response) {
         log.warn(e.toString());
         errorResponseWriter.sendError(response, FORBIDDEN);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public void handle(NoResourceFoundException e, HttpServletResponse response) {
+        log.warn(e.toString());
+        errorResponseWriter.sendError(response, NOT_FOUND);
     }
 }

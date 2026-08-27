@@ -1,10 +1,10 @@
 package ru.creditbank.credit.operations;
 
+import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
-import ru.creditbank.credit.operations.dto.rq.CreditInfoRqDto;
+import ru.creditbank.credit.operations.dto.rq.StatusUpdateRqDto;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class TestFixtures {
 
@@ -21,9 +21,10 @@ public class TestFixtures {
                 .build();
     }
 
-    public static CreditInfoRqDto buildCreditInfoRqDto(UUID id) {
-        return CreditInfoRqDto.builder()
-                .id(id)
+    public static StatusUpdateRqDto buildStatusUpdateRqDto(CreditStatusEnum status, String managerComment) {
+        return StatusUpdateRqDto.builder()
+                .status(status)
+                .managerComment(managerComment)
                 .build();
     }
 }

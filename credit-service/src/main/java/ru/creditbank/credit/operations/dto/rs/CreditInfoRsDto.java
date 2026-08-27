@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -12,16 +11,11 @@ import java.util.UUID;
 public record CreditInfoRsDto(
 
         UUID id,
-        UUID userId,
-        String userFullName,
-        BigDecimal requestedAmount,
-        Integer termMonths,
+        UserInfoDto userInfo,
+        LoadDetailsDto loanDetails,
         CreditStatusEnum status,
 
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
-        Instant creationDate,
-
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
-        Instant lastUpdated
+        Instant createdAt
 ) {
 }

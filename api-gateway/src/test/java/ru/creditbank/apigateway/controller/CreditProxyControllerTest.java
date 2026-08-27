@@ -29,7 +29,7 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
         // then
-        assertEquals("Token Invalid", rsDto.message());
+        assertEquals("Token invalid", rsDto.message());
     }
 
     @Test

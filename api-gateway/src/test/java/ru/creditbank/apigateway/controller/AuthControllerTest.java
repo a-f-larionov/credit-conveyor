@@ -54,6 +54,6 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized());
 
         // then
-        assertEquals("Unauthorized", rsDto.message());
+        assertEquals("Token is empty", rsDto.message());
     }
 }

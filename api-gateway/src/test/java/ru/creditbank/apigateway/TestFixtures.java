@@ -7,26 +7,32 @@ import ru.creditbank.apigateway.dto.rq.UserInfoRqDto;
 import ru.creditbank.apigateway.dto.rs.UserInfoRsDto;
 
 public class TestFixtures {
-
+    private static Long lastUniqueIndex = 0L;
 
     public static RegisterRqDto buildRegisterRqDto() {
-        var unique = 1L;
-        return buildRegisterRqDto(unique, "Password" + unique);
+        lastUniqueIndex++;
+        return buildRegisterRqDto(
+                "user" + lastUniqueIndex + "@email.ru",
+                "Password" + lastUniqueIndex
+        );
     }
 
     public static RegisterRqDto buildRegisterRqDto(String password) {
-        var unique = 1L;
-        return buildRegisterRqDto(unique, password);
+        lastUniqueIndex++;
+        return buildRegisterRqDto(
+                "user" + lastUniqueIndex + "@email.ru",
+                password);
     }
 
-    public static RegisterRqDto buildRegisterRqDto(Long unique, String password) {
+    public static RegisterRqDto buildRegisterRqDto(String userEmail, String password) {
+        lastUniqueIndex++;
         return RegisterRqDto.builder()
                 .fullName(FullNameDto.builder()
-                        .firstName("firstName-" + unique)
-                        .middleName("middleName-" + unique)
-                        .lastName("lastName-" + unique)
+                        .firstName("firstName-" + lastUniqueIndex)
+                        .middleName("middleName-" + lastUniqueIndex)
+                        .lastName("lastName-" + lastUniqueIndex)
                         .build())
-                .email("email_" + unique + "@mail.com")
+                .email(userEmail)
                 .password(password)
                 .build();
     }

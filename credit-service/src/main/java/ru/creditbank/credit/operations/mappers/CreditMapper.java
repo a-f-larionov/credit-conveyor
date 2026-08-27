@@ -16,13 +16,15 @@ public interface CreditMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", source = "userId")
+    @Mapping(target = "userEmail", source = "userEmail")
     @Mapping(target = "userFullName", source = "rqDto.fullName")
     @Mapping(target = "requestedAmount", source = "rqDto.requestedAmount")
     @Mapping(target = "termMonths", source = "rqDto.termMonths")
     @Mapping(target = "status", source = "status")
     @Mapping(target = "creationDate", source = "creationDate")
     @Mapping(target = "lastUpdated", source = "lastUpdated")
-    CreditEntity mapRqDtoToCreateEntity(CreditCreateRqDto rqDto, UUID userId, CreditStatusEnum status, Instant creationDate, Instant lastUpdated);
+    @Mapping(target = "interestRate", ignore = true)
+    CreditEntity mapRqDtoToCreateEntity(CreditCreateRqDto rqDto, UUID userId, String userEmail, CreditStatusEnum status, Instant creationDate, Instant lastUpdated);
 
     @Mapping(target = "id", source = "credit.id")
     @Mapping(target = "status", source = "credit.status")
@@ -30,12 +32,12 @@ public interface CreditMapper {
     CreditCreateRsDto mapEntityToCreateRsDto(CreditEntity credit);
 
     @Mapping(target = "id", source = "credit.id")
-    @Mapping(target = "userId", source = "credit.userId")
-    @Mapping(target = "userFullName", source = "credit.userFullName")
-    @Mapping(target = "requestedAmount", source = "credit.requestedAmount")
-    @Mapping(target = "termMonths", source = "credit.termMonths")
+    @Mapping(target = "userInfo.userId", source = "credit.userId")
+    @Mapping(target = "userInfo.fullName", source = "credit.userFullName")
+    @Mapping(target = "userInfo.email", source = "credit.userEmail")
+    @Mapping(target = "loanDetails.requestedAmount", source = "credit.requestedAmount")
+    @Mapping(target = "loanDetails.termMonths", source = "credit.termMonths")
     @Mapping(target = "status", source = "credit.status")
-    @Mapping(target = "creationDate", source = "credit.creationDate")
-    @Mapping(target = "lastUpdated", source = "credit.lastUpdated")
+    @Mapping(target = "createdAt", source = "credit.creationDate")
     CreditInfoRsDto mapEntityToInfoRsDto(CreditEntity credit);
 }

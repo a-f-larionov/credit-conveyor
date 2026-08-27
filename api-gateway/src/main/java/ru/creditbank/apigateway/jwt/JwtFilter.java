@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,16 +14,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.creditbank.apigateway.config.ErrorResponseWriter;
 import ru.creditbank.apigateway.config.SecurityConfig;
+import ru.creditbank.apigateway.exception.RestException;
 import ru.creditbank.apigateway.exception.WrongOrInvalidJwtTokenException;
 import ru.creditbank.apigateway.service.JwtService;
 
 import java.io.IOException;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     public static final String HEADER_NAME = "Authorization";
@@ -40,10 +44,16 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             doFilter(request);
-        } catch (Exception e) {
+        } catch (RestException e) {
+            log.warn(e.getMessage());
             errorResponseWriter.sendError(response, UNAUTHORIZED, e.getMessage());
             return;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            errorResponseWriter.sendError(response, INTERNAL_SERVER_ERROR);
+            return;
         }
+
         filterChain.doFilter(request, response);
     }
 
@@ -54,10 +64,12 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         var jwtToken = resolveJwtToken(request);
-        if (jwtToken == null) return;
+        if (jwtToken == null) {
+            throw new WrongOrInvalidJwtTokenException("Token is empty", UNAUTHORIZED);
+        }
 
         if (!jwtService.isTokenValid(jwtToken)) {
-            throw new WrongOrInvalidJwtTokenException("Token Invalid", UNAUTHORIZED);
+            throw new WrongOrInvalidJwtTokenException("Token invalid", UNAUTHORIZED);
         }
 
         setSecurityContextAuthentication(jwtToken);

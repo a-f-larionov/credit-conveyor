@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ru.creditbank.credit.operations.enums.UserRole;
 import ru.creditbank.credit.operations.jwt.JwtUserDetails;
 import ru.creditbank.credit.operations.service.JwtService;
 
@@ -23,16 +24,29 @@ public class TestJwtGenerator {
     @Value("${jwt.signing.expiration_sec}")
     Long jwtSigningExpirationSec;
 
-    public String generate(){
+    public String generate() {
         return generate(UUID.randomUUID());
     }
 
+    public String generate(Set<UserRole> roles) {
+        var userId = UUID.randomUUID();
+        return generate(userId, "username" + userId + "@email.ru", roles);
+    }
+
     public String generate(UUID userId) {
+        return generate(userId, "username" + userId + "@email.ru");
+    }
+
+    public String generate(UUID userId, String userEmail) {
+        return generate(userId, userEmail, Set.of(UserRole.ROLE_USER));
+    }
+
+    public String generate(UUID userId, String userEmail, Set<UserRole> userRoles) {
 
         var userDetails = JwtUserDetails.builder()
                 .userId(userId)
-                .username("username@email.ru")
-                .userRoles(Set.of("ROLE_USER"))
+                .username(userEmail)
+                .userRoles(userRoles.stream().map(Enum::toString).collect(Collectors.toSet()))
                 .build();
 
         return generateToken(userDetails, userDetails.getUserId().toString());
