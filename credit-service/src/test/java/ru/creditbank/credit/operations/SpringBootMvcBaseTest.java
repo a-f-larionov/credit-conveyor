@@ -1,25 +1,23 @@
 package ru.creditbank.credit.operations;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "test-local"})
 public abstract class SpringBootMvcBaseTest {
 
     @Autowired
@@ -27,6 +25,20 @@ public abstract class SpringBootMvcBaseTest {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    @SneakyThrows
+    protected <RS> RS performGetWithDto(String url, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
+        var requestBuilder = get(url);
+        if (token != null) {
+            requestBuilder.header("Authorization", "Bearer " + token);
+        }
+        requestBuilder.contentType(MediaType.APPLICATION_JSON);
+        var result = mockMvc.perform(requestBuilder)
+                .andExpect(expectedStatus)
+                .andReturn();
+        return objectMapper.readValue(result.getResponse().getContentAsString(), rsDtoClazz);
+    }
+
 
     protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz, ResultMatcher expectedStatus) {
         return performPostWithDto(url, rqDto, rsDTOClazz, expectedStatus, null);
