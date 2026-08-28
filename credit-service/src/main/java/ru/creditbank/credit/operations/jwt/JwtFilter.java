@@ -12,7 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.creditbank.credit.operations.config.ErrorResponseWriter;
+import ru.creditbank.common.library.config.ErrorResponseWriter;
 import ru.creditbank.credit.operations.config.SecurityConfig;
 import ru.creditbank.credit.operations.exception.BusinessException;
 import ru.creditbank.credit.operations.exception.WrongOrInvalidJwtTokenException;

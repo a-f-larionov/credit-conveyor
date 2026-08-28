@@ -1,4 +1,4 @@
-package ru.creditbank.credit.operations.config;
+package ru.creditbank.common.library.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -6,12 +6,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
-import ru.creditbank.credit.operations.dto.rs.ErrorRsDto;
+import ru.creditbank.common.library.dto.rs.ErrorRsDto;
 
 import java.time.Instant;
 
-@Component
 @RequiredArgsConstructor
 public class ErrorResponseWriter {
 

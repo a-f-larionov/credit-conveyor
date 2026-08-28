@@ -2,12 +2,12 @@ package ru.creditbank.credit.operations.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.creditbank.common.library.dto.rs.ErrorRsDto;
 import ru.creditbank.credit.operations.SpringBootMvcBaseTest;
 import ru.creditbank.credit.operations.TestJwtGenerator;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
-import ru.creditbank.credit.operations.dto.rs.ErrorRsDto;
 
 import java.util.Set;
 import java.util.UUID;

@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.creditbank.apigateway.jwt.JwtFilter;
+import ru.creditbank.common.library.config.ErrorResponseWriter;
 
 import java.util.Set;
 
@@ -43,9 +44,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) ->
-                                errorResponseWriter.sendError(response, UNAUTHORIZED))
+                                errorResponseWriter.sendError(request, response, UNAUTHORIZED))
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                errorResponseWriter.sendError(response, FORBIDDEN))
+                                errorResponseWriter.sendError(request, response, FORBIDDEN))
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         ;

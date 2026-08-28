@@ -1,0 +1,19 @@
+# 🔐 Credit Conveyor – Common Library
+
+[![Java](https://img.shields.io/badge/Java-17%2B-blue)](https://adoptium.net/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-brightgreen)](https://spring.io/projects/spring-boot)
+[![JWT](https://img.shields.io/badge/JWT-0.12.6-orange)](https://jwt.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)](https://www.docker.com/)
+
+
+Общая библиотека кредитного конвеера на **Spring Boot 3 + JWT**.
+
+---
+
+## 🧰 Стек
+- Java 17, Spring Boot 3, Spring Security 6
+- JWT (jjwt), PostgreSQL, Spring Data JPA
+- Docker, Lombok, Maven
+
+---

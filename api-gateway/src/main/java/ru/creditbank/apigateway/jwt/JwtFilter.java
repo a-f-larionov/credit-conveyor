@@ -12,11 +12,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.creditbank.apigateway.config.ErrorResponseWriter;
 import ru.creditbank.apigateway.config.SecurityConfig;
 import ru.creditbank.apigateway.exception.BusinessException;
 import ru.creditbank.apigateway.exception.WrongOrInvalidJwtTokenException;
 import ru.creditbank.apigateway.service.JwtService;
+import ru.creditbank.common.library.config.ErrorResponseWriter;
 
 import java.io.IOException;
 
@@ -46,11 +46,11 @@ public class JwtFilter extends OncePerRequestFilter {
             doFilter(request);
         } catch (BusinessException e) {
             log.warn(e.getMessage());
-            errorResponseWriter.sendError(response, UNAUTHORIZED, e.getMessage());
+            errorResponseWriter.sendError(request, response, UNAUTHORIZED, e.getMessage());
             return;
         } catch (Exception e) {
             log.error(e.getMessage());
-            errorResponseWriter.sendError(response, INTERNAL_SERVER_ERROR);
+            errorResponseWriter.sendError(request, response, INTERNAL_SERVER_ERROR);
             return;
         }
 
