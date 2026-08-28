@@ -2,6 +2,14 @@ package ru.creditbank.credit.operations.dto.rs;
 
 import lombok.Builder;
 
+import java.time.Instant;
+
 @Builder
-public record ErrorRsDto(String message) {
+public record ErrorRsDto(
+        Instant timestamp,
+        Integer status,
+        String error,
+        String message,
+        String path
+        ) {
 }

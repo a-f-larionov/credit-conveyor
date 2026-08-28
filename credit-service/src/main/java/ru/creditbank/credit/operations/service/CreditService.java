@@ -12,7 +12,7 @@ import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.enitity.CreditEntity;
 import ru.creditbank.credit.operations.exception.AccessNotAllowed;
 import ru.creditbank.credit.operations.exception.CreditNotFoundException;
-import ru.creditbank.credit.operations.exception.CreditStatusUpdate;
+import ru.creditbank.credit.operations.exception.CreditStatusUpdateException;
 import ru.creditbank.credit.operations.jwt.JwtUserDetails;
 import ru.creditbank.credit.operations.mappers.CreditMapper;
 import ru.creditbank.credit.operations.repository.CreditRepository;
@@ -60,9 +60,7 @@ public class CreditService {
     public CreditInfoRsDto getInfo(UUID creditId) {
 
         var creditEntity = creditRepository.findById(creditId)
-                .orElseThrow(() -> new CreditNotFoundException(
-                        format("Credit with id %s not found", creditId), NOT_FOUND)
-                );
+                .orElseThrow(() -> new CreditNotFoundException(creditId));
 
         validateAccess(creditEntity);
 
@@ -73,9 +71,7 @@ public class CreditService {
     public void statusUpdate(StatusUpdateRqDto statusUpdateRqDto, UUID creditId) {
 
         var creditEntity = creditRepository.findById(creditId)
-                .orElseThrow(() -> new CreditNotFoundException(
-                        format("Credit with id %s not found", creditId),
-                        NOT_FOUND));
+                .orElseThrow(() -> new CreditNotFoundException(creditId));
 
         validateCreditStatusMayChanged(creditEntity.getStatus());
         validateStatusIsAllowedToChange(statusUpdateRqDto.status());
@@ -90,7 +86,7 @@ public class CreditService {
 
     private void validateCreditStatusMayChanged(CreditStatusEnum status) {
         if (!status.equals(PENDING)) {
-            throw new CreditStatusUpdate(
+            throw new CreditStatusUpdateException(
                     format("Credit must be %s, but is %s", PENDING, status),
                     BAD_REQUEST);
         }
@@ -98,7 +94,7 @@ public class CreditService {
 
     private void validateStatusIsAllowedToChange(CreditStatusEnum status) {
         if (!allowedStatuses.contains(status)) {
-            throw new CreditStatusUpdate(
+            throw new CreditStatusUpdateException(
                     format("Target status '%s' is not allowed. Allowed values: %s",
                             status, allowedStatuses),
                     BAD_REQUEST);

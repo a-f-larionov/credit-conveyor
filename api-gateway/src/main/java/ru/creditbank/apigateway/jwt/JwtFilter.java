@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.creditbank.apigateway.config.ErrorResponseWriter;
 import ru.creditbank.apigateway.config.SecurityConfig;
-import ru.creditbank.apigateway.exception.RestException;
+import ru.creditbank.apigateway.exception.BusinessException;
 import ru.creditbank.apigateway.exception.WrongOrInvalidJwtTokenException;
 import ru.creditbank.apigateway.service.JwtService;
 
@@ -44,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             doFilter(request);
-        } catch (RestException e) {
+        } catch (BusinessException e) {
             log.warn(e.getMessage());
             errorResponseWriter.sendError(response, UNAUTHORIZED, e.getMessage());
             return;

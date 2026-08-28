@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.creditbank.credit.operations.config.ErrorResponseWriter;
 import ru.creditbank.credit.operations.config.SecurityConfig;
-import ru.creditbank.credit.operations.exception.RestException;
+import ru.creditbank.credit.operations.exception.BusinessException;
 import ru.creditbank.credit.operations.exception.WrongOrInvalidJwtTokenException;
 import ru.creditbank.credit.operations.service.JwtService;
 
@@ -43,13 +43,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             doFilter(request);
-        } catch (RestException e) {
+        } catch (BusinessException e) {
             log.warn(e.getMessage());
-            errorResponseWriter.sendError(response, UNAUTHORIZED, e.getMessage());
+            errorResponseWriter.sendError(request, response, UNAUTHORIZED, e.getMessage());
             return;
         } catch (Exception e) {
             log.error(e.getMessage());
-            errorResponseWriter.sendError(response, INTERNAL_SERVER_ERROR);
+            errorResponseWriter.sendError(request, response, INTERNAL_SERVER_ERROR);
             return;
         }
         filterChain.doFilter(request, response);
@@ -62,7 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         var jwtToken = resolveJwtToken(request);
-        if (jwtToken == null){
+        if (jwtToken == null) {
             throw new WrongOrInvalidJwtTokenException("Token is empty", UNAUTHORIZED);
         }
 

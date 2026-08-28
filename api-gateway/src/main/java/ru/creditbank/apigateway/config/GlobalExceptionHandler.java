@@ -8,7 +8,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.creditbank.apigateway.exception.RestException;
+import ru.creditbank.apigateway.exception.BusinessException;
 
 import java.util.stream.Collectors;
 
@@ -28,8 +28,8 @@ public class GlobalExceptionHandler {
         errorResponseWriter.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(RestException.class)
-    public void handle(RestException e, HttpServletResponse response) {
+    @ExceptionHandler(BusinessException.class)
+    public void handle(BusinessException e, HttpServletResponse response) {
         log.warn(e.toString());
         errorResponseWriter.sendError(response, e.getHttpStatus(), e.getMessage());
     }

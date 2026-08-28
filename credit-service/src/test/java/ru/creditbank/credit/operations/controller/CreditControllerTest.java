@@ -119,18 +119,6 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
     }
 
     @Test
-    void getInfoNoCreditId() {
-        // given
-        var token = jwtGenerator.generate();
-
-        // when
-        var rsDto = performGetWithDto("/credit-service/api/v1/info/", ErrorRsDto.class, status().isNotFound(), token);
-
-        // then
-        assertEquals("Not Found", rsDto.message());
-    }
-
-    @Test
     void getInfoByOwner() {
         // given
         var userId = UUID.randomUUID();

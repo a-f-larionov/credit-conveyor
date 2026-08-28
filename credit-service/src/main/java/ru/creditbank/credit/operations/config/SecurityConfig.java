@@ -39,9 +39,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) ->
-                                errorResponseWriter.sendError(response, HttpStatus.UNAUTHORIZED))
+                                errorResponseWriter.sendError(request, response, HttpStatus.UNAUTHORIZED))
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                errorResponseWriter.sendError(response, HttpStatus.FORBIDDEN))
+                                errorResponseWriter.sendError(request, response, HttpStatus.FORBIDDEN))
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         ;
