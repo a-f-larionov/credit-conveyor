@@ -1,14 +1,11 @@
 # ---- Stage 1: Build ----
-FROM eclipse-temurin:17-jdk-alpine AS build
+FROM common-api-starter AS build
 
 WORKDIR /app
 
 COPY mvnw .
 RUN chmod +x mvnw
 COPY .mvn ./.mvn
-
-# it's a trick, download and cache the wrapper
-RUN ./mvnw --version
 
 COPY pom.xml .
 RUN ./mvnw dependency:go-offline -B

@@ -63,7 +63,7 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
     @SneakyThrows
     private <T> MockWebServer createMockWebServerAndEnqueue(T rsDto) {
         MockWebServer mockWebServer = new MockWebServer();
-        mockWebServer.start(8081);
+        mockWebServer.start(8082);
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
                 .setHeader("Content-Type", "application/json")

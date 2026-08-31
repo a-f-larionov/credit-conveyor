@@ -25,4 +25,4 @@ jwt:
 
 services:
   credit-service:
-    url: "http://credit-service:8081"
+    url: "http://credit-service:8082"

@@ -24,6 +24,7 @@ public interface CreditMapper {
     @Mapping(target = "creationDate", source = "creationDate")
     @Mapping(target = "lastUpdated", source = "lastUpdated")
     @Mapping(target = "interestRate", ignore = true)
+    @Mapping(target = "managerComment", ignore = true)
     CreditEntity mapRqDtoToCreateEntity(CreditCreateRqDto rqDto, UUID userId, String userEmail, CreditStatusEnum status, Instant creationDate, Instant lastUpdated);
 
     @Mapping(target = "id", source = "credit.id")

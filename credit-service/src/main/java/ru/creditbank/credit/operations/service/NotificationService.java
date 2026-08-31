@@ -11,16 +11,15 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class NotificationService {
 
-    private final MailService mailService;
+    private final MailOutBoxService mailOutBoxService;
 
     public void onCreditStatusChange(CreditEntity creditEntity) {
 
         var to = creditEntity.getUserEmail();
         var subject = format("Ваша кредитная заявка #%s", creditEntity.getId());
-
         var body = getMailBody(creditEntity);
 
-        mailService.sendSimpleMessage(to, subject, body);
+        mailOutBoxService.queue(to, subject, body);
     }
 
     @NonNull

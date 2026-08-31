@@ -15,6 +15,7 @@ import ru.creditbank.credit.operations.TestJwtGenerator;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
+import ru.creditbank.credit.operations.service.MailOutBoxService;
 
 import java.util.Set;
 import java.util.UUID;
@@ -40,6 +41,9 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
 
     @RegisterExtension
     static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP);
+
+    @Autowired
+    MailOutBoxService mailOutBoxService;
 
     @Autowired
     TestJwtGenerator jwtGenerator;
@@ -127,6 +131,8 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
         assertThat(infoRsDto.loanDetails().requestedAmount()).isEqualTo(createRqDto.requestedAmount());
         assertThat(infoRsDto.loanDetails().termMonths()).isEqualTo(createRqDto.termMonths());
         assertThat(infoRsDto.loanDetails().interestRate()).isNull();
+
+        mailOutBoxService.trySendOne();
 
         MimeMessage[] messages = greenMail.getReceivedMessages();
         assertEquals(1, messages.length, "Должно быть отправлено ровно одно письмо");
