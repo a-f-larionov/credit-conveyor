@@ -1,4 +1,4 @@
-package ru.creditbank.credit.operations.exception;
+package ru.creditbank.common.library.exception;
 
 import org.springframework.http.HttpStatus;
 

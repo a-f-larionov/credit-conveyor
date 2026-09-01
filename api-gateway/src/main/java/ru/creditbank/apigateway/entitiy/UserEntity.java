@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import ru.creditbank.common.library.jwt.JwtUserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
-public class UserEntity implements UserDetails {
+public class UserEntity implements JwtUserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

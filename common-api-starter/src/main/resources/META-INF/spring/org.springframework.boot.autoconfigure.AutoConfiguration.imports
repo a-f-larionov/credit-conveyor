@@ -1,1 +1,2 @@
 ru.creditbank.common.library.autoconfigure.ExceptionHandlerAutoConfiguration
+ru.creditbank.common.library.autoconfigure.JwtAutoConfiguration

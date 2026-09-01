@@ -25,12 +25,11 @@ public class TestFixtures {
     }
 
     public static RegisterRqDto buildRegisterRqDto(String userEmail, String password) {
-        lastUniqueIndex++;
         return RegisterRqDto.builder()
                 .fullName(FullNameDto.builder()
-                        .firstName("firstName-" + lastUniqueIndex)
-                        .middleName("middleName-" + lastUniqueIndex)
-                        .lastName("lastName-" + lastUniqueIndex)
+                        .firstName("firstName")
+                        .middleName("middleName")
+                        .lastName("lastName")
                         .build())
                 .email(userEmail)
                 .password(password)

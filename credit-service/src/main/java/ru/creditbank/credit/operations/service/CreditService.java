@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ru.creditbank.common.library.jwt.JwtUserDetails;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
 import ru.creditbank.credit.operations.dto.rq.StatusUpdateRqDto;
@@ -13,7 +14,6 @@ import ru.creditbank.credit.operations.enitity.CreditEntity;
 import ru.creditbank.credit.operations.exception.AccessNotAllowed;
 import ru.creditbank.credit.operations.exception.CreditNotFoundException;
 import ru.creditbank.credit.operations.exception.CreditStatusUpdateException;
-import ru.creditbank.credit.operations.jwt.JwtUserDetails;
 import ru.creditbank.credit.operations.mappers.CreditMapper;
 import ru.creditbank.credit.operations.repository.CreditRepository;
 
@@ -23,7 +23,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import static java.lang.String.format;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static ru.creditbank.credit.operations.dto.CreditStatusEnum.PENDING;
 
 @Service
@@ -45,7 +46,7 @@ public class CreditService {
 
         var credit = creditMapper.mapRqDtoToCreateEntity(
                 rqDto,
-                userDetails.getUserId(),
+                userDetails.getId(),
                 userDetails.getUsername(),
                 PENDING,
                 Instant.now(),
@@ -109,7 +110,7 @@ public class CreditService {
         boolean isAdminOrManager = auth.getAuthorities().stream()
                 .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()) || "ROLE_CREDIT_MANAGER".equals(a.getAuthority()));
 
-        if (!isAdminOrManager && (!creditEntity.getUserId().equals(userDetails.getUserId()))) {
+        if (!isAdminOrManager && (!creditEntity.getUserId().equals(userDetails.getId()))) {
             throw new AccessNotAllowed("You are not allowed to view this credit", FORBIDDEN);
         }
     }

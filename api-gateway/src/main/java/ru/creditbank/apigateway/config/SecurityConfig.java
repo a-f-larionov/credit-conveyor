@@ -1,5 +1,6 @@
 package ru.creditbank.apigateway.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.creditbank.apigateway.jwt.JwtFilter;
+import ru.creditbank.apigateway.jwt.JwtGatewayFilter;
 import ru.creditbank.common.library.config.ErrorResponseWriter;
 
 import java.util.Set;
@@ -30,8 +31,12 @@ public class SecurityConfig {
             "/error"
     );
 
-    private final JwtFilter jwtFilter;
+    private final JwtGatewayFilter jwtGatewayFilter;
     private final ErrorResponseWriter errorResponseWriter;
+
+    public static boolean isPublicPath(HttpServletRequest request) {
+        return SecurityConfig.PUBLIC_URLS.contains(request.getRequestURI());
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,7 +53,7 @@ public class SecurityConfig {
                         .accessDeniedHandler((request, response, accessDeniedException) ->
                                 errorResponseWriter.sendError(request, response, FORBIDDEN))
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtGatewayFilter, UsernamePasswordAuthenticationFilter.class)
         ;
 
         return http.build();

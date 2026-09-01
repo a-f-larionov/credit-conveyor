@@ -1,5 +1,6 @@
 package ru.creditbank.apigateway.dto.rq;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import ru.creditbank.apigateway.dto.FullNameDto;
@@ -17,6 +18,7 @@ public record RegisterRqDto(
         String password,
 
         @NotNull
+        @Valid
         FullNameDto fullName
 ) {
 }

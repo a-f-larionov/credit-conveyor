@@ -1,10 +1,11 @@
-package ru.creditbank.credit.operations.exception;
+package ru.creditbank.common.library.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 public abstract class BusinessException extends RuntimeException {
+
     private final HttpStatus httpStatus;
 
     public BusinessException(String msg, HttpStatus httpStatus) {

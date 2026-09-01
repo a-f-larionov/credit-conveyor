@@ -22,9 +22,8 @@ services:
   common-api-starter:
     build:
       context: ./common-api-starter
-      args:
-        M2_PATH2: ./m3/
     image: common-api-starter:latest
+    pull_policy: build
 
   db:
     image: postgres:latest

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
 import ru.creditbank.apigateway.TestFixtures;
 import ru.creditbank.apigateway.dto.rs.LoginRsDto;
-import ru.creditbank.apigateway.service.JwtService;
+import ru.creditbank.common.library.service.JwtService;
 import ru.creditbank.common.library.dto.rs.ErrorRsDto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

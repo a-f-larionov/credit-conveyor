@@ -9,7 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.creditbank.common.library.config.ErrorResponseWriter;
-import ru.creditbank.credit.operations.exception.BusinessException;
+import ru.creditbank.common.library.exception.BusinessException;
 
 import java.util.stream.Collectors;
 

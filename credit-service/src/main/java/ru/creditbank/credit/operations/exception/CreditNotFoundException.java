@@ -1,6 +1,7 @@
 package ru.creditbank.credit.operations.exception;
 
 import org.springframework.http.HttpStatus;
+import ru.creditbank.common.library.exception.BusinessException;
 
 import java.util.UUID;
 

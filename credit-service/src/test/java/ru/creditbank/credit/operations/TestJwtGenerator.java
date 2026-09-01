@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ru.creditbank.common.library.jwt.JwtUser;
+import ru.creditbank.common.library.service.JwtService;
 import ru.creditbank.credit.operations.enums.UserRole;
-import ru.creditbank.credit.operations.jwt.JwtUserDetails;
-import ru.creditbank.credit.operations.service.JwtService;
 
 import javax.crypto.SecretKey;
 import java.util.*;
@@ -43,13 +43,13 @@ public class TestJwtGenerator {
 
     public String generate(UUID userId, String userEmail, Set<UserRole> userRoles) {
 
-        var userDetails = JwtUserDetails.builder()
-                .userId(userId)
+        var userDetails = JwtUser.builder()
+                .id(userId)
                 .username(userEmail)
                 .userRoles(userRoles.stream().map(Enum::toString).collect(Collectors.toSet()))
                 .build();
 
-        return generateToken(userDetails, userDetails.getUserId().toString());
+        return generateToken(userDetails, userDetails.getId().toString());
     }
 
     public String generateToken(UserDetails userDetails, String userId) {

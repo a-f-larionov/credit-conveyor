@@ -1,4 +1,4 @@
-package ru.creditbank.credit.operations.jwt;
+package ru.creditbank.common.library.jwt;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,10 +11,10 @@ import java.util.Set;
 import java.util.UUID;
 
 @Builder
-public class JwtUserDetails implements UserDetails {
+public class JwtUser implements JwtUserDetails, UserDetails {
 
     @Getter
-    private final UUID userId;
+    private final UUID id;
     private final String username;
     private final Set<String> userRoles;
 
