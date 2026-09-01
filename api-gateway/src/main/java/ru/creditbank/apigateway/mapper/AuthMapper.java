@@ -6,7 +6,7 @@ import ru.creditbank.apigateway.dto.rq.RegisterRqDto;
 import ru.creditbank.apigateway.dto.rs.LoginRsDto;
 import ru.creditbank.apigateway.dto.rs.UserInfoRsDto;
 import ru.creditbank.apigateway.entitiy.UserEntity;
-import ru.creditbank.apigateway.entitiy.UserRole;
+import ru.creditbank.common.library.enums.UserRole;
 
 import java.util.Set;
 

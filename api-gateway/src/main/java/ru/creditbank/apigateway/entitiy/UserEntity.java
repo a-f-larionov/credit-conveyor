@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import ru.creditbank.common.library.enums.UserRole;
 import ru.creditbank.common.library.jwt.JwtUserDetails;
 
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.entitiy;
+package ru.creditbank.common.library.enums;
 
 public enum UserRole {
     ROLE_USER,
