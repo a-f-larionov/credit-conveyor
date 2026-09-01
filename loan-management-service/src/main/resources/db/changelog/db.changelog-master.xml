@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="loan-management-service-001-create-loans-table" author="a_f_larionov">
+        <comment>Create loans table</comment>
+        <sqlFile path="db/changelog/changes/001-create-loans-table.sql"/>
+        <rollback>
+            <sqlFile path="db/changelog/changes/001-create-loans-table-rollback.sql"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="loan-management-service-002-create-payments-table" author="a_f_larionov">
+        <comment>Create loans table</comment>
+        <sqlFile path="db/changelog/changes/002-create-payments-table.sql"/>
+        <rollback>
+            <sqlFile path="db/changelog/changes/002-create-payments-table-rollback.sql"/>
+        </rollback>
+    </changeSet>
+
+
+</databaseChangeLog>

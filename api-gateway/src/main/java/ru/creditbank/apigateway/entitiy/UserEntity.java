@@ -12,25 +12,25 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Getter
-@Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserEntity implements JwtUserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
+    @ToString.Exclude
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 

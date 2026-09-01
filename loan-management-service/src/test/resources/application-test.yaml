@@ -1,0 +1,10 @@
+spring:
+
+  application:
+    name: loan-management-service-test
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

@@ -8,20 +8,19 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-@Getter
-@Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 @Entity
 @Table(name = "credit")
 public class CreditEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
     @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, unique = true)
     private UUID id;
 
     @Column(name = "user_id", nullable = false)

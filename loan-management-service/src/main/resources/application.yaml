@@ -1,0 +1,24 @@
+server:
+  port:  8082
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  application:
+    name: loan-management-service
+
+  datasource:
+    url: jdbc:postgresql://${DATA_SOURCE_DB_HOST}:5432/${DATA_SOURCE_DB_NAME}
+    username: ${DATA_SOURCE_USERNAME}
+    password: ${DATA_SOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+jwt:
+  signing:
+    key: ${JWT_SIGNING_KEY}
+    expiration_sec: ${JWT_EXPIRATION_SEC}

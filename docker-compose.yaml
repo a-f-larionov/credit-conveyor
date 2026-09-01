@@ -1,5 +1,14 @@
 services:
 
+  loan-management-service:
+    hostname: loan-management-service
+    build: ./loan-management-service/
+    env_file:
+      - ./loan-management-service/.env
+    environment:
+      DATA_SOURCE_DB_HOST: db
+    depends_on: [ "db", "common-api-starter" ]
+
   credit-service:
     hostname: credit-service
     build: ./credit-service/
