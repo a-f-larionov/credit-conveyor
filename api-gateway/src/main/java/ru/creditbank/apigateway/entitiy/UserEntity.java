@@ -13,9 +13,10 @@ import java.util.Set;
 import java.util.UUID;
 
 @Builder
-@AllArgsConstructor
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")

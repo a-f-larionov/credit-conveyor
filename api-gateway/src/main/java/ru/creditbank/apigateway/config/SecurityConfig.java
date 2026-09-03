@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,9 +17,6 @@ import ru.creditbank.apigateway.jwt.JwtGatewayFilter;
 import ru.creditbank.common.library.config.ErrorResponseWriter;
 
 import java.util.Set;
-
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Configuration
 @EnableMethodSecurity
@@ -51,10 +49,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((request, response, authException) ->
-                                errorResponseWriter.sendError(request, response, UNAUTHORIZED))
-                        .accessDeniedHandler((request, response, accessDeniedException) ->
-                                errorResponseWriter.sendError(request, response, FORBIDDEN))
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            log.warn("Authentication error: {}", authException.getMessage());
+                            errorResponseWriter.sendError(request, response, HttpStatus.UNAUTHORIZED);
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            log.warn("Access denied: {}", accessDeniedException.getMessage());
+                            errorResponseWriter.sendError(request, response, HttpStatus.FORBIDDEN);
+                        })
                 )
                 .addFilterBefore(jwtGatewayFilter, UsernamePasswordAuthenticationFilter.class)
         ;
