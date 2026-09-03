@@ -5,11 +5,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import ru.creditbank.common.library.dto.rs.ErrorRsDto;
 
 import java.time.Instant;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ErrorResponseWriter {
 
