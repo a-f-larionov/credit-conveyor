@@ -1,9 +1,9 @@
 package ru.creditbank.apigateway.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.creditbank.apigateway.dto.rq.LoginRqDto;
 import ru.creditbank.apigateway.dto.rq.RegisterRqDto;
 import ru.creditbank.apigateway.dto.rq.UserInfoRqDto;
@@ -62,7 +62,7 @@ public class UserService {
         return authMapper.toLoginRsDto(token);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public UserInfoRsDto getInfo(UserInfoRqDto rqDto) {
         var user = userRepository.findByEmail(rqDto.email())
                 .orElseThrow(() -> new UserDoesNotExistsException("User does not exits", NOT_FOUND));

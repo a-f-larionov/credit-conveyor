@@ -1,9 +1,9 @@
 package ru.creditbank.credit.operations.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.creditbank.common.library.jwt.JwtUserDetails;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
@@ -58,6 +58,7 @@ public class CreditService {
         return creditMapper.mapEntityToCreateRsDto(credit);
     }
 
+    @Transactional(readOnly = true)
     public CreditInfoRsDto getInfo(UUID creditId) {
 
         var creditEntity = creditRepository.findById(creditId)

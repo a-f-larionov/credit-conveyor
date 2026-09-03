@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.creditbank</groupId>
-	<artifactId>api-gateway</artifactId>
+	<artifactId>credit-service</artifactId>
 	<version>0.0.4-SNAPSHOT</version>
 
 	<url>https://github.com/a-f-larionov/credit-conveyor/</url>
