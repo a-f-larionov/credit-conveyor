@@ -56,7 +56,7 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
 
         // when
         var changeStatusRqDto = buildStatusUpdateRqDto(CreditStatusEnum.APPROVED, null);
-        var rsDto = performPathWithDto("/credit-service/api/v1/status/update/" + creditId, changeStatusRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
+        var rsDto = performPath("/credit-service/api/v1/status/update/" + creditId, changeStatusRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
         // then
         assertEquals("Token is empty", rsDto.message());
@@ -70,7 +70,7 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
 
         // when
         var changeStatusRqDto = buildStatusUpdateRqDto(CreditStatusEnum.APPROVED, null);
-        var rsDto = performPathWithDto("/credit-service/api/v1/status/update/" + creditId, changeStatusRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
+        var rsDto = performPath("/credit-service/api/v1/status/update/" + creditId, changeStatusRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
         // then
         assertEquals("Token invalid", rsDto.message());
@@ -84,7 +84,7 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
 
         // when
         var changeStatusRqDto = buildStatusUpdateRqDto(CreditStatusEnum.APPROVED, null);
-        var rsDto = performPathWithDto("/credit-service/api/v1/status/update/" + creditId, changeStatusRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
+        var rsDto = performPath("/credit-service/api/v1/status/update/" + creditId, changeStatusRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
         // then
         assertEquals("Token invalid", rsDto.message());
@@ -100,7 +100,7 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
 
         // when
         var changeStatusRqDto = buildStatusUpdateRqDto(CreditStatusEnum.APPROVED, null);
-        var rsDto = performPathWithDto("/credit-service/api/v1/status/update/" + creditId, changeStatusRqDto, ErrorRsDto.class, status().isNotFound(), token);
+        var rsDto = performPath("/credit-service/api/v1/status/update/" + creditId, changeStatusRqDto, ErrorRsDto.class, status().isNotFound(), token);
 
         // then
         assertEquals(format("Credit with id %s not found", creditId), rsDto.message());
@@ -114,14 +114,14 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
         var userEmail = "userEmail123@mail.com";
         var token = jwtGenerator.generate(userId, userEmail, Set.of(ROLE_USER, ROLE_CREDIT_MANAGER));
         var createRqDto = TestFixtures.buildCreditCreateRqDto();
-        var createdRsDto = performPostWithDto("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
+        var createdRsDto = performPost("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
 
         // when
         var changeStatusRqDto = buildStatusUpdateRqDto(CreditStatusEnum.APPROVED, "Комментарий менеджера тестовый");
-        performPathWithDto("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, status().isOk(), token);
+        performPath("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, status().isOk(), token);
 
         // then
-        var infoRsDto = performGetWithDto("/credit-service/api/v1/info/" + createdRsDto.id(), CreditInfoRsDto.class, status().isOk(), token);
+        var infoRsDto = performGet("/credit-service/api/v1/info/" + createdRsDto.id(), CreditInfoRsDto.class, status().isOk(), token);
         assertThat(infoRsDto.id()).isEqualTo(createdRsDto.id());
         assertThat(infoRsDto.userInfo().userId()).isEqualTo(userId);
         assertThat(infoRsDto.userInfo().fullName()).isEqualTo(createRqDto.fullName());
@@ -151,11 +151,11 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
         var userEmail = "userEmail@mail.com";
         var token = jwtGenerator.generate(userId, userEmail);
         var createRqDto = TestFixtures.buildCreditCreateRqDto();
-        var createdRsDto = performPostWithDto("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
+        var createdRsDto = performPost("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
 
         // when
         var changeStatusRqDto = buildStatusUpdateRqDto(CreditStatusEnum.APPROVED, null);
-        var rsDto = performPathWithDto("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, ErrorRsDto.class, status().isForbidden(), token);
+        var rsDto = performPath("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, ErrorRsDto.class, status().isForbidden(), token);
 
         // then
         assertEquals("Forbidden", rsDto.message());
@@ -168,11 +168,11 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
         var userEmail = "userEmail@mail.com";
         var token = jwtGenerator.generate(userId, userEmail, Set.of(ROLE_USER, ROLE_CREDIT_MANAGER));
         var createRqDto = TestFixtures.buildCreditCreateRqDto();
-        var createdRsDto = performPostWithDto("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
+        var createdRsDto = performPost("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
 
         // when
         var changeStatusRqDto = buildStatusUpdateRqDto(CreditStatusEnum.PENDING, null);
-        var rsDto = performPathWithDto("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, ErrorRsDto.class, status().isBadRequest(), token);
+        var rsDto = performPath("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, ErrorRsDto.class, status().isBadRequest(), token);
 
         // then
         assertEquals("Target status 'PENDING' is not allowed. Allowed values: [APPROVED, REJECTED]", rsDto.message());
@@ -185,14 +185,14 @@ class CreditControllerUpdateStatusTest extends SpringBootMvcBaseTest {
         var userEmail = "userEmail@mail.com";
         var token = jwtGenerator.generate(userId, userEmail, Set.of(ROLE_USER, ROLE_CREDIT_MANAGER));
         var createRqDto = TestFixtures.buildCreditCreateRqDto();
-        var createdRsDto = performPostWithDto("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
+        var createdRsDto = performPost("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
 
         var changeStatusRqDto = buildStatusUpdateRqDto(CreditStatusEnum.APPROVED, null);
-        performPathWithDto("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, status().isOk(), token);
+        performPath("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, status().isOk(), token);
 
         // when
         changeStatusRqDto = buildStatusUpdateRqDto(CreditStatusEnum.APPROVED, null);
-        var rsDto = performPathWithDto("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, ErrorRsDto.class, status().isBadRequest(), token);
+        var rsDto = performPath("/credit-service/api/v1/status/update/" + createdRsDto.id(), changeStatusRqDto, ErrorRsDto.class, status().isBadRequest(), token);
 
         // then
         assertEquals("Credit must be PENDING, but is APPROVED", rsDto.message());

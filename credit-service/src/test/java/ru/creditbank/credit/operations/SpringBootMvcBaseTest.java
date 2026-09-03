@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -28,12 +29,12 @@ public abstract class SpringBootMvcBaseTest {
     protected ObjectMapper objectMapper;
 
     @SneakyThrows
-    protected <RQ> void performPathWithDto(String url, RQ rqDto, ResultMatcher expectedStatus, String token) {
-        performPathWithDto(url, rqDto, null, expectedStatus, token);
+    protected <RQ> void performPath(String url, RQ rqDto, ResultMatcher expectedStatus, String token) {
+        performPath(url, rqDto, null, expectedStatus, token);
     }
 
     @SneakyThrows
-    protected <RQ, RS> RS performPathWithDto(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
+    protected <RQ, RS> RS performPath(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
         var requestBuilder = patch(url);
         requestBuilder.contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(rqDto));
@@ -48,7 +49,7 @@ public abstract class SpringBootMvcBaseTest {
     }
 
     @SneakyThrows
-    protected <RS> RS performGetWithDto(String url, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
+    protected <RS> RS performGet(String url, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
         var requestBuilder = get(url);
         if (token != null) {
             requestBuilder.header("Authorization", "Bearer " + token);
@@ -61,13 +62,13 @@ public abstract class SpringBootMvcBaseTest {
     }
 
 
-    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz, ResultMatcher expectedStatus) {
-        return performPostWithDto(url, rqDto, rsDTOClazz, expectedStatus, null);
+    protected <RQ, RS> RS performPost(String url, RQ rqDto, Class<RS> rsDTOClazz, ResultMatcher expectedStatus) {
+        return performPost(url, rqDto, rsDTOClazz, expectedStatus, null);
     }
 
     @SneakyThrows
-    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
-        var result = mockMvc.perform(postWithDto(url, rqDto, token))
+    protected <RQ, RS> RS performPost(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
+        var result = mockMvc.perform(post(url, rqDto, token))
                 .andExpect(expectedStatus)
                 .andReturn();
         if (rsDtoClazz == null) return null;
@@ -75,8 +76,8 @@ public abstract class SpringBootMvcBaseTest {
     }
 
     @SneakyThrows
-    protected <RQ> MockHttpServletRequestBuilder postWithDto(String url, RQ rqDto, String token) {
-        var requestBuilder = post(url);
+    protected <RQ> MockHttpServletRequestBuilder post(String url, RQ rqDto, String token) {
+        var requestBuilder = MockMvcRequestBuilders.post(url);
         if (token != null) {
             requestBuilder.header("Authorization", "Bearer " + token);
         }

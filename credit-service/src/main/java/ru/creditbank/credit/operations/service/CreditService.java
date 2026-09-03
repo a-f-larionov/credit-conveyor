@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.creditbank.common.library.enums.UserRole;
 import ru.creditbank.common.library.jwt.JwtUserDetails;
+import ru.creditbank.common.library.service.SecurityService;
 import ru.creditbank.credit.operations.dto.CreditStatusEnum;
 import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
 import ru.creditbank.credit.operations.dto.rq.StatusUpdateRqDto;
 import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
-import ru.creditbank.credit.operations.enitity.CreditEntity;
-import ru.creditbank.credit.operations.exception.AccessNotAllowed;
 import ru.creditbank.credit.operations.exception.CreditNotFoundException;
 import ru.creditbank.credit.operations.exception.CreditStatusUpdateException;
 import ru.creditbank.credit.operations.mappers.CreditMapper;
@@ -24,17 +24,16 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static ru.creditbank.credit.operations.dto.CreditStatusEnum.PENDING;
+import static ru.creditbank.credit.operations.dto.CreditStatusEnum.*;
 
 @Service
 @RequiredArgsConstructor
 public class CreditService {
 
     private final NotificationService notificationService;
+    private final SecurityService securityService;
 
-    private static final Set<CreditStatusEnum> allowedStatuses =
-            EnumSet.of(CreditStatusEnum.APPROVED, CreditStatusEnum.REJECTED);
+    private static final Set<CreditStatusEnum> allowedStatusesToChange = EnumSet.of(APPROVED, REJECTED);
 
     private final CreditRepository creditRepository;
     private final CreditMapper creditMapper;
@@ -64,7 +63,7 @@ public class CreditService {
         var creditEntity = creditRepository.findById(creditId)
                 .orElseThrow(() -> new CreditNotFoundException(creditId));
 
-        validateAccess(creditEntity);
+        securityService.checkAccess(creditEntity.getUserEmail(), UserRole.ROLE_ADMIN, UserRole.ROLE_CREDIT_MANAGER);
 
         return creditMapper.mapEntityToInfoRsDto(creditEntity);
     }
@@ -95,24 +94,11 @@ public class CreditService {
     }
 
     private void validateStatusIsAllowedToChange(CreditStatusEnum status) {
-        if (!allowedStatuses.contains(status)) {
+        if (!allowedStatusesToChange.contains(status)) {
             throw new CreditStatusUpdateException(
                     format("Target status '%s' is not allowed. Allowed values: %s",
-                            status, allowedStatuses),
+                            status, allowedStatusesToChange),
                     BAD_REQUEST);
-        }
-    }
-
-    private void validateAccess(CreditEntity creditEntity) {
-
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        var userDetails = (JwtUserDetails) auth.getPrincipal();
-
-        boolean isAdminOrManager = auth.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()) || "ROLE_CREDIT_MANAGER".equals(a.getAuthority()));
-
-        if (!isAdminOrManager && (!creditEntity.getUserId().equals(userDetails.getId()))) {
-            throw new AccessNotAllowed("You are not allowed to view this credit", FORBIDDEN);
         }
     }
 }

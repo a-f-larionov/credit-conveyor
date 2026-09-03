@@ -20,21 +20,18 @@ public class CreditController {
     private final CreditService creditService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('USER')")
     public CreditCreateRsDto create(@Valid @RequestBody CreditCreateRqDto rqDto) {
 
         return creditService.create(rqDto);
     }
 
     @GetMapping("/info/{creditId}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'CREDIT_MANAGER')")
     public CreditInfoRsDto info(@PathVariable UUID creditId) {
 
         return creditService.getInfo(creditId);
     }
 
     @PatchMapping("/status/update/{creditId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CREDIT_MANAGER')")
     public void statusUpdate(@Valid @RequestBody StatusUpdateRqDto statusUpdateRqDto, @PathVariable UUID creditId){
 
         creditService.statusUpdate(statusUpdateRqDto, creditId);
