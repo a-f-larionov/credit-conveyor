@@ -179,6 +179,6 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var rsDto = performGet("/credit-service/api/v1/info/" + createdRsDto.id(), ErrorRsDto.class, status().isForbidden(), noManagerToken);
 
         // then
-        assertEquals("You are not allowed to view this credit", rsDto.message());
+        assertEquals("Forbidden", rsDto.message());
     }
 }

@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import ru.creditbank.apigateway.SpringBootMvcBaseTest;
 import ru.creditbank.apigateway.TestFixtures;
-import ru.creditbank.common.library.dto.rs.ErrorRsDto;
 import ru.creditbank.apigateway.dto.rs.LoginRsDto;
+import ru.creditbank.common.library.dto.rs.ErrorRsDto;
 
 import java.io.IOException;
 

@@ -1,9 +1,9 @@
 package ru.creditbank.credit.operations.service;
 
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.creditbank.credit.operations.enitity.MailOutboxEntity;
 import ru.creditbank.credit.operations.repository.MailOutboxRepository;
 
