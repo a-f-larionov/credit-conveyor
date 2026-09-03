@@ -2,6 +2,7 @@ package ru.creditbank.loan.management.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.Set;
 @EnableMethodSecurity
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     public static final Set<String> PUBLIC_URLS = Set.of(
@@ -39,15 +41,20 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_URLS.toArray(String[]::new)).permitAll()
+                        .requestMatchers("/loan-management-service/api/v1/loans/create").hasRole("CREDIT_MANAGER")
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((request, response, authException) ->
-                                errorResponseWriter.sendError(request, response, HttpStatus.UNAUTHORIZED))
-                        .accessDeniedHandler((request, response, accessDeniedException) ->
-                                errorResponseWriter.sendError(request, response, HttpStatus.FORBIDDEN))
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            log.warn("Authentication error: {}", authException.getMessage());
+                            errorResponseWriter.sendError(request, response, HttpStatus.UNAUTHORIZED);
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            log.warn("Access denied: {}", accessDeniedException.getMessage());
+                            errorResponseWriter.sendError(request, response, HttpStatus.FORBIDDEN);
+                        })
                 )
                 .addFilterBefore(jwtTrustedFilter, UsernamePasswordAuthenticationFilter.class)
         ;

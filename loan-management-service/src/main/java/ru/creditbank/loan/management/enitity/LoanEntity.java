@@ -6,11 +6,17 @@ import ru.creditbank.loan.management.enums.LoanStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Builder
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @Entity
@@ -26,13 +32,25 @@ public class LoanEntity {
     @Column(name = "user_id", nullable = false)
     private UUID userId;
 
-    @Column(name = "total_amount", precision = 15, scale = 2, nullable = false)
+    @OneToMany(mappedBy = "loan", cascade = ALL, orphanRemoval = true, fetch = LAZY)
+    private List<SchedulePaymentEntity> schedulePayments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "loan", cascade = ALL, orphanRemoval = true, fetch = LAZY)
+    private List<PaymentEntity> payments = new ArrayList<>();
+
+    @Column(name = "total_amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal totalAmount;
 
-    @Column(name = "remaining_amount", precision = 15, scale = 2, nullable = false)
+    @Column(name = "remaining_amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal remainingAmount;
 
-    @Column(name = "next_payment_date", nullable = false)
+    @Column(name = "term_months", nullable = false)
+    private Integer termMonths;
+
+    @Column(name = "interest_rate", nullable = false, precision = 15, scale = 2)
+    private BigDecimal interestRate;
+
+    @Column(name = "next_payment_date")
     private Instant nextPaymentDate;
 
     @Enumerated(EnumType.STRING)

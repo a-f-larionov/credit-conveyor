@@ -2,14 +2,19 @@ package ru.creditbank.loan.management.enitity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.creditbank.loan.management.enums.PaymentTypeEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
+
 @Builder
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @Entity
@@ -22,21 +27,20 @@ public class PaymentEntity {
     @Column(name = "id", nullable = false, unique = true)
     private UUID id;
 
-    @Column(name = "load_id", nullable = false)
-    private UUID loadId;
+    @JoinColumn(name = "loan_id", nullable = false)
+    @ManyToOne(fetch = LAZY)
+    private LoanEntity loan;
 
     @Column(name = "amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "datetime", nullable = false)
-    private Instant datetime;
+    @Column(name = "remaining", nullable = false, precision = 15, scale = 2)
+    private BigDecimal remaining;
 
     @Column(name = "type", nullable = false)
+    @Enumerated(STRING)
     private PaymentTypeEnum type;
 
-    @Column(name = "new_balance", nullable = false, precision = 15, scale = 2)
-    private BigDecimal newBalance;
-
     @Column(name = "created_at", nullable = false)
-    Instant createdAt;
+    private Instant createdAt;
 }

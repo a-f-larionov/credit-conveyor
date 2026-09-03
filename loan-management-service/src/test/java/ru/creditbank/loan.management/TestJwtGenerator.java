@@ -24,12 +24,12 @@ public class TestJwtGenerator {
     @Value("${jwt.signing.expiration_sec}")
     Long jwtSigningExpirationSec;
 
-    public String generate() {
-        return generate(UUID.randomUUID());
-    }
-
     public String generate(Set<UserRole> roles) {
         var userId = UUID.randomUUID();
+        return generate(userId, "username" + userId + "@email.ru", roles);
+    }
+
+    public String generate(UUID userId, Set<UserRole> roles) {
         return generate(userId, "username" + userId + "@email.ru", roles);
     }
 

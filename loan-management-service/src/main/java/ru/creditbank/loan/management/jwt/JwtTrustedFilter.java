@@ -7,11 +7,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.creditbank.common.library.config.ErrorResponseWriter;
 import ru.creditbank.common.library.exception.BusinessException;
-import ru.creditbank.common.library.exception.WrongOrInvalidJwtTokenException;
 import ru.creditbank.common.library.service.JwtSecurityContextService;
 import ru.creditbank.common.library.service.JwtService;
 import ru.creditbank.loan.management.config.SecurityConfig;
@@ -59,11 +60,11 @@ public class JwtTrustedFilter extends OncePerRequestFilter {
 
         var jwtToken = jwtService.resolveJwtToken(request);
         if (jwtToken == null) {
-            throw new WrongOrInvalidJwtTokenException("Token is empty", UNAUTHORIZED);
+            throw new AuthenticationCredentialsNotFoundException("Token is empty");
         }
 
         if (!jwtService.isTokenValid(jwtToken)) {
-            throw new WrongOrInvalidJwtTokenException("Token invalid", UNAUTHORIZED);
+            throw new BadCredentialsException("Token invalid");
         }
 
         var userDetails = jwtService.extractUserDetailFromToken(jwtToken);

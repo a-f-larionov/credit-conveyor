@@ -13,13 +13,20 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
         </rollback>
     </changeSet>
 
-    <changeSet id="loan-management-service-002-create-payments-table" author="a_f_larionov">
-        <comment>Create loans table</comment>
-        <sqlFile path="db/changelog/changes/002-create-payments-table.sql"/>
+    <changeSet id="loan-management-service-002-create-schedule-payments-table" author="a_f_larionov">
+        <comment>Create payments table</comment>
+        <sqlFile path="db/changelog/changes/002-create-schedule-payments-table.sql"/>
         <rollback>
-            <sqlFile path="db/changelog/changes/002-create-payments-table-rollback.sql"/>
+            <sqlFile path="db/changelog/changes/002-create-schedule-payments-table-rollback.sql"/>
         </rollback>
     </changeSet>
 
+    <changeSet id="loan-management-service-003-create-payments-table" author="a_f_larionov">
+        <comment>Create payments table</comment>
+        <sqlFile path="db/changelog/changes/003-create-payments-table.sql"/>
+        <rollback>
+            <sqlFile path="db/changelog/changes/003-create-payments-table-rollback.sql"/>
+        </rollback>
+    </changeSet>
 
 </databaseChangeLog>
