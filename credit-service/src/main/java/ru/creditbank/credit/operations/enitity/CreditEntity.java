@@ -9,9 +9,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Builder
-@AllArgsConstructor
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "credit")
