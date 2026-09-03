@@ -14,7 +14,7 @@ public class RegisterControllerTest extends SpringBootMvcBaseTest {
         var rqDto = TestFixtures.buildRegisterRqDto();
 
         // when-then
-        performPostWithDto("/api/v1/auth/register", rqDto, status().isCreated());
+        performPost("/api/v1/auth/register", rqDto, status().isCreated());
     }
 
     @Test
@@ -23,7 +23,7 @@ public class RegisterControllerTest extends SpringBootMvcBaseTest {
         var rqDto = TestFixtures.buildRegisterRqDto("no_upper_case_password");
 
         // when-then
-        performPostWithDto("/api/v1/auth/register", rqDto, status().isBadRequest());
+        performPost("/api/v1/auth/register", rqDto, status().isBadRequest());
     }
 
     @Test
@@ -32,9 +32,9 @@ public class RegisterControllerTest extends SpringBootMvcBaseTest {
         var rqDto = TestFixtures.buildRegisterRqDto();
 
         // when
-        performPostWithDto("/api/v1/auth/register", rqDto, status().isCreated());
+        performPost("/api/v1/auth/register", rqDto, status().isCreated());
 
         // then
-        performPostWithDto("/api/v1/auth/register", rqDto, status().isConflict());
+        performPost("/api/v1/auth/register", rqDto, status().isConflict());
     }
 }

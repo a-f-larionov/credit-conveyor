@@ -2,7 +2,6 @@ package ru.creditbank.apigateway.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/info")
-    @PreAuthorize("hasRole('ADMIN') or #rqDto.email == authentication.principal.username ")
     public UserInfoRsDto info(@Valid @RequestBody UserInfoRqDto rqDto) {
 
         return userService.getInfo(rqDto);

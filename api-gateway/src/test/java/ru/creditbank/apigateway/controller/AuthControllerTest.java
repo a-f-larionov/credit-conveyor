@@ -24,7 +24,7 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var loginRqDto = TestFixtures.buildLoginRqDto("not-exists@mail.ru", "Password123");
 
         // when
-        var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDto, ErrorRsDto.class, status().isNotFound());
+        var rsDto = performPost("/api/v1/auth/login", loginRqDto, ErrorRsDto.class, status().isNotFound());
 
         // then
         assertEquals("User does not exists", rsDto.message());
@@ -36,10 +36,10 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var registerRqDto = buildRegisterRqDto();
         var loginRqDto = buildLoginRqDto(registerRqDto);
 
-        performPostWithDto("/api/v1/auth/register", registerRqDto, status().isCreated());
+        performPost("/api/v1/auth/register", registerRqDto, status().isCreated());
 
         // when
-        var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDto, LoginRsDto.class, status().isOk());
+        var rsDto = performPost("/api/v1/auth/login", loginRqDto, LoginRsDto.class, status().isOk());
 
         // then
         assertTrue(jwtService.isTokenValid(rsDto.token()));
@@ -51,7 +51,7 @@ class AuthControllerTest extends SpringBootMvcBaseTest {
         var userInfoRqDto = buildUserInfoRqDto("email@email.com");
 
         // when
-        var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized());
+        var rsDto = performPost("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized());
 
         // then
         assertEquals("Token is empty", rsDto.message());

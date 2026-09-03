@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,36 +29,36 @@ public abstract class SpringBootMvcBaseTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    protected <RQ> void performPostWithDto(String url, RQ rqDto) {
-        performPostWithDto(url, rqDto, status().is2xxSuccessful());
+    protected <RQ> void performPost(String url, RQ rqDto) {
+        performPost(url, rqDto, status().is2xxSuccessful());
     }
 
     @SneakyThrows
-    protected <RQ> void performPostWithDto(String url, RQ rqDTO, ResultMatcher expectedStatus) {
-        mockMvc.perform(postWithDto(url, rqDTO, null))
+    protected <RQ> void performPost(String url, RQ rqDTO, ResultMatcher expectedStatus) {
+        mockMvc.perform(post(url, rqDTO, null))
                 .andExpect(expectedStatus)
                 .andReturn();
     }
 
-    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz) {
-        return performPostWithDto(url, rqDto, rsDTOClazz, status().is2xxSuccessful());
+    protected <RQ, RS> RS performPost(String url, RQ rqDto, Class<RS> rsDTOClazz) {
+        return performPost(url, rqDto, rsDTOClazz, status().is2xxSuccessful());
     }
 
-    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDTOClazz, ResultMatcher expectedStatus) {
-        return performPostWithDto(url, rqDto, rsDTOClazz, expectedStatus, null);
+    protected <RQ, RS> RS performPost(String url, RQ rqDto, Class<RS> rsDTOClazz, ResultMatcher expectedStatus) {
+        return performPost(url, rqDto, rsDTOClazz, expectedStatus, null);
     }
 
     @SneakyThrows
-    protected <RQ, RS> RS performPostWithDto(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
-        var result = mockMvc.perform(postWithDto(url, rqDto, token))
+    protected <RQ, RS> RS performPost(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
+        var result = mockMvc.perform(post(url, rqDto, token))
                 .andExpect(expectedStatus)
                 .andReturn();
         return objectMapper.readValue(result.getResponse().getContentAsString(), rsDtoClazz);
     }
 
     @SneakyThrows
-    protected <RQ> MockHttpServletRequestBuilder postWithDto(String url, RQ rqDto, String token) {
-        var requestBuilder = post(url);
+    protected <RQ> MockHttpServletRequestBuilder post(String url, RQ rqDto, String token) {
+        var requestBuilder = MockMvcRequestBuilders.post(url);
         if (token != null) {
             requestBuilder.header("Authorization", "Bearer " + token);
         }

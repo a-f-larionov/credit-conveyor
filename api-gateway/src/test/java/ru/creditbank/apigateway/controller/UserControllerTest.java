@@ -22,12 +22,12 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
         var registerRqDto = buildRegisterRqDto();
         var loginRqDto = TestFixtures.buildLoginRqDto(registerRqDto);
 
-        performPostWithDto("/api/v1/auth/register", registerRqDto, status().isCreated());
-        var rsDto = performPostWithDto("/api/v1/auth/login", loginRqDto, LoginRsDto.class, status().isOk());
+        performPost("/api/v1/auth/register", registerRqDto, status().isCreated());
+        var rsDto = performPost("/api/v1/auth/login", loginRqDto, LoginRsDto.class, status().isOk());
         var token = rsDto.token();
 
         // when
-        var userInfoRsDto = performPostWithDto("/api/v1/user/info", loginRqDto, UserInfoRsDto.class, status().isOk(), token);
+        var userInfoRsDto = performPost("/api/v1/user/info", loginRqDto, UserInfoRsDto.class, status().isOk(), token);
 
         // then
         assertEquals(registerRqDto.email(), userInfoRsDto.email());
@@ -46,7 +46,7 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
         var userInfoRqDto = buildUserInfoRqDto("user@user.ru");
 
         // when-then
-        var rsDto = performPostWithDto("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
+        var rsDto = performPost("/api/v1/user/info", userInfoRqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
         assertEquals("Token invalid", rsDto.message());
     }
@@ -56,15 +56,15 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
     void testUserInfoAdmin() {
         // given
         var targetUserRegisterRqDto = buildRegisterRqDto("targetUser@server.org", "Password123");
-        performPostWithDto("/api/v1/auth/register", targetUserRegisterRqDto, status().isCreated());
+        performPost("/api/v1/auth/register", targetUserRegisterRqDto, status().isCreated());
         var targetUserInfoRqDTO = buildUserInfoRqDto(targetUserRegisterRqDto.email());
 
         var adminLoginRqDto = TestFixtures.buildLoginRqDto("admin@admin.ru", "Admin123");
-        var rsDto = performPostWithDto("/api/v1/auth/login", adminLoginRqDto, LoginRsDto.class, status().isOk());
+        var rsDto = performPost("/api/v1/auth/login", adminLoginRqDto, LoginRsDto.class, status().isOk());
         var token = rsDto.token();
 
         // when
-        var userInfoRsDto = performPostWithDto("/api/v1/user/info", targetUserInfoRqDTO, UserInfoRsDto.class, status().isOk(), token);
+        var userInfoRsDto = performPost("/api/v1/user/info", targetUserInfoRqDTO, UserInfoRsDto.class, status().isOk(), token);
 
         // then
         assertEquals(targetUserInfoRqDTO.email(), userInfoRsDto.email());
@@ -83,12 +83,12 @@ public class UserControllerTest extends SpringBootMvcBaseTest {
         var loginUser1RqDto = TestFixtures.buildLoginRqDto(registerUser1RqDto);
         var userInfo2RqDto = buildUserInfoRqDto("user2@server.org");
 
-        performPostWithDto("/api/v1/auth/register", registerUser1RqDto, status().isCreated());
-        var rsDto = performPostWithDto("/api/v1/auth/login", loginUser1RqDto, LoginRsDto.class, status().isOk());
+        performPost("/api/v1/auth/register", registerUser1RqDto, status().isCreated());
+        var rsDto = performPost("/api/v1/auth/login", loginUser1RqDto, LoginRsDto.class, status().isOk());
         var token = rsDto.token();
 
         // when
-        var errorRsDto = performPostWithDto("/api/v1/user/info", userInfo2RqDto, ErrorRsDto.class, status().isForbidden(), token);
+        var errorRsDto = performPost("/api/v1/user/info", userInfo2RqDto, ErrorRsDto.class, status().isForbidden(), token);
 
         // then
         assertEquals("Forbidden", errorRsDto.message());

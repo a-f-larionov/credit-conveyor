@@ -26,7 +26,7 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
         var rqDto = TestFixtures.buildRegisterRqDto();
 
         // when
-        var rsDto = performPostWithDto("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isUnauthorized(), token);
+        var rsDto = performPost("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isUnauthorized(), token);
 
         // then
         assertEquals("Token invalid", rsDto.message());
@@ -44,7 +44,7 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
         var mockWebServer = createMockWebServerAndEnqueue(rsDto);
 
         // when
-        var actualRsDto = performPostWithDto(methodUrl, rqDto, rsDto.getClass(), status().isOk(), token);
+        var actualRsDto = performPost(methodUrl, rqDto, rsDto.getClass(), status().isOk(), token);
 
         // then
         var request = mockWebServer.takeRequest();
@@ -75,7 +75,7 @@ class CreditProxyControllerTest extends SpringBootMvcBaseTest {
     private String getValidToken() {
         var registerRqDto = buildRegisterRqDto();
         var loginRqDto = buildLoginRqDto(registerRqDto);
-        performPostWithDto("/api/v1/auth/register", registerRqDto);
-        return performPostWithDto("/api/v1/auth/login", loginRqDto, LoginRsDto.class).token();
+        performPost("/api/v1/auth/register", registerRqDto);
+        return performPost("/api/v1/auth/login", loginRqDto, LoginRsDto.class).token();
     }
 }

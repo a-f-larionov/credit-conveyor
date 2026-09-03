@@ -9,18 +9,21 @@ import ru.creditbank.apigateway.dto.rq.RegisterRqDto;
 import ru.creditbank.apigateway.dto.rq.UserInfoRqDto;
 import ru.creditbank.apigateway.dto.rs.LoginRsDto;
 import ru.creditbank.apigateway.dto.rs.UserInfoRsDto;
-import ru.creditbank.common.library.enums.UserRole;
 import ru.creditbank.apigateway.exception.UserAlreadyExistsException;
 import ru.creditbank.apigateway.exception.UserDoesNotExistsException;
 import ru.creditbank.apigateway.exception.WrongPasswordException;
-import ru.creditbank.common.library.jwt.JwtStore;
 import ru.creditbank.apigateway.mapper.AuthMapper;
 import ru.creditbank.apigateway.repository.UserRepository;
+import ru.creditbank.common.library.enums.UserRole;
+import ru.creditbank.common.library.jwt.JwtStore;
 import ru.creditbank.common.library.service.JwtService;
+import ru.creditbank.common.library.service.SecurityService;
 
 import java.util.Set;
 
 import static org.springframework.http.HttpStatus.*;
+import static ru.creditbank.common.library.enums.UserRole.ROLE_ADMIN;
+import static ru.creditbank.common.library.enums.UserRole.ROLE_CREDIT_MANAGER;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final SecurityService securityService;
     private final JwtService jwtService;
     private final JwtStore jwtStore;
     private final AuthMapper authMapper;
@@ -64,6 +68,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserInfoRsDto getInfo(UserInfoRqDto rqDto) {
+        securityService.checkAccess(rqDto.email(), ROLE_ADMIN, ROLE_CREDIT_MANAGER);
+
         var user = userRepository.findByEmail(rqDto.email())
                 .orElseThrow(() -> new UserDoesNotExistsException("User does not exits", NOT_FOUND));
         return authMapper.mapUserToUserInfoRsDto(user);
