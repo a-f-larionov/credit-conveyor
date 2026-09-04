@@ -23,6 +23,11 @@ jwt:
     key: ${JWT_SIGNING_KEY}
     expiration_sec: ${JWT_EXPIRATION_SEC}
 
+cloud:
+  openfeign:
+    okhttp:
+      enabled: true
+
 services:
   credit-service:
     url: "http://credit-service:8082"
