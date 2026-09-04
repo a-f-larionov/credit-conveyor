@@ -19,11 +19,4 @@
 ---
 
 ## 🚀 Настройка & Запуск
-```bash
-git clone https://github.com/a-f-larionov/credit-conveyor.git
-cd credit-conveyor
-cp .env.example .env
-cp ./api-gateway/.env.example ./api-gateway/.env
-cp ./credit-service/.env.example ./credit-service/.env
-cp ./loan-management-service/.env.example ./loan-management-service/.env
-docker-compose up -d --build
+[See README.md on project root](https://github.com/a-f-larionov/credit-conveyor/blob/main/README.md)

@@ -52,14 +52,14 @@ public class LoanService {
         var loanEntity = loanRepository.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException(loanId));
 
-        securityService.checkAccess(loanEntity.getUserId(), ROLE_CREDIT_MANAGER, ROLE_ADMIN);
+        securityService.checkAccess(loanEntity.getUserId(), ROLE_CREDIT_MANAGER);
         return loanMapper.entityToRsDto(loanEntity);
     }
 
     @Transactional(readOnly = true)
     public LoanListRsDto list(UUID userId) {
         log.info("Fetching loans by userId: {}", userId);
-        securityService.checkAccess(userId, ROLE_ADMIN, ROLE_CREDIT_MANAGER);
+        securityService.checkAccess(userId, ROLE_CREDIT_MANAGER);
 
         var entities = loanRepository.findByUserId(userId);
         var rsDtoList = loanMapper.mapToLoanList(entities);
