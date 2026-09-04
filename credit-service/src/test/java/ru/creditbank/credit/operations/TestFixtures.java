@@ -1,8 +1,8 @@
 package ru.creditbank.credit.operations;
 
-import ru.creditbank.credit.operations.dto.CreditStatusEnum;
-import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
-import ru.creditbank.credit.operations.dto.rq.StatusUpdateRqDto;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
+import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
+import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
 
 import java.math.BigDecimal;
 

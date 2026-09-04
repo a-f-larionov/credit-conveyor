@@ -2,9 +2,9 @@ package ru.creditbank.credit.operations.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.creditbank.credit.operations.dto.CreditStatusEnum;
-import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
-import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
+import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
+import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.enitity.CreditEntity;
 

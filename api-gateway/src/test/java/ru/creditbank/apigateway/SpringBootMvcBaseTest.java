@@ -56,8 +56,26 @@ public abstract class SpringBootMvcBaseTest {
     }
 
     @SneakyThrows
+    protected <RQ, RS> RS performPatch(String url, RQ rqDto, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
+        var result = mockMvc.perform(patch(url, rqDto, token))
+                .andExpect(expectedStatus)
+                .andReturn();
+        return objectMapper.readValue(result.getResponse().getContentAsString(), rsDtoClazz);
+    }
+
+    @SneakyThrows
     protected <RQ> MockHttpServletRequestBuilder post(String url, RQ rqDto, String token) {
         var requestBuilder = MockMvcRequestBuilders.post(url);
+        if (token != null) {
+            requestBuilder.header("Authorization", "Bearer " + token);
+        }
+        return requestBuilder.contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(rqDto));
+    }
+
+    @SneakyThrows
+    protected <RQ> MockHttpServletRequestBuilder patch(String url, RQ rqDto, String token) {
+        var requestBuilder = MockMvcRequestBuilders.patch(url);
         if (token != null) {
             requestBuilder.header("Authorization", "Bearer " + token);
         }

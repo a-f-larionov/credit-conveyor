@@ -1,4 +1,4 @@
-package ru.creditbank.common.library.dto.rs;
+package ru.creditbank.common.library.dto.common.rs;
 
 import lombok.Builder;
 

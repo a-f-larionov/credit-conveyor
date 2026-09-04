@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.creditbank.common.library.enums.UserRole;
 import ru.creditbank.common.library.jwt.JwtUserDetails;
 import ru.creditbank.common.library.service.SecurityService;
-import ru.creditbank.credit.operations.dto.CreditStatusEnum;
-import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
-import ru.creditbank.credit.operations.dto.rq.StatusUpdateRqDto;
-import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
+import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
+import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
+import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.exception.CreditNotFoundException;
 import ru.creditbank.credit.operations.exception.CreditStatusUpdateException;
@@ -24,7 +24,7 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static ru.creditbank.credit.operations.dto.CreditStatusEnum.*;
+import static ru.creditbank.common.library.enums.CreditStatusEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -64,12 +64,11 @@ public class CreditService {
                 .orElseThrow(() -> new CreditNotFoundException(creditId));
 
         securityService.checkAccess(creditEntity.getUserEmail(), UserRole.ROLE_ADMIN, UserRole.ROLE_CREDIT_MANAGER);
-
         return creditMapper.mapEntityToInfoRsDto(creditEntity);
     }
 
     @Transactional
-    public void statusUpdate(StatusUpdateRqDto statusUpdateRqDto, UUID creditId) {
+    public CreditCreateRsDto statusUpdate(StatusUpdateRqDto statusUpdateRqDto, UUID creditId) {
 
         var creditEntity = creditRepository.findById(creditId)
                 .orElseThrow(() -> new CreditNotFoundException(creditId));
@@ -83,6 +82,7 @@ public class CreditService {
         notificationService.onCreditStatusChange(creditEntity);
 
         creditRepository.save(creditEntity);
+        return creditMapper.mapEntityToCreateRsDto(creditEntity);
     }
 
     private void validateCreditStatusMayChanged(CreditStatusEnum status) {

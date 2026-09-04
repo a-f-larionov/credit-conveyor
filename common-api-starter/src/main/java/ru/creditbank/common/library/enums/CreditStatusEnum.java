@@ -1,4 +1,4 @@
-package ru.creditbank.credit.operations.dto;
+package ru.creditbank.common.library.enums;
 
 public enum CreditStatusEnum {
     PENDING,

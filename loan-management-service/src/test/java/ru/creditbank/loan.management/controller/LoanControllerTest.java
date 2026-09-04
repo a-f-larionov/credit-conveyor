@@ -3,7 +3,7 @@ package ru.creditbank.loan.management.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
-import ru.creditbank.common.library.dto.rs.ErrorRsDto;
+import ru.creditbank.common.library.dto.common.rs.ErrorRsDto;
 import ru.creditbank.loan.management.SpringBootMvcBaseTest;
 import ru.creditbank.loan.management.TestJwtGenerator;
 import ru.creditbank.loan.management.dto.rq.CreateLoanRqDto;

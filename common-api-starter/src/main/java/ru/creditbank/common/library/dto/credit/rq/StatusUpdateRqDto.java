@@ -1,9 +1,9 @@
-package ru.creditbank.credit.operations.dto.rq;
+package ru.creditbank.common.library.dto.credit.rq;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import ru.creditbank.credit.operations.dto.CreditStatusEnum;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
 
 @Builder
 public record StatusUpdateRqDto(

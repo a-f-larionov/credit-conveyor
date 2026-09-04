@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
-import ru.creditbank.common.library.dto.rs.ErrorRsDto;
+import ru.creditbank.common.library.dto.common.rs.ErrorRsDto;
 import ru.creditbank.credit.operations.SpringBootMvcBaseTest;
 import ru.creditbank.credit.operations.TestFixtures;
 import ru.creditbank.credit.operations.TestJwtGenerator;
-import ru.creditbank.credit.operations.dto.CreditStatusEnum;
-import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
+import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.service.MailOutBoxService;
 

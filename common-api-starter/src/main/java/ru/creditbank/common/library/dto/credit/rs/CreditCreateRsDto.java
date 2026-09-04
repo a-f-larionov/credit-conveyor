@@ -1,9 +1,9 @@
-package ru.creditbank.credit.operations.dto.rs;
+package ru.creditbank.common.library.dto.credit.rs;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import ru.creditbank.credit.operations.dto.CreditStatusEnum;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
 
 import java.time.Instant;
 import java.util.UUID;

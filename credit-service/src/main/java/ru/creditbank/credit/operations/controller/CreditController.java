@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.creditbank.credit.operations.dto.rq.CreditCreateRqDto;
-import ru.creditbank.credit.operations.dto.rq.StatusUpdateRqDto;
-import ru.creditbank.credit.operations.dto.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
+import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
+import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.service.CreditService;
 
@@ -33,8 +33,8 @@ public class CreditController {
     }
 
     @PatchMapping("/status/update/{creditId}")
-    public void statusUpdate(@Valid @RequestBody StatusUpdateRqDto statusUpdateRqDto, @PathVariable UUID creditId) {
+    public CreditCreateRsDto statusUpdate(@Valid @RequestBody StatusUpdateRqDto statusUpdateRqDto, @PathVariable UUID creditId) {
         log.info("Status Update for creditId: {}", creditId);
-        creditService.statusUpdate(statusUpdateRqDto, creditId);
+        return creditService.statusUpdate(statusUpdateRqDto, creditId);
     }
 }

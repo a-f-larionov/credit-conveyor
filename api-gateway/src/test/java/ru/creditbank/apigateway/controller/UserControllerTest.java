@@ -7,7 +7,7 @@ import ru.creditbank.apigateway.SpringBootMvcBaseTest;
 import ru.creditbank.apigateway.TestFixtures;
 import ru.creditbank.apigateway.dto.rs.LoginRsDto;
 import ru.creditbank.apigateway.dto.rs.UserInfoRsDto;
-import ru.creditbank.common.library.dto.rs.ErrorRsDto;
+import ru.creditbank.common.library.dto.common.rs.ErrorRsDto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

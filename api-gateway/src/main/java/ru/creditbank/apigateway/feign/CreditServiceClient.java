@@ -1,10 +1,15 @@
 package ru.creditbank.apigateway.feign;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
+import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
+import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
+
+import java.util.UUID;
 
 @FeignClient(
         name = "credit-service",
@@ -13,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface CreditServiceClient {
 
     @PostMapping("/credit-service/api/v1/create")
-    JsonNode createCredit(@RequestBody JsonNode requestBody);
+    ResponseEntity<CreditCreateRsDto> createCredit(@Valid @RequestBody CreditCreateRqDto rqDto);
 
+    @PatchMapping("/credit-service/api/v1/status/update/{creditId}")
+    ResponseEntity<CreditCreateRsDto> statusUpdate(@Valid @RequestBody StatusUpdateRqDto rqDto, @PathVariable UUID creditId);
 }

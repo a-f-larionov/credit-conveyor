@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import ru.creditbank.common.library.dto.rs.ErrorRsDto;
+import ru.creditbank.common.library.dto.common.rs.ErrorRsDto;
 
 import java.time.Instant;
 

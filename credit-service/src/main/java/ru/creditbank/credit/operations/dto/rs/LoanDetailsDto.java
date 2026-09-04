@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record LoadDetailsDto(
+public record LoanDetailsDto(
 
         BigDecimal requestedAmount,
         Integer termMonths,

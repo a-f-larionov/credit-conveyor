@@ -2,7 +2,7 @@ package ru.creditbank.credit.operations.enitity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.creditbank.credit.operations.dto.CreditStatusEnum;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;

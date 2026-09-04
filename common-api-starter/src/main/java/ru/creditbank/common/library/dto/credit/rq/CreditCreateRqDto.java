@@ -1,4 +1,4 @@
-package ru.creditbank.credit.operations.dto.rq;
+package ru.creditbank.common.library.dto.credit.rq;
 
 import jakarta.validation.constraints.*;
 import lombok.Builder;
