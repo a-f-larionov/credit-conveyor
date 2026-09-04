@@ -18,15 +18,16 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
 
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+
 jwt:
   signing:
     key: ${JWT_SIGNING_KEY}
     expiration_sec: ${JWT_EXPIRATION_SEC}
 
-cloud:
-  openfeign:
-    okhttp:
-      enabled: true
 
 services:
   credit-service:
