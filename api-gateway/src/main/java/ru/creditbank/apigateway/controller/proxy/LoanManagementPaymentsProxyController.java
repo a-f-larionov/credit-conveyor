@@ -13,7 +13,7 @@ import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/laon-maanagement-service/api/v1/payments/")
+@RequestMapping("/loan-management-service/api/v1/payments/")
 @RequiredArgsConstructor
 @Slf4j
 public class LoanManagementPaymentsProxyController {

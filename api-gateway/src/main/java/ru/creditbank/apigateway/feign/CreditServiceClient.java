@@ -14,7 +14,7 @@ import java.util.UUID;
 @FeignClient(
         name = "credit-service",
         url = "${services.credit-service.url}",
-        path = "/credit-service/api/v1/"
+        path = "/credit-service/api/v1/credits/"
 )
 public interface CreditServiceClient {
 

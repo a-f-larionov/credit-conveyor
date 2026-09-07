@@ -43,7 +43,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_URLS.toArray(String[]::new)).permitAll()
-                        .requestMatchers("/api/v1/user/info").hasAnyRole("USER", "ADMIN", "CREDIT_MANAGER")
+                        .requestMatchers("/api/v1/user/info/**").hasAnyRole("USER", "ADMIN", "CREDIT_MANAGER")
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import ru.creditbank.apigateway.dto.rs.LoginRsDto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,10 +35,22 @@ public class SpringBootMvcProxyBaseTest extends SpringBootMvcBaseTest {
         mockWebServer.shutdown();
     }
 
+    @SneakyThrows
+    @SuppressWarnings("unchecked")
+    protected <RQ, RS> RS performGetMockedAndTestRequest(String url, RQ rqDto, RS rsDto, HttpStatus httpStatus) {
+        enqueueResponse(rsDto, httpStatus);
+        var token = getValidToken();
+
+        var actualRsDto = performGet(url, (Class<RS>) rsDto.getClass(), status().is(httpStatus.value()), token);
+
+        testRequest(url, rqDto, token, HttpMethod.GET);
+
+        return actualRsDto;
+    }
 
     @SneakyThrows
     @SuppressWarnings("unchecked")
-    protected  <RQ, RS> RS performPostMockedAndTestRequest(String url, RQ rqDto, RS rsDto, HttpStatus httpStatus) {
+    protected <RQ, RS> RS performPostMockedAndTestRequest(String url, RQ rqDto, RS rsDto, HttpStatus httpStatus) {
         enqueueResponse(rsDto, httpStatus);
         var token = getValidToken();
 
@@ -66,9 +80,11 @@ public class SpringBootMvcProxyBaseTest extends SpringBootMvcBaseTest {
 
         assertEquals(httpMethod.toString(), request.getMethod());
         assertEquals(url, request.getPath());
-        assertEquals("application/json", request.getHeader("Content-Type"));
-        assertEquals(objectMapper.writeValueAsString(rqDto), request.getBody().readUtf8());
         assertEquals("Bearer " + token, request.getHeader("Authorization"));
+        if (!httpMethod.equals(HttpMethod.GET)) {
+            assertEquals(objectMapper.writeValueAsString(rqDto), request.getBody().readUtf8());
+            assertEquals("application/json", request.getHeader("Content-Type"));
+        }
     }
 
     @SneakyThrows

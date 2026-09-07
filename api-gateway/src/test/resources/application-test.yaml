@@ -12,3 +12,5 @@ spring:
 services:
   credit-service:
     url: "http://localhost:8082"
+  loan-management-service:
+    url: "http://localhost:8082"

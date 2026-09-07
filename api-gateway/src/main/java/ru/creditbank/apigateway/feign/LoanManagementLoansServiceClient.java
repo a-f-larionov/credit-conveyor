@@ -14,7 +14,7 @@ import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
 import java.util.UUID;
 
 @FeignClient(
-        name = "loan-management-service",
+        name = "loan-management-service/loans/",
         url = "${services.loan-management-service.url}",
         path = "/loan-management-service/api/v1/loans"
 )

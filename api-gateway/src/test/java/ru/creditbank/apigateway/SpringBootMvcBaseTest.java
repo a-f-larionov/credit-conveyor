@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -81,5 +82,18 @@ public abstract class SpringBootMvcBaseTest {
         }
         return requestBuilder.contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(rqDto));
+    }
+
+    @SneakyThrows
+    protected <RS> RS performGet(String url, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
+        var requestBuilder = get(url);
+        if (token != null) {
+            requestBuilder.header("Authorization", "Bearer " + token);
+        }
+        requestBuilder.contentType(MediaType.APPLICATION_JSON);
+        var result = mockMvc.perform(requestBuilder)
+                .andExpect(expectedStatus)
+                .andReturn();
+        return objectMapper.readValue(result.getResponse().getContentAsString(), rsDtoClazz);
     }
 }

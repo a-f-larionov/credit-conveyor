@@ -13,7 +13,7 @@ import ru.creditbank.credit.operations.service.CreditService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/credit-service/api/v1/")
+@RequestMapping("/credit-service/api/v1/credits/")
 @RequiredArgsConstructor
 @Slf4j
 public class CreditController {

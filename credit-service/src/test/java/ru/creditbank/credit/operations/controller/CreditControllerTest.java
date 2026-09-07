@@ -58,7 +58,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var token = jwtGenerator.generate();
 
         // when
-        var rsDto = performPost("/credit-service/api/v1/create", rqDto, ErrorRsDto.class, status().isBadRequest(), token);
+        var rsDto = performPost("/credit-service/api/v1/credits/create", rqDto, ErrorRsDto.class, status().isBadRequest(), token);
 
         // then
         assertEquals("fullName : must match \"^[А-Яа-яЁёA-Za-z\\s-]+$\"; fullName : must not be blank; fullName : size must be between 5 and 100", rsDto.message());
@@ -71,7 +71,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var token = jwtGenerator.generate();
 
         // when
-        var rsDto = performPost("/credit-service/api/v1/create", rqDto, CreditCreateRsDto.class, status().isOk(), token);
+        var rsDto = performPost("/credit-service/api/v1/credits/create", rqDto, CreditCreateRsDto.class, status().isOk(), token);
 
         // then
         assertThat(rsDto.id()).isNotNull();
@@ -112,7 +112,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var creditIdNotFound = UUID.randomUUID();
 
         // when
-        var rsDto = performGet("/credit-service/api/v1/info/" + creditIdNotFound, ErrorRsDto.class, status().isNotFound(), token);
+        var rsDto = performGet("/credit-service/api/v1/credits/info/" + creditIdNotFound, ErrorRsDto.class, status().isNotFound(), token);
 
         // then
         assertEquals(format("Credit with id %s not found", creditIdNotFound), rsDto.message());
@@ -125,10 +125,10 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var userEmail = "userEmail@mail.com";
         var token = jwtGenerator.generate(userId, userEmail);
         var createRqDto = buildCreditCreateRqDto();
-        var createdRsDto = performPost("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
+        var createdRsDto = performPost("/credit-service/api/v1/credits/create", createRqDto, CreditCreateRsDto.class, status().isOk(), token);
 
         // when
-        var infoRsDto = performGet("/credit-service/api/v1/info/" + createdRsDto.id(), CreditInfoRsDto.class, status().isOk(), token);
+        var infoRsDto = performGet("/credit-service/api/v1/credits/info/" + createdRsDto.id(), CreditInfoRsDto.class, status().isOk(), token);
 
         // then
         assertThat(infoRsDto.id()).isEqualTo(createdRsDto.id());
@@ -149,11 +149,11 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         var userEmail = "userEmail@mail.com";
         var creditOwnerToken = jwtGenerator.generate(userId, userEmail);
         var createRqDto = buildCreditCreateRqDto();
-        var createdRsDto = performPost("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), creditOwnerToken);
+        var createdRsDto = performPost("/credit-service/api/v1/credits/create", createRqDto, CreditCreateRsDto.class, status().isOk(), creditOwnerToken);
         var creditManagerToken = jwtGenerator.generate(Set.of(ROLE_CREDIT_MANAGER));
 
         // when
-        var infoRsDto = performGet("/credit-service/api/v1/info/" + createdRsDto.id(), CreditInfoRsDto.class, status().isOk(), creditManagerToken);
+        var infoRsDto = performGet("/credit-service/api/v1/credits/info/" + createdRsDto.id(), CreditInfoRsDto.class, status().isOk(), creditManagerToken);
 
         // then
         assertThat(infoRsDto.id()).isEqualTo(createdRsDto.id());
@@ -172,11 +172,11 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         // given
         var creditOwnerToken = jwtGenerator.generate();
         var createRqDto = buildCreditCreateRqDto();
-        var createdRsDto = performPost("/credit-service/api/v1/create", createRqDto, CreditCreateRsDto.class, status().isOk(), creditOwnerToken);
+        var createdRsDto = performPost("/credit-service/api/v1/credits/create", createRqDto, CreditCreateRsDto.class, status().isOk(), creditOwnerToken);
         var noManagerToken = jwtGenerator.generate();
 
         // when
-        var rsDto = performGet("/credit-service/api/v1/info/" + createdRsDto.id(), ErrorRsDto.class, status().isForbidden(), noManagerToken);
+        var rsDto = performGet("/credit-service/api/v1/credits/info/" + createdRsDto.id(), ErrorRsDto.class, status().isForbidden(), noManagerToken);
 
         // then
         assertEquals("Forbidden", rsDto.message());

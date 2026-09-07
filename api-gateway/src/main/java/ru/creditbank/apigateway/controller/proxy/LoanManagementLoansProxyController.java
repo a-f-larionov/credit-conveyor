@@ -12,7 +12,7 @@ import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/laon-management-service/api/v1/loans/")
+@RequestMapping("/loan-management-service/api/v1/loans/")
 @RequiredArgsConstructor
 public class LoanManagementLoansProxyController {
 

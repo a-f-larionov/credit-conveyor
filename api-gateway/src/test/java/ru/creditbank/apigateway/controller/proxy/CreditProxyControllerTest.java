@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.controller;
+package ru.creditbank.apigateway.controller.proxy;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ class CreditProxyControllerTest extends SpringBootMvcProxyBaseTest {
     @Test
     public void proxyCreate_invalidToken_shouldReturnUnauthorized() {
         // given
-        var url = "/credit-service/api/v1/create";
+        var url = "/credit-service/api/v1/credits/create";
         var rqDto = buildRegisterRqDto();
         var token = "invalid-token";
 
@@ -31,7 +31,7 @@ class CreditProxyControllerTest extends SpringBootMvcProxyBaseTest {
     @Test
     public void proxyCreate() {
         // given
-        var methodUrl = "/credit-service/api/v1/create";
+        var methodUrl = "/credit-service/api/v1/credits/create";
         var rqDto = buildCreateRqDto();
         var httpStatus = HttpStatus.CREATED;
         var rsDto = buildCreateRsDTo();
@@ -48,7 +48,7 @@ class CreditProxyControllerTest extends SpringBootMvcProxyBaseTest {
     @Test
     public void proxyStatusUpdate_invalidToken_shouldReturnUnauthorized() {
         // given
-        var url = "/credit-service/api/v1/status/update/" + UUID.randomUUID();
+        var url = "/credit-service/api/v1/credits/status/update/" + UUID.randomUUID();
         var rqDto = buildRegisterRqDto();
         var token = "invalid-token";
 
@@ -62,7 +62,7 @@ class CreditProxyControllerTest extends SpringBootMvcProxyBaseTest {
     @Test
     public void proxyStatusUpdate() {
         // given
-        var url = "/credit-service/api/v1/status/update/" + UUID.randomUUID();
+        var url = "/credit-service/api/v1/credits/status/update/" + UUID.randomUUID();
         var rqDto = buildUpdateStatusRqDto();
         var rsDto = buildCreateRsDTo();
         var httpStatus = HttpStatus.OK;
