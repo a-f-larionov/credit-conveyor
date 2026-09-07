@@ -1,8 +1,8 @@
-package ru.creditbank.loan.management.dto.rs;
+package ru.creditbank.common.library.dto.loan.management.rs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import ru.creditbank.loan.management.enums.LoanStatusEnum;
+import ru.creditbank.common.library.enums.LoanStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;

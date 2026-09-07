@@ -1,6 +1,7 @@
 package ru.creditbank.credit.operations.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import static ru.creditbank.common.library.enums.CreditStatusEnum.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CreditService {
 
     private final NotificationService notificationService;
@@ -40,7 +42,7 @@ public class CreditService {
 
     @Transactional
     public CreditCreateRsDto create(CreditCreateRqDto rqDto) {
-
+        log.info("Create credit request: {}", rqDto.toString());
         var userDetails = (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         var credit = creditMapper.mapRqDtoToCreateEntity(
@@ -59,7 +61,7 @@ public class CreditService {
 
     @Transactional(readOnly = true)
     public CreditInfoRsDto getInfo(UUID creditId) {
-
+        log.info("Fetching info: {}", creditId);
         var creditEntity = creditRepository.findById(creditId)
                 .orElseThrow(() -> new CreditNotFoundException(creditId));
 
@@ -69,6 +71,7 @@ public class CreditService {
 
     @Transactional
     public CreditCreateRsDto statusUpdate(StatusUpdateRqDto statusUpdateRqDto, UUID creditId) {
+        log.info("Status Update for creditId: {}", creditId);
 
         var creditEntity = creditRepository.findById(creditId)
                 .orElseThrow(() -> new CreditNotFoundException(creditId));

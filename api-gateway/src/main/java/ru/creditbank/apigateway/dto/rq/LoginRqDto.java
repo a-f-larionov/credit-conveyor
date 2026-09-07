@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import org.jetbrains.annotations.NotNull;
+import ru.creditbank.common.library.helpers.LogHelper;
+
+import java.util.Map;
 
 @Builder
 public record LoginRqDto(
@@ -18,4 +22,14 @@ public record LoginRqDto(
         @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")
         String password
 ) {
+
+    @NotNull
+    @Override
+    public String toString() {
+        return LogHelper.toStringDto(this.getClass().getName(),
+                Map.of("email", email,
+                        "password", "***"
+                )
+        );
+    }
 }

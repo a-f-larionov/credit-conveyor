@@ -2,16 +2,16 @@ package ru.creditbank.loan.management.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.creditbank.common.library.enums.LoanStatusEnum;
 import ru.creditbank.common.library.enums.UserRole;
 import ru.creditbank.loan.management.SpringBootMvcBaseTest;
 import ru.creditbank.loan.management.TestJwtGenerator;
-import ru.creditbank.loan.management.dto.rq.CreateLoanRqDto;
-import ru.creditbank.loan.management.dto.rq.PaymentRqDto;
-import ru.creditbank.loan.management.dto.rs.LoanRsDto;
-import ru.creditbank.loan.management.dto.rs.PaymentHistoryItemRsDto;
-import ru.creditbank.loan.management.dto.rs.PaymentHistoryRsDto;
-import ru.creditbank.loan.management.dto.rs.PaymentRsDto;
-import ru.creditbank.loan.management.enums.LoanStatusEnum;
+import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
+import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryItemRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.creditbank.loan.management.TestFixtures.buildCreateLoanRqDto;
 import static ru.creditbank.loan.management.TestFixtures.buildPaymentsRqDto;
-import static ru.creditbank.loan.management.enums.PaymentTypeEnum.FULL;
-import static ru.creditbank.loan.management.enums.PaymentTypeEnum.REGULAR;
+import static ru.creditbank.common.library.enums.PaymentTypeEnum.FULL;
+import static ru.creditbank.common.library.enums.PaymentTypeEnum.REGULAR;
 
 public class PaymentControllerTest extends SpringBootMvcBaseTest {
 

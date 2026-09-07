@@ -9,13 +9,13 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import ru.creditbank.common.library.config.ErrorResponseWriter;
 import ru.creditbank.common.library.exception.BusinessException;
 
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -52,5 +52,11 @@ public class GlobalExceptionHandler {
     public void handle(AccessDeniedException e, HttpServletRequest request, HttpServletResponse response) {
         log.warn(e.toString());
         errorResponseWriter.sendError(request, response, FORBIDDEN);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public void handle(NoResourceFoundException e, HttpServletRequest request, HttpServletResponse response) {
+        log.warn(e.toString());
+        errorResponseWriter.sendError(request, response, NOT_FOUND);
     }
 }

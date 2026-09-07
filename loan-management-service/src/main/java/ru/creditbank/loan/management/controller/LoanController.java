@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.creditbank.loan.management.dto.rq.CreateLoanRqDto;
-import ru.creditbank.loan.management.dto.rs.LoanListRsDto;
-import ru.creditbank.loan.management.dto.rs.LoanRsDto;
+import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.LoanListRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
 import ru.creditbank.loan.management.service.LoanService;
 
 import java.util.UUID;
@@ -14,7 +14,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/loan-management-service/api/v1/loans/")
 @RequiredArgsConstructor
-
 public class LoanController {
 
     private final LoanService loanService;

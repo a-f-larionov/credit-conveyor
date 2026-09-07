@@ -2,7 +2,7 @@ package ru.creditbank.loan.management.dto.rs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import ru.creditbank.loan.management.enums.PaymentStatusEnum;
+import ru.creditbank.common.library.enums.PaymentStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;

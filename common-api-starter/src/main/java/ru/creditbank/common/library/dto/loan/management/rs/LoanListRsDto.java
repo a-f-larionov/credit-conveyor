@@ -1,4 +1,4 @@
-package ru.creditbank.loan.management.dto.rs;
+package ru.creditbank.common.library.dto.loan.management.rs;
 
 import lombok.Builder;
 

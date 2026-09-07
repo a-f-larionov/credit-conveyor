@@ -1,4 +1,4 @@
-package ru.creditbank.loan.management.enums;
+package ru.creditbank.common.library.enums;
 
 public enum PaymentTypeEnum {
     REGULAR,

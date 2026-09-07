@@ -3,9 +3,9 @@ package ru.creditbank.loan.management.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.creditbank.common.library.enums.PaymentStatusEnum;
 import ru.creditbank.loan.management.enitity.LoanEntity;
 import ru.creditbank.loan.management.enitity.SchedulePaymentEntity;
-import ru.creditbank.loan.management.enums.PaymentStatusEnum;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

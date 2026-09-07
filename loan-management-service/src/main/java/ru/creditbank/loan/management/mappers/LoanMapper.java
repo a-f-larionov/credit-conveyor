@@ -2,11 +2,11 @@ package ru.creditbank.loan.management.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.creditbank.loan.management.dto.rq.CreateLoanRqDto;
-import ru.creditbank.loan.management.dto.rs.LoanListRsDto;
+import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.LoanListRsDto;
 import ru.creditbank.loan.management.dto.rs.LoanPaymentScheduleRsDto;
 import ru.creditbank.loan.management.dto.rs.LoanPaymentsScheduleListRsDto;
-import ru.creditbank.loan.management.dto.rs.LoanRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
 import ru.creditbank.loan.management.enitity.LoanEntity;
 import ru.creditbank.loan.management.enitity.SchedulePaymentEntity;
 
@@ -23,7 +23,7 @@ public interface LoanMapper {
     @Mapping(target = "termMonths", source = "rqDto.termMonths")
     @Mapping(target = "interestRate", source = "rqDto.interestRate")
     @Mapping(target = "nextPaymentDate", expression = "java(rqDto.firstPaymentDate().truncatedTo(java.time.temporal.ChronoUnit.DAYS))")
-    @Mapping(target = "status", expression = "java(ru.creditbank.loan.management.enums.LoanStatusEnum.ACTIVE)")
+    @Mapping(target = "status", expression = "java(ru.creditbank.common.library.enums.LoanStatusEnum.ACTIVE)")
     @Mapping(target = "createdAt", expression = "java(java.time.Instant.now())")
     @Mapping(target = "payments", ignore = true)
     @Mapping(target = "schedulePayments", ignore = true)

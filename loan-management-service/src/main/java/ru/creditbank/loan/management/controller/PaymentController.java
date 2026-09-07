@@ -2,11 +2,10 @@ package ru.creditbank.loan.management.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.creditbank.loan.management.dto.rq.PaymentRqDto;
-import ru.creditbank.loan.management.dto.rs.PaymentHistoryRsDto;
-import ru.creditbank.loan.management.dto.rs.PaymentRsDto;
+import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
 import ru.creditbank.loan.management.service.PaymentService;
 
 import java.util.UUID;
@@ -14,7 +13,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/loan-management-service/api/v1/payments/")
 @RequiredArgsConstructor
-@Slf4j
 public class PaymentController {
 
     private final PaymentService paymentService;

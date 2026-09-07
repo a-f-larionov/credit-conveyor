@@ -2,7 +2,7 @@ package ru.creditbank.loan.management.enitity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.creditbank.loan.management.enums.LoanStatusEnum;
+import ru.creditbank.common.library.enums.LoanStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -33,9 +33,11 @@ public class LoanEntity {
     private UUID userId;
 
     @OneToMany(mappedBy = "loan", cascade = ALL, orphanRemoval = true, fetch = LAZY)
+    @Builder.Default
     private List<SchedulePaymentEntity> schedulePayments = new ArrayList<>();
 
     @OneToMany(mappedBy = "loan", cascade = ALL, orphanRemoval = true, fetch = LAZY)
+    @Builder.Default
     private List<PaymentEntity> payments = new ArrayList<>();
 
     @Column(name = "total_amount", nullable = false, precision = 15, scale = 2)

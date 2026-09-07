@@ -1,8 +1,8 @@
 package ru.creditbank.loan.management;
 
-import ru.creditbank.loan.management.dto.rq.CreateLoanRqDto;
-import ru.creditbank.loan.management.dto.rq.PaymentRqDto;
-import ru.creditbank.loan.management.enums.PaymentTypeEnum;
+import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
+import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
+import ru.creditbank.common.library.enums.PaymentTypeEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;

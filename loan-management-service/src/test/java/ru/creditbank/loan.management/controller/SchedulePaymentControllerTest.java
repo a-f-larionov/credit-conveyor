@@ -3,13 +3,13 @@ package ru.creditbank.loan.management.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.creditbank.common.library.enums.PaymentStatusEnum;
 import ru.creditbank.loan.management.SpringBootMvcBaseTest;
 import ru.creditbank.loan.management.TestJwtGenerator;
-import ru.creditbank.loan.management.dto.rq.CreateLoanRqDto;
+import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
 import ru.creditbank.loan.management.dto.rs.LoanPaymentScheduleRsDto;
 import ru.creditbank.loan.management.dto.rs.LoanPaymentsScheduleListRsDto;
-import ru.creditbank.loan.management.dto.rs.LoanRsDto;
-import ru.creditbank.loan.management.enums.PaymentStatusEnum;
+import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
 import ru.creditbank.loan.management.service.PaymentScheduleGeneratorService;
 
 import java.math.BigDecimal;

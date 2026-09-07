@@ -2,10 +2,10 @@ package ru.creditbank.loan.management.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.creditbank.loan.management.dto.rq.PaymentRqDto;
-import ru.creditbank.loan.management.dto.rs.PaymentHistoryItemRsDto;
-import ru.creditbank.loan.management.dto.rs.PaymentHistoryRsDto;
-import ru.creditbank.loan.management.dto.rs.PaymentRsDto;
+import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryItemRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
 import ru.creditbank.loan.management.enitity.PaymentEntity;
 
 import java.math.BigDecimal;

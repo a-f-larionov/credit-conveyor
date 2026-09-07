@@ -2,7 +2,7 @@ package ru.creditbank.loan.management.enitity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.creditbank.loan.management.enums.PaymentTypeEnum;
+import ru.creditbank.common.library.enums.PaymentTypeEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;

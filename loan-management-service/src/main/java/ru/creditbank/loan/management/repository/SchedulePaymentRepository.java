@@ -2,8 +2,8 @@ package ru.creditbank.loan.management.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import ru.creditbank.common.library.enums.PaymentStatusEnum;
 import ru.creditbank.loan.management.enitity.SchedulePaymentEntity;
-import ru.creditbank.loan.management.enums.PaymentStatusEnum;
 
 import java.util.List;
 import java.util.Optional;

@@ -22,19 +22,16 @@ public class CreditController {
 
     @PostMapping("/create")
     public CreditCreateRsDto create(@Valid @RequestBody CreditCreateRqDto rqDto) {
-        log.info("Create credit request: {}, {}", rqDto.fullName(), rqDto.requestedAmount());
         return creditService.create(rqDto);
     }
 
     @GetMapping("/info/{creditId}")
     public CreditInfoRsDto info(@PathVariable UUID creditId) {
-        log.info("Fetching info: {}", creditId);
         return creditService.getInfo(creditId);
     }
 
     @PatchMapping("/status/update/{creditId}")
     public CreditCreateRsDto statusUpdate(@Valid @RequestBody StatusUpdateRqDto statusUpdateRqDto, @PathVariable UUID creditId) {
-        log.info("Status Update for creditId: {}", creditId);
         return creditService.statusUpdate(statusUpdateRqDto, creditId);
     }
 }

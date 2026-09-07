@@ -4,6 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import ru.creditbank.apigateway.dto.FullNameDto;
+import ru.creditbank.common.library.helpers.LogHelper;
+
+import java.util.Map;
 
 @Builder
 public record RegisterRqDto(
@@ -21,6 +24,15 @@ public record RegisterRqDto(
         @Valid
         FullNameDto fullName
 ) {
+    @org.jetbrains.annotations.NotNull
+    @Override
+    public String toString() {
+        return LogHelper.toStringDto(this.getClass().getName(), Map.of(
+                "email", email,
+                "fullName", fullName,
+                "password", "***"
+        ));
+    }
 }
 
 

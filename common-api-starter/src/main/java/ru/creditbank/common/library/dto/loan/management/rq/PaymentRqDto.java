@@ -1,10 +1,10 @@
-package ru.creditbank.loan.management.dto.rq;
+package ru.creditbank.common.library.dto.loan.management.rq;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
-import ru.creditbank.loan.management.enums.PaymentTypeEnum;
+import ru.creditbank.common.library.enums.PaymentTypeEnum;
 
 import java.math.BigDecimal;
 import java.util.UUID;

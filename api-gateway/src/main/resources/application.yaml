@@ -32,3 +32,5 @@ jwt:
 services:
   credit-service:
     url: "http://credit-service:8082"
+  loan-management-service:
+    url: "http://loan-management-service:8083"

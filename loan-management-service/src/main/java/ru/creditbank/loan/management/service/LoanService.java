@@ -5,16 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.creditbank.common.library.service.SecurityService;
-import ru.creditbank.loan.management.dto.rq.CreateLoanRqDto;
-import ru.creditbank.loan.management.dto.rs.LoanListRsDto;
-import ru.creditbank.loan.management.dto.rs.LoanRsDto;
+import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.LoanListRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
 import ru.creditbank.loan.management.exception.LoanNotFoundException;
 import ru.creditbank.loan.management.mappers.LoanMapper;
 import ru.creditbank.loan.management.repository.LoanRepository;
 
 import java.util.UUID;
 
-import static ru.creditbank.common.library.enums.UserRole.ROLE_ADMIN;
 import static ru.creditbank.common.library.enums.UserRole.ROLE_CREDIT_MANAGER;
 
 @Slf4j
