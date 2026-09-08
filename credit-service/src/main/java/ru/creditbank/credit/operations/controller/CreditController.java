@@ -26,12 +26,14 @@ public class CreditController {
     }
 
     @GetMapping("/info/{creditId}")
-    public CreditInfoRsDto info(@PathVariable UUID creditId) {
+    public CreditInfoRsDto info(@PathVariable("creditId") UUID creditId) {
         return creditService.getInfo(creditId);
     }
 
     @PatchMapping("/status/update/{creditId}")
-    public CreditCreateRsDto statusUpdate(@Valid @RequestBody StatusUpdateRqDto statusUpdateRqDto, @PathVariable UUID creditId) {
+    public CreditCreateRsDto statusUpdate(
+            @Valid @RequestBody StatusUpdateRqDto statusUpdateRqDto,
+            @PathVariable("creditId") UUID creditId) {
         return creditService.statusUpdate(statusUpdateRqDto, creditId);
     }
 }

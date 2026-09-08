@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway;
+package ru.creditbank.credit.operations;
 
 
 import lombok.SneakyThrows;
@@ -6,18 +6,20 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import ru.creditbank.apigateway.dto.rs.LoginRsDto;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.creditbank.apigateway.TestFixtures.buildLoginRqDto;
-import static ru.creditbank.apigateway.TestFixtures.buildRegisterRqDto;
 
 public class SpringBootMvcProxyBaseTest extends SpringBootMvcBaseTest {
 
     public static MockWebServer mockWebServer;
+
+    @Autowired
+    TestJwtGenerator jwtGenerator;
 
     @BeforeEach
     @SneakyThrows
@@ -37,7 +39,7 @@ public class SpringBootMvcProxyBaseTest extends SpringBootMvcBaseTest {
     @SuppressWarnings("unchecked")
     protected <RQ, RS> RS performGetMockedAndTestRequest(String url, RQ rqDto, RS rsDto, HttpStatus httpStatus) {
         enqueueResponse(rsDto, httpStatus);
-        var token = getValidToken();
+        var token = jwtGenerator.generate();
 
         var actualRsDto = performGet(url, (Class<RS>) rsDto.getClass(), status().is(httpStatus.value()), token);
 
@@ -50,7 +52,7 @@ public class SpringBootMvcProxyBaseTest extends SpringBootMvcBaseTest {
     @SuppressWarnings("unchecked")
     protected <RQ, RS> RS performPostMockedAndTestRequest(String url, RQ rqDto, RS rsDto, HttpStatus httpStatus) {
         enqueueResponse(rsDto, httpStatus);
-        var token = getValidToken();
+        var token = jwtGenerator.generate();
 
         var actualRsDto = performPost(url, rqDto, (Class<RS>) rsDto.getClass(), status().is(httpStatus.value()), token);
 
@@ -63,7 +65,7 @@ public class SpringBootMvcProxyBaseTest extends SpringBootMvcBaseTest {
     @SuppressWarnings("unchecked")
     protected <RQ, RS> RS performPatchMockedAndTestRequest(String url, RQ rqDto, RS rsDto, HttpStatus httpStatus) {
         enqueueResponse(rsDto, httpStatus);
-        var token = getValidToken();
+        var token = jwtGenerator.generate();
 
         var actualRsDto = performPatch(url, rqDto, (Class<RS>) rsDto.getClass(), status().is(httpStatus.value()), token);
 
@@ -73,7 +75,16 @@ public class SpringBootMvcProxyBaseTest extends SpringBootMvcBaseTest {
     }
 
     @SneakyThrows
-    private <RQ> void testRequest(String url, RQ rqDto, String token, HttpMethod httpMethod) {
+    public <T> void enqueueResponse(T rsDto, HttpStatus httpStatus) {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(httpStatus.value())
+                .setHeader("Content-Type", "application/json")
+                .setBody(objectMapper.writeValueAsString(rsDto))
+        );
+    }
+
+    @SneakyThrows
+    public <RQ> void testRequest(String url, RQ rqDto, String token, HttpMethod httpMethod) {
         var request = mockWebServer.takeRequest();
 
         assertEquals(httpMethod.toString(), request.getMethod());
@@ -84,22 +95,4 @@ public class SpringBootMvcProxyBaseTest extends SpringBootMvcBaseTest {
             assertEquals("application/json", request.getHeader("Content-Type"));
         }
     }
-
-    @SneakyThrows
-    private <T> void enqueueResponse(T rsDto, HttpStatus httpStatus) {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(httpStatus.value())
-                .setHeader("Content-Type", "application/json")
-                .setBody(objectMapper.writeValueAsString(rsDto))
-        );
-
-    }
-
-    private String getValidToken() {
-        var registerRqDto = buildRegisterRqDto();
-        var loginRqDto = buildLoginRqDto(registerRqDto);
-        performPost("/api/v1/auth/register", registerRqDto);
-        return performPost("/api/v1/auth/login", loginRqDto, LoginRsDto.class).token();
-    }
-
 }

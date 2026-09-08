@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public void handle(Exception e, HttpServletResponse response, HttpServletRequest request) {
-        log.error(e.toString());
+        log.error(e.toString(), e);
         errorResponseWriter.sendError(request, response, INTERNAL_SERVER_ERROR);
     }
 

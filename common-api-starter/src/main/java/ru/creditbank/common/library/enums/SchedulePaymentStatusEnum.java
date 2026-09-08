@@ -1,6 +1,6 @@
 package ru.creditbank.common.library.enums;
 
-public enum PaymentStatusEnum {
+public enum SchedulePaymentStatusEnum {
     PENDING,
     PARTIAL,
     DONE,

@@ -1,9 +1,10 @@
-package ru.creditbank.loan.management.service;
+package ru.creditbank.common.library.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import ru.creditbank.common.library.autoconfigure.CreditAutoConfiguration;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
@@ -11,12 +12,12 @@ import java.time.temporal.ChronoUnit;
 import static java.time.Instant.now;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(classes = CreditAutoConfiguration.class)
 @ActiveProfiles({"test", "test-local"})
-class SchedulePaymentGeneratorServiceTest {
+class CreditCalculatorServiceTest {
 
     @Autowired
-    PaymentScheduleGeneratorService paymentScheduleGeneratorService;
+    CreditCalculatorService creditCalculatorService;
 
     @Test
     void calcPrincipal() {
@@ -25,7 +26,7 @@ class SchedulePaymentGeneratorServiceTest {
         var interestFactor = new BigDecimal("10");
 
         // when
-        var result = paymentScheduleGeneratorService.calcPrincipal(monthlyPayment, interestFactor);
+        var result = creditCalculatorService.calcPrincipal(monthlyPayment, interestFactor);
 
         // then
         assertThat(result).isEqualByComparingTo(new BigDecimal("990"));
@@ -38,7 +39,7 @@ class SchedulePaymentGeneratorServiceTest {
         var monthlyFactor = new BigDecimal("0.123456789");
 
         // when
-        var result = paymentScheduleGeneratorService.calcInterest(sum, monthlyFactor);
+        var result = creditCalculatorService.calcInterest(sum, monthlyFactor);
 
         // then
         assertThat(result).isEqualByComparingTo(new BigDecimal("123.46"));
@@ -52,7 +53,7 @@ class SchedulePaymentGeneratorServiceTest {
         BigDecimal monthlyFactor = new BigDecimal("0.123456789");
 
         // when
-        var result = paymentScheduleGeneratorService.getMonthlyPayment(termMonths, totalAmount, monthlyFactor);
+        var result = creditCalculatorService.getMonthlyPayment(termMonths, totalAmount, monthlyFactor);
 
         // then
         assertThat(result).isEqualByComparingTo(new BigDecimal("16517.12"));
@@ -65,7 +66,7 @@ class SchedulePaymentGeneratorServiceTest {
         BigDecimal monthlyFactor = new BigDecimal("0.123456789");
 
         // when
-        var result = paymentScheduleGeneratorService.getAnnuityFactor(termMonths, monthlyFactor);
+        var result = creditCalculatorService.getAnnuityFactor(termMonths, monthlyFactor);
 
         // then
         assertThat(result).isEqualByComparingTo(new BigDecimal("0.1337886632"));
@@ -77,7 +78,7 @@ class SchedulePaymentGeneratorServiceTest {
         var interestRate = new BigDecimal("12.3456789");
 
         // when
-        var result = paymentScheduleGeneratorService.getMonthlyFactor(interestRate);
+        var result = creditCalculatorService.getMonthlyFactor(interestRate);
 
         // then
         assertThat(result).isEqualByComparingTo(new BigDecimal("0.0102880658"));
@@ -90,7 +91,7 @@ class SchedulePaymentGeneratorServiceTest {
         var month = 25;
 
         // when
-        var result = paymentScheduleGeneratorService.getDateForMonth(firstPaymentDate, month);
+        var result = creditCalculatorService.getDateForMonth(firstPaymentDate, month);
 
         // then
         assertThat(result).isEqualTo(

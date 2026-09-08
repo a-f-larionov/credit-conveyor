@@ -19,7 +19,7 @@ public class NotificationService {
         var subject = format("Ваша кредитная заявка #%s", creditEntity.getId());
         var body = getMailBody(creditEntity);
 
-        mailOutBoxService.queue(to, subject, body);
+        mailOutBoxService.enqueue(to, subject, body);
     }
 
     @NonNull
@@ -27,7 +27,7 @@ public class NotificationService {
         var bodyBuilder = new StringBuilder();
         bodyBuilder.append(format("Уважаемый %s, ваша заявка на кредит переведена в статус: %s.  \n",
                 creditEntity.getUserFullName(),
-                creditEntity.getStatus())
+                creditEntity.getStatus().getDescription())
         );
 
         if (creditEntity.getManagerComment() != null) {

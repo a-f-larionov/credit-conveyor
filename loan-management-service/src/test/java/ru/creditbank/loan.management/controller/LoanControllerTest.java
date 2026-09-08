@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import ru.creditbank.common.library.dto.common.rs.ErrorRsDto;
-import ru.creditbank.common.library.enums.LoanStatusEnum;
-import ru.creditbank.loan.management.SpringBootMvcBaseTest;
-import ru.creditbank.loan.management.TestJwtGenerator;
 import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
 import ru.creditbank.common.library.dto.loan.management.rs.LoanListRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
+import ru.creditbank.common.library.enums.LoanStatusEnum;
+import ru.creditbank.loan.management.SpringBootMvcBaseTest;
+import ru.creditbank.loan.management.TestJwtGenerator;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;

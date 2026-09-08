@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.creditbank.apigateway.feign.LoanManagementPaymentsServiceClient;
+import ru.creditbank.common.library.client.LoanManagementPaymentsServiceClient;
 import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
@@ -26,7 +26,7 @@ public class LoanManagementPaymentsProxyController {
     }
 
     @GetMapping("/history/{loanId}")
-    ResponseEntity<PaymentHistoryRsDto> history(@PathVariable UUID loanId) {
+    ResponseEntity<PaymentHistoryRsDto> history(@PathVariable("loanId") UUID loanId) {
         return loanManagementPaymentsServiceClient.history(loanId);
     }
 }

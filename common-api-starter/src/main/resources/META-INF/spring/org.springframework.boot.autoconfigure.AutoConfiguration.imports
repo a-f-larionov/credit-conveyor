@@ -1,3 +1,5 @@
 ru.creditbank.common.library.autoconfigure.ExceptionHandlerAutoConfiguration
 ru.creditbank.common.library.autoconfigure.JwtAutoConfiguration
 ru.creditbank.common.library.autoconfigure.SecurityAutoConfiguration
+ru.creditbank.common.library.autoconfigure.CreditAutoConfiguration
+ru.creditbank.common.library.autoconfigure.FeignAutoConfiguration

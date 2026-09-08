@@ -1,4 +1,4 @@
-package ru.creditbank.apigateway.feign;
+package ru.creditbank.common.library.client;
 
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -24,8 +24,8 @@ public interface LoanManagementLoansServiceClient {
     ResponseEntity<LoanRsDto> create(@Valid @RequestBody CreateLoanRqDto rqDto);
 
     @GetMapping("/info/{loanId}")
-    ResponseEntity<LoanRsDto> info(@PathVariable UUID loanId);
+    ResponseEntity<LoanRsDto> info(@PathVariable("loanId") UUID loanId);
 
     @GetMapping("/list/{userId}")
-    ResponseEntity<LoanListRsDto> list(@PathVariable UUID userId);
+    ResponseEntity<LoanListRsDto> list(@PathVariable("userId") UUID userId);
 }

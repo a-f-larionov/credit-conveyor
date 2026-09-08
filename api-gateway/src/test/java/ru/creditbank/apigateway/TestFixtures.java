@@ -73,15 +73,17 @@ public class TestFixtures {
                 .build();
     }
 
-    public static CreditCreateRqDto buildCreateRqDto() {
+    public static CreditCreateRqDto buildCreditCreateRqDto() {
         return CreditCreateRqDto.builder()
                 .fullName("full-name")
                 .requestedAmount(new BigDecimal("10000000"))
                 .termMonths(12)
+                .monthlyIncome(new BigDecimal(10000))
+                .employmentMonths(10)
                 .build();
     }
 
-    public static CreditCreateRsDto buildCreateRsDTo() {
+    public static CreditCreateRsDto buildCreditCreateRsDTo() {
         return CreditCreateRsDto.builder()
                 .id(UUID.randomUUID())
                 .status(CreditStatusEnum.PENDING)

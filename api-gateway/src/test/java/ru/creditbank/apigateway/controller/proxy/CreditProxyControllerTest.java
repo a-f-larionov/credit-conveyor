@@ -32,9 +32,9 @@ class CreditProxyControllerTest extends SpringBootMvcProxyBaseTest {
     public void proxyCreate() {
         // given
         var methodUrl = "/credit-service/api/v1/credits/create";
-        var rqDto = buildCreateRqDto();
+        var rqDto = buildCreditCreateRqDto();
         var httpStatus = HttpStatus.CREATED;
-        var rsDto = buildCreateRsDTo();
+        var rsDto = buildCreditCreateRsDTo();
 
         // when
         var actualRsDto = performPostMockedAndTestRequest(methodUrl, rqDto, rsDto, httpStatus);
@@ -64,7 +64,7 @@ class CreditProxyControllerTest extends SpringBootMvcProxyBaseTest {
         // given
         var url = "/credit-service/api/v1/credits/status/update/" + UUID.randomUUID();
         var rqDto = buildUpdateStatusRqDto();
-        var rsDto = buildCreateRsDTo();
+        var rsDto = buildCreditCreateRsDTo();
         var httpStatus = HttpStatus.OK;
 
         // when

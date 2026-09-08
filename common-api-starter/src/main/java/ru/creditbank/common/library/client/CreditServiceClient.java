@@ -1,10 +1,12 @@
-package ru.creditbank.apigateway.feign;
-
+package ru.creditbank.common.library.client;
 
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
 import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
 import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
@@ -22,5 +24,8 @@ public interface CreditServiceClient {
     ResponseEntity<CreditCreateRsDto> createCredit(@Valid @RequestBody CreditCreateRqDto rqDto);
 
     @PatchMapping("/status/update/{creditId}")
-    ResponseEntity<CreditCreateRsDto> statusUpdate(@Valid @RequestBody StatusUpdateRqDto rqDto, @PathVariable UUID creditId);
+    ResponseEntity<CreditCreateRsDto> statusUpdate(
+            @Valid @RequestBody StatusUpdateRqDto rqDto,
+            @PathVariable("creditId") UUID creditId
+    );
 }

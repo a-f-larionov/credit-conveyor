@@ -1,8 +1,8 @@
 package ru.creditbank.credit.operations;
 
-import ru.creditbank.common.library.enums.CreditStatusEnum;
 import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
 import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
 
 import java.math.BigDecimal;
 
@@ -13,11 +13,20 @@ public class TestFixtures {
     }
 
     public static CreditCreateRqDto buildCreditCreateRqDto(String fullName) {
+        return buildCreditCreateRqDto(fullName, 12, new BigDecimal("100000.0"));
+    }
 
+    public static CreditCreateRqDto buildCreditCreateRqDto(String fullName, int employmentMonths, BigDecimal monthlyIncome) {
+        return buildCreditCreateRqDto(fullName, employmentMonths, monthlyIncome, new BigDecimal("100000"));
+    }
+
+    public static CreditCreateRqDto buildCreditCreateRqDto(String fullName, int employmentMonths, BigDecimal monthlyIncome, BigDecimal requestedAmount) {
         return CreditCreateRqDto.builder()
                 .fullName(fullName)
-                .requestedAmount(new BigDecimal("123.23"))
+                .requestedAmount(requestedAmount)
                 .termMonths(12)
+                .employmentMonths(employmentMonths)
+                .monthlyIncome(monthlyIncome)
                 .build();
     }
 

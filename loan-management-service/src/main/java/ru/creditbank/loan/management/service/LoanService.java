@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.creditbank.common.library.service.SecurityService;
 import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
 import ru.creditbank.common.library.dto.loan.management.rs.LoanListRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
+import ru.creditbank.common.library.service.SecurityService;
 import ru.creditbank.loan.management.exception.LoanNotFoundException;
 import ru.creditbank.loan.management.mappers.LoanMapper;
 import ru.creditbank.loan.management.repository.LoanRepository;
@@ -28,7 +28,7 @@ public class LoanService {
 
     @Transactional
     public LoanRsDto create(CreateLoanRqDto rqDto) {
-        log.info("Creating loan for user: {}", rqDto.userId());
+        log.info("Creating loan: {}", rqDto);
         var loanEntity = loanMapper.toEntityForCreate(rqDto);
 
         var schedulePayments = paymentScheduleGeneratorService.generateSchedulePayments(

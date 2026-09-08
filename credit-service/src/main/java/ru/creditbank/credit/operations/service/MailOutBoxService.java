@@ -1,6 +1,7 @@
 package ru.creditbank.credit.operations.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,14 +14,15 @@ import static ru.creditbank.credit.operations.enums.EmailOutboxStatusEnum.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MailOutBoxService {
 
     private final MailService mailService;
     private final MailOutboxRepository mailOutboxRepository;
 
     @Transactional
-    public void queue(String to, String subject, String body) {
-
+    public void enqueue(String to, String subject, String body) {
+        log.info("Enqueue mail: to={}, subject={}, body={}", to, subject, body);
         var emailEntity = MailOutboxEntity.builder()
                 .recipient(to)
                 .subject(subject)
@@ -35,11 +37,14 @@ public class MailOutBoxService {
     @Scheduled(cron = "0 */1 * * * ?")
     @Transactional
     public void trySendOne() {
+        log.info("Try send one new mail");
         mailOutboxRepository.findOneNew()
                 .ifPresent(this::sendNow);
     }
 
     private void sendNow(MailOutboxEntity email) {
+
+        log.info("Try send mail with id: {}", email.getId());
 
         try {
             mailService.sendSimpleMessage(email.getRecipient(), email.getSubject(), email.getBody());

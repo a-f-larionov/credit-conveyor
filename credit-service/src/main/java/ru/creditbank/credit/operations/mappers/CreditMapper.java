@@ -2,9 +2,9 @@ package ru.creditbank.credit.operations.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.creditbank.common.library.enums.CreditStatusEnum;
 import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
 import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.enitity.CreditEntity;
 
@@ -41,4 +41,12 @@ public interface CreditMapper {
     @Mapping(target = "status", source = "credit.status")
     @Mapping(target = "createdAt", source = "credit.creationDate")
     CreditInfoRsDto mapEntityToInfoRsDto(CreditEntity credit);
+
+
+    @Mapping(target = "fullName",source = "entity.userFullName")
+    @Mapping(target = "requestedAmount",source = "entity.requestedAmount")
+    @Mapping(target = "termMonths",source = "entity.termMonths")
+    @Mapping(target = "monthlyIncome",source = "entity.monthlyIncome")
+    @Mapping(target = "employmentMonths",source = "entity.employmentMonths")
+    CreditCreateRqDto mapEntityToCreateRqDto(CreditEntity entity);
 }

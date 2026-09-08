@@ -1,5 +1,4 @@
-package ru.creditbank.apigateway.feign;
-
+package ru.creditbank.common.library.client;
 
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
 
@@ -25,5 +25,8 @@ public interface LoanManagementPaymentsServiceClient {
     ResponseEntity<PaymentRsDto> create(@Valid @RequestBody PaymentRqDto rqDto);
 
     @GetMapping("/history/{loanId}")
-    ResponseEntity<PaymentHistoryRsDto> history(@PathVariable UUID loanId);
+    ResponseEntity<PaymentHistoryRsDto> history(@PathVariable("loanId") UUID loanId);
+
+    @GetMapping("/user-statistic/{userId}")
+    ClientLoanPaymentsStatisticRsDto userStatistic(@PathVariable("userId") UUID userId);
 }

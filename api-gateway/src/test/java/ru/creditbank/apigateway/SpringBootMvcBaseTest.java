@@ -67,19 +67,20 @@ public abstract class SpringBootMvcBaseTest {
     @SneakyThrows
     protected <RQ> MockHttpServletRequestBuilder post(String url, RQ rqDto, String token) {
         var requestBuilder = MockMvcRequestBuilders.post(url);
-        if (token != null) {
-            requestBuilder.header("Authorization", "Bearer " + token);
-        }
+        addBearerHeader(token, requestBuilder);
         return requestBuilder.contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(rqDto));
+    }
+
+    private void addBearerHeader(String token, MockHttpServletRequestBuilder requestBuilder) {
+        if (token == null) return;
+        requestBuilder.header("Authorization", "Bearer " + token);
     }
 
     @SneakyThrows
     protected <RQ> MockHttpServletRequestBuilder patch(String url, RQ rqDto, String token) {
         var requestBuilder = MockMvcRequestBuilders.patch(url);
-        if (token != null) {
-            requestBuilder.header("Authorization", "Bearer " + token);
-        }
+        addBearerHeader(token, requestBuilder);
         return requestBuilder.contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(rqDto));
     }
@@ -87,9 +88,7 @@ public abstract class SpringBootMvcBaseTest {
     @SneakyThrows
     protected <RS> RS performGet(String url, Class<RS> rsDtoClazz, ResultMatcher expectedStatus, String token) {
         var requestBuilder = get(url);
-        if (token != null) {
-            requestBuilder.header("Authorization", "Bearer " + token);
-        }
+        addBearerHeader(token, requestBuilder);
         requestBuilder.contentType(MediaType.APPLICATION_JSON);
         var result = mockMvc.perform(requestBuilder)
                 .andExpect(expectedStatus)

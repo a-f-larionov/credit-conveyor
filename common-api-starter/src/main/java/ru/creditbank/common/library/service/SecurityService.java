@@ -21,7 +21,7 @@ public class SecurityService {
         var auth = getAuthentication();
 
         if (!hasAnyRole(auth, roles) && !isOwnerByEmail(auth, ownerUserName)) {
-            throw new AccessDeniedException("You can access only to own data");
+            throw new AccessDeniedException("Access denied");
         }
     }
 
@@ -41,17 +41,17 @@ public class SecurityService {
         var auth = getAuthentication();
 
         if (!hasAnyRole(auth, roles) && !isOwnerByUserId(auth, userId)) {
-            throw new AccessDeniedException("You can access only to own data");
+            throw new AccessDeniedException("Access denied");
         }
     }
 
+    public void checkAccess(UserRole... roles) {
 
-    private boolean isOwnerByEmail(Authentication authentication, String email) {
-        return authentication.getName().equals(email);
-    }
+        var auth = getAuthentication();
 
-    private boolean isOwnerByUserId(Authentication authentication, UUID userId) {
-        return ((JwtUserDetails) authentication.getPrincipal()).getId().equals(userId);
+        if (!hasAnyRole(auth, roles)) {
+            throw new AccessDeniedException("Access denied");
+        }
     }
 
     private boolean hasAnyRole(Authentication auth, UserRole... roles) {
@@ -59,6 +59,14 @@ public class SecurityService {
         var roleSet = Arrays.stream(authorityArray).collect(Collectors.toSet());
         return auth.getAuthorities().stream()
                 .anyMatch(a -> roleSet.contains(a.getAuthority()));
+    }
+
+    private boolean isOwnerByEmail(Authentication authentication, String email) {
+        return authentication.getName().equals(email);
+    }
+
+    private boolean isOwnerByUserId(Authentication authentication, UUID userId) {
+        return ((JwtUserDetails) authentication.getPrincipal()).getId().equals(userId);
     }
 
     public static String[] authorityToStringArray(UserRole... roles) {

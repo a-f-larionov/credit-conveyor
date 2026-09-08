@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.creditbank.apigateway.feign.LoanManagementLoansServiceClient;
+import ru.creditbank.common.library.client.LoanManagementLoansServiceClient;
 import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
 import ru.creditbank.common.library.dto.loan.management.rs.LoanListRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
@@ -24,13 +24,12 @@ public class LoanManagementLoansProxyController {
     }
 
     @GetMapping("/info/{loanId}")
-    ResponseEntity<LoanRsDto> info(@PathVariable UUID loanId) {
+    ResponseEntity<LoanRsDto> info(@PathVariable("loanId") UUID loanId) {
         return loanManagementLoansServiceClient.info(loanId);
     }
 
     @GetMapping("/list/{userId}")
-    ResponseEntity<LoanListRsDto> list(@PathVariable UUID userId) {
+    ResponseEntity<LoanListRsDto> list(@PathVariable("userId") UUID userId) {
         return loanManagementLoansServiceClient.list(userId);
     }
-
 }

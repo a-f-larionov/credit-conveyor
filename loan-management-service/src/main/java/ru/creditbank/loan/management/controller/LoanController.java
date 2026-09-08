@@ -26,13 +26,13 @@ public class LoanController {
     }
 
     @GetMapping("/info/{loanId}")
-    public LoanRsDto info(@PathVariable UUID loanId) {
+    public LoanRsDto info(@PathVariable("loanId") UUID loanId) {
 
         return loanService.info(loanId);
     }
 
     @GetMapping("/list/{userId}")
-    public LoanListRsDto list(@PathVariable UUID userId) {
+    public LoanListRsDto list(@PathVariable("userId") UUID userId) {
 
         return loanService.list(userId);
     }

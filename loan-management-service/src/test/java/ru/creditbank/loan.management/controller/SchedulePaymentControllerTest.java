@@ -3,14 +3,14 @@ package ru.creditbank.loan.management.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.creditbank.common.library.enums.PaymentStatusEnum;
+import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
+import ru.creditbank.common.library.enums.SchedulePaymentStatusEnum;
+import ru.creditbank.common.library.service.CreditCalculatorService;
 import ru.creditbank.loan.management.SpringBootMvcBaseTest;
 import ru.creditbank.loan.management.TestJwtGenerator;
-import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
 import ru.creditbank.loan.management.dto.rs.LoanPaymentScheduleRsDto;
 import ru.creditbank.loan.management.dto.rs.LoanPaymentsScheduleListRsDto;
-import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
-import ru.creditbank.loan.management.service.PaymentScheduleGeneratorService;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -29,7 +29,7 @@ public class SchedulePaymentControllerTest extends SpringBootMvcBaseTest {
     TestJwtGenerator jwtGenerator;
 
     @Autowired
-    PaymentScheduleGeneratorService paymentScheduleGeneratorService;
+    CreditCalculatorService creditCalculatorService;
 
     @Test
     public void getSchedule() {
@@ -56,8 +56,8 @@ public class SchedulePaymentControllerTest extends SpringBootMvcBaseTest {
         assertThat(scheduleRsDto.payments()).hasSize(termMonths);
         scheduleRsDto.payments().sort(Comparator.comparing(LoanPaymentScheduleRsDto::date));
 
-        var monthlyRate = paymentScheduleGeneratorService.getMonthlyFactor(interestRate);
-        var monthlyPayment = paymentScheduleGeneratorService.getMonthlyPayment(termMonths, totalAmount, monthlyRate);
+        var monthlyRate = creditCalculatorService.getMonthlyFactor(interestRate);
+        var monthlyPayment = creditCalculatorService.getMonthlyPayment(termMonths, totalAmount, monthlyRate);
         var remainAmount = totalAmount;
 
         var totalPaymentSum = BigDecimal.ZERO;
@@ -65,11 +65,11 @@ public class SchedulePaymentControllerTest extends SpringBootMvcBaseTest {
         for (int months = 1; months <= termMonths; months++) {
             var rsDto = scheduleRsDto.payments().get(months - 1);
 
-            var interest = paymentScheduleGeneratorService.calcInterest(remainAmount, monthlyRate);
-            var principal = paymentScheduleGeneratorService.calcPrincipal(monthlyPayment, interest);
+            var interest = creditCalculatorService.calcInterest(remainAmount, monthlyRate);
+            var principal = creditCalculatorService.calcPrincipal(monthlyPayment, interest);
             if (months == termMonths) {
                 principal = remainAmount;
-                interest = paymentScheduleGeneratorService.calcInterest(remainAmount, monthlyRate);
+                interest = creditCalculatorService.calcInterest(remainAmount, monthlyRate);
                 remainAmount = BigDecimal.ZERO;
             } else {
                 remainAmount = remainAmount.subtract(principal);
@@ -82,7 +82,7 @@ public class SchedulePaymentControllerTest extends SpringBootMvcBaseTest {
             assertThat(rsDto.interestAmount()).isEqualByComparingTo(interest);
             assertThat(rsDto.principalAmount()).isEqualByComparingTo(principal);
             assertThat(rsDto.remainAmount()).isEqualByComparingTo(remainAmount);
-            assertThat(rsDto.status()).isEqualTo(PaymentStatusEnum.PENDING);
+            assertThat(rsDto.status()).isEqualTo(SchedulePaymentStatusEnum.PENDING);
 
             totalPaymentSum = totalPaymentSum.add(interest).add(principal);
         }

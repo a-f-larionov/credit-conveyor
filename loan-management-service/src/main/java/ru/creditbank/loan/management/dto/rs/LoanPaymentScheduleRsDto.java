@@ -2,7 +2,7 @@ package ru.creditbank.loan.management.dto.rs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import ru.creditbank.common.library.enums.PaymentStatusEnum;
+import ru.creditbank.common.library.enums.SchedulePaymentStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -19,6 +19,6 @@ public record LoanPaymentScheduleRsDto(
         BigDecimal interestAmount,
         BigDecimal principalAmount,
         BigDecimal remainAmount,
-        PaymentStatusEnum status
+        SchedulePaymentStatusEnum status
 ) {
 }
