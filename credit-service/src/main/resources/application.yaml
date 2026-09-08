@@ -1,5 +1,5 @@
 server:
-  port:  ${SERVER_PORT}
+  port: ${SERVER_PORT}
 
 spring:
   config:
@@ -9,7 +9,7 @@ spring:
     name: credit-service
 
   datasource:
-    url: jdbc:postgresql://${DATA_SOURCE_DB_HOST}:5432/${DATA_SOURCE_DB_NAME}
+    url: jdbc:postgresql://${DATA_SOURCE_DB_HOST}:5432/${DATA_SOURCE_DB_NAME}?currentSchema=${DATA_SOURCE_SCHEMA_NAME}
     username: ${DATA_SOURCE_USERNAME}
     password: ${DATA_SOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -34,3 +34,12 @@ jwt:
   signing:
     key: ${JWT_SIGNING_KEY}
     expiration_sec: ${JWT_EXPIRATION_SEC}
+
+credit:
+  auto-decision:
+    enabled: true
+    default-interest: 15.0
+
+services:
+  loan-management-service:
+    url: "http://loan-management-service:8083"
