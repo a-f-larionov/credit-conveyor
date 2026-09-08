@@ -2,11 +2,12 @@ package ru.creditbank.credit.operations.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestPropertySource;
 import ru.creditbank.common.library.dto.common.rs.ErrorRsDto;
+import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
 import ru.creditbank.credit.operations.SpringBootMvcBaseTest;
 import ru.creditbank.credit.operations.TestJwtGenerator;
-import ru.creditbank.common.library.enums.CreditStatusEnum;
-import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 
 import java.util.Set;
@@ -21,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.creditbank.credit.operations.TestFixtures.buildCreditCreateRqDto;
 import static ru.creditbank.credit.operations.enums.UserRole.ROLE_CREDIT_MANAGER;
 
-class CreditControllerTest extends SpringBootMvcBaseTest {
+@TestPropertySource(properties = "credit.auto-decision.enabled=false")
+class CreditControllerDisabledAutoDecisionTest extends SpringBootMvcBaseTest {
 
     @Autowired
     TestJwtGenerator jwtGenerator;
@@ -137,7 +139,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         assertThat(infoRsDto.userInfo().email()).isEqualTo(userEmail);
         assertThat(infoRsDto.createdAt()).isBetween(now().minus(10, MINUTES), now());
         assertThat(infoRsDto.status()).isEqualTo(CreditStatusEnum.PENDING);
-        assertThat(infoRsDto.loanDetails().requestedAmount()).isEqualTo(createRqDto.requestedAmount());
+        assertThat(infoRsDto.loanDetails().requestedAmount()).isEqualByComparingTo(createRqDto.requestedAmount());
         assertThat(infoRsDto.loanDetails().termMonths()).isEqualTo(createRqDto.termMonths());
         assertThat(infoRsDto.loanDetails().interestRate()).isNull();
     }
@@ -162,7 +164,7 @@ class CreditControllerTest extends SpringBootMvcBaseTest {
         assertThat(infoRsDto.userInfo().email()).isEqualTo(userEmail);
         assertThat(infoRsDto.createdAt()).isBetween(now().minus(10, MINUTES), now());
         assertThat(infoRsDto.status()).isEqualTo(CreditStatusEnum.PENDING);
-        assertThat(infoRsDto.loanDetails().requestedAmount()).isEqualTo(createRqDto.requestedAmount());
+        assertThat(infoRsDto.loanDetails().requestedAmount()).isEqualByComparingTo(createRqDto.requestedAmount());
         assertThat(infoRsDto.loanDetails().termMonths()).isEqualTo(createRqDto.termMonths());
         assertThat(infoRsDto.loanDetails().interestRate()).isNull();
     }

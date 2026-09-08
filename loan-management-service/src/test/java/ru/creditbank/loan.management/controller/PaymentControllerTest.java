@@ -2,18 +2,20 @@ package ru.creditbank.loan.management.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
+import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.*;
 import ru.creditbank.common.library.enums.LoanStatusEnum;
 import ru.creditbank.common.library.enums.UserRole;
 import ru.creditbank.loan.management.SpringBootMvcBaseTest;
 import ru.creditbank.loan.management.TestJwtGenerator;
-import ru.creditbank.common.library.dto.loan.management.rq.CreateLoanRqDto;
-import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
-import ru.creditbank.common.library.dto.loan.management.rs.LoanRsDto;
-import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryItemRsDto;
-import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
-import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
+import ru.creditbank.loan.management.dto.rq.CorrectDateRqDto;
+import ru.creditbank.loan.management.dto.rs.LoanPaymentScheduleRsDto;
+import ru.creditbank.loan.management.dto.rs.LoanPaymentsScheduleListRsDto;
+import ru.creditbank.loan.management.schedule.OverdueScheduleService;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
@@ -23,15 +25,18 @@ import static java.time.Instant.now;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.creditbank.loan.management.TestFixtures.buildCreateLoanRqDto;
-import static ru.creditbank.loan.management.TestFixtures.buildPaymentsRqDto;
 import static ru.creditbank.common.library.enums.PaymentTypeEnum.FULL;
 import static ru.creditbank.common.library.enums.PaymentTypeEnum.REGULAR;
+import static ru.creditbank.loan.management.TestFixtures.buildCreateLoanRqDto;
+import static ru.creditbank.loan.management.TestFixtures.buildPaymentsRqDto;
 
 public class PaymentControllerTest extends SpringBootMvcBaseTest {
 
     @Autowired
     TestJwtGenerator jwtGenerator;
+
+    @Autowired
+    OverdueScheduleService overdueScheduleService;
 
     @Test
     void processPaymentRegularAndCloseLoan() {
@@ -111,11 +116,11 @@ public class PaymentControllerTest extends SpringBootMvcBaseTest {
 
         var paymentRqDto1 = buildPaymentsRqDto(loanId, new BigDecimal("507512.44"), REGULAR);
         var paymentRqDto2 = buildPaymentsRqDto(loanId, new BigDecimal("507512.44"), REGULAR);
-        var paymentRs1 = performPost("/loan-management-service/api/v1/payments/process", paymentRqDto1, PaymentRsDto.class, status().isOk(), userToken);
-        var paymentRs2 = performPost("/loan-management-service/api/v1/payments/process", paymentRqDto2, PaymentRsDto.class, status().isOk(), userToken);
+        var paymentRs1 = performPost("/loan-management-service/api/v1/payments/process", paymentRqDto1, PaymentRsDto.class, userToken);
+        var paymentRs2 = performPost("/loan-management-service/api/v1/payments/process", paymentRqDto2, PaymentRsDto.class, userToken);
 
         // when
-        var paymentsHistory = performGet("/loan-management-service/api/v1/payments/history/" + loanId, PaymentHistoryRsDto.class, status().isOk(), userToken);
+        var paymentsHistory = performGet("/loan-management-service/api/v1/payments/history/" + loanId, PaymentHistoryRsDto.class, userToken);
 
         // then
         assertThat(paymentsHistory.payments()).hasSize(2);
@@ -125,6 +130,41 @@ public class PaymentControllerTest extends SpringBootMvcBaseTest {
 
         assertHistoryDtoIs(rsHistoryDto1, paymentRqDto1, new BigDecimal("502487.56"));
         assertHistoryDtoIs(rsHistoryDto2, paymentRqDto2, BigDecimal.ZERO);
+    }
+
+    @Test
+    void statistic() {
+        // given
+        var userId = UUID.randomUUID();
+        var userToken = jwtGenerator.generate(userId);
+
+        // create loan
+        var tokenManager = jwtGenerator.generate(Set.of(UserRole.ROLE_CREDIT_MANAGER));
+        var loanRqDto = buildCreateLoanRqDto(userId, new BigDecimal("1000000"), 2, new BigDecimal("12"));
+        var rsDto = performPost("/loan-management-service/api/v1/loans/create", loanRqDto, LoanRsDto.class, status().isCreated(), tokenManager);
+        var loanId = rsDto.loanId();
+
+        // correct any payment
+        var scheduleRsDto = performGet("/loan-management-service/api/v1/schedule-payment/list/" + loanId, LoanPaymentsScheduleListRsDto.class, status().isOk(), tokenManager);
+        var anyPayment = scheduleRsDto.payments().stream().findAny().orElseThrow(AssertionError::new);
+        performPatch("/loan-management-service/api/v1/schedule-payment/correct-date/" + anyPayment.id(),
+                CorrectDateRqDto.builder().newDate(Instant.now().minus(100, DAYS)).build(),
+                LoanPaymentScheduleRsDto.class,
+                tokenManager);
+
+        // when
+        overdueScheduleService.checkOverdueSchedulePayments();
+
+        // paid all payments
+        performPost("/loan-management-service/api/v1/payments/process", buildPaymentsRqDto(loanId, new BigDecimal("507512.44"), REGULAR), PaymentRsDto.class, userToken);
+        performPost("/loan-management-service/api/v1/payments/process", buildPaymentsRqDto(loanId, new BigDecimal("507512.44"), REGULAR), PaymentRsDto.class, userToken);
+
+
+        var statisticRsDto = performGet("/loan-management-service/api/v1/payments/user-statistic/" + userId, ClientLoanPaymentsStatisticRsDto.class, status().isOk(), userToken);
+
+        // then
+        assertThat(statisticRsDto.allOverduePayments()).isEqualTo(1);
+        assertThat(statisticRsDto.allDonePayments()).isEqualTo(2);
     }
 
     private void assertHistoryDtoIs(PaymentHistoryItemRsDto rsDto1, PaymentRqDto rqDto, BigDecimal remaining) {

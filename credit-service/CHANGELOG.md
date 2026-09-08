@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
     - Add Swagger UI
 
+[0.0.5] - 2026-09-08
+## Added
+    - Add auto decide functional 
+
 [0.0.4] - 2026-08-26
 ## Added
     - CreditService updateSatus api method

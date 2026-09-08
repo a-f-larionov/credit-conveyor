@@ -20,6 +20,14 @@ public record CreditCreateRqDto(
 
         @NotNull
         @Min(1)
-        Integer termMonths
+        Integer termMonths,
+
+        @NotNull
+        @Min(1)
+        BigDecimal monthlyIncome,
+
+        @NotNull
+        @Min(1)
+        Integer employmentMonths
 ) {
 }

@@ -12,3 +12,8 @@ spring:
     properties:
       mail:
         debug: true
+
+
+services:
+  loan-management-service:
+    url: "http://localhost:8082"

@@ -1,11 +1,11 @@
 package ru.creditbank.loan.management.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.creditbank.loan.management.dto.rq.CorrectDateRqDto;
+import ru.creditbank.loan.management.dto.rs.LoanPaymentScheduleRsDto;
 import ru.creditbank.loan.management.dto.rs.LoanPaymentsScheduleListRsDto;
 import ru.creditbank.loan.management.service.SchedulePaymentService;
 
@@ -20,8 +20,16 @@ public class SchedulePaymentController {
     private final SchedulePaymentService schedulePaymentService;
 
     @GetMapping("/list/{loanId}")
-    public LoanPaymentsScheduleListRsDto list(@PathVariable UUID loanId) {
+    public LoanPaymentsScheduleListRsDto list(@PathVariable("loanId") UUID loanId) {
 
         return schedulePaymentService.list(loanId);
+    }
+
+    @PatchMapping("/correct-date/{paymentId}")
+    public LoanPaymentScheduleRsDto correctDate(
+            @PathVariable("paymentId") UUID paymentId,
+            @Valid @RequestBody CorrectDateRqDto rqDto) {
+
+        return schedulePaymentService.correctDate(paymentId, rqDto);
     }
 }

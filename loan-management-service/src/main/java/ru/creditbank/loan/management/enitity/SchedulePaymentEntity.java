@@ -2,7 +2,7 @@ package ru.creditbank.loan.management.enitity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.creditbank.common.library.enums.PaymentStatusEnum;
+import ru.creditbank.common.library.enums.SchedulePaymentStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -24,6 +24,9 @@ public class SchedulePaymentEntity {
     @Column(name = "id", nullable = false, unique = true)
     private UUID id;
 
+    @JoinColumn(name = "user_id", nullable = false)
+    private UUID userId;
+
     @JoinColumn(name = "loan_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private LoanEntity loan;
@@ -43,12 +46,15 @@ public class SchedulePaymentEntity {
     @Column(name = "remain_amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal remainAmount;
 
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SchedulePaymentStatusEnum status;
+
     @Column(name = "done_date")
     private Instant doneDate;
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PaymentStatusEnum status;
+    @Column(name = "overdue_days")
+    private Long overdueDays;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

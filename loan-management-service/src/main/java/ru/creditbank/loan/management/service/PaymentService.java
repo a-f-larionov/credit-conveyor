@@ -5,13 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.creditbank.common.library.enums.LoanStatusEnum;
-import ru.creditbank.common.library.enums.PaymentStatusEnum;
-import ru.creditbank.common.library.service.SecurityService;
 import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
+import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryItemRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
+import ru.creditbank.common.library.enums.LoanStatusEnum;
+import ru.creditbank.common.library.enums.SchedulePaymentStatusEnum;
+import ru.creditbank.common.library.service.SecurityService;
 import ru.creditbank.loan.management.enitity.LoanEntity;
 import ru.creditbank.loan.management.enitity.PaymentEntity;
 import ru.creditbank.loan.management.enitity.SchedulePaymentEntity;
@@ -29,6 +30,7 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static ru.creditbank.common.library.enums.SchedulePaymentStatusEnum.DONE;
 import static ru.creditbank.common.library.enums.UserRole.ROLE_CREDIT_MANAGER;
 
 @Service
@@ -39,7 +41,6 @@ public class PaymentService {
     private final SecurityService securityService;
     private final PaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
-
     private final LoanRepository loanRepository;
     private final SchedulePaymentRepository schedulePaymentRepository;
 
@@ -82,6 +83,18 @@ public class PaymentService {
         return paymentMapper.toPaymentHistoryRsDto(historyRsDtoList);
     }
 
+    @Transactional(readOnly = true)
+    public ClientLoanPaymentsStatisticRsDto clientStatistic(UUID userId) {
+        log.info("Fetching client statistic for userId: {}", userId);
+
+        var allDonePayments = schedulePaymentRepository
+                .countByUserIdAndStatus(userId, DONE);
+        var allDoneOverduePayments = schedulePaymentRepository
+                .countByUserIdAndOverdueDaysIsGreaterThan(userId, 1L);
+
+        return paymentMapper.statisticToRsDto(allDonePayments, allDoneOverduePayments);
+    }
+
     private static void validateLoanStatus(LoanEntity loan) {
         if (loan.getStatus().equals(LoanStatusEnum.CLOSED)) {
             log.warn("Attempt to pay closed loan: {}", loan.getId());
@@ -91,7 +104,7 @@ public class PaymentService {
 
     private void updateNextPaymentDate(LoanEntity loan) {
         var nextPayment = schedulePaymentRepository.findFirstByLoanIdAndStatusInOrderByDateAsc(
-                        loan.getId(), List.of(PaymentStatusEnum.PENDING, PaymentStatusEnum.OVERDUE))
+                        loan.getId(), List.of(SchedulePaymentStatusEnum.PENDING, SchedulePaymentStatusEnum.OVERDUE))
                 .orElse(null);
 
         if (nextPayment == null) {
@@ -126,7 +139,7 @@ public class PaymentService {
     private void processRegularPayment(LoanEntity loan, PaymentRqDto rqDto) {
         log.debug("Process REGULAR payment for loan={}", loan.getId());
         var payment = schedulePaymentRepository.findFirstByLoanIdAndStatusInOrderByDateAsc(
-                        loan.getId(), List.of(PaymentStatusEnum.PENDING, PaymentStatusEnum.OVERDUE))
+                        loan.getId(), List.of(SchedulePaymentStatusEnum.PENDING, SchedulePaymentStatusEnum.OVERDUE))
                 .orElseThrow(() -> new IllegalStateException(format("No payments found for %s", rqDto.loanId())));
 
         var totalAmount = payment.getInterestAmount().add(payment.getPrincipalAmount());
@@ -135,7 +148,7 @@ public class PaymentService {
                     + totalAmount, BAD_REQUEST);
         }
 
-        payment.setStatus(PaymentStatusEnum.DONE);
+        payment.setStatus(DONE);
         payment.setDoneDate(Instant.now());
 
         loan.setRemainingAmount(payment.getRemainAmount());
@@ -149,7 +162,7 @@ public class PaymentService {
         List<SchedulePaymentEntity> remainingPayments = schedulePaymentRepository
                 .findAllByLoanIdAndStatusInOrderByDateAsc(
                         loan.getId(),
-                        List.of(PaymentStatusEnum.PENDING, PaymentStatusEnum.OVERDUE)
+                        List.of(SchedulePaymentStatusEnum.PENDING, SchedulePaymentStatusEnum.OVERDUE)
                 );
 
         if (remainingPayments.isEmpty()) {
@@ -168,7 +181,7 @@ public class PaymentService {
 
         var now = Instant.now();
         for (var payment : remainingPayments) {
-            payment.setStatus(PaymentStatusEnum.DONE);
+            payment.setStatus(DONE);
             payment.setDoneDate(now);
         }
 

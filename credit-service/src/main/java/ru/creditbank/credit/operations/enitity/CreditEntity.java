@@ -39,6 +39,12 @@ public class CreditEntity {
     @Column(name = "term_months", nullable = false)
     private Integer termMonths;
 
+    @Column(name = "monthly_income", nullable = false, precision = 15, scale = 2)
+    private BigDecimal monthlyIncome;
+
+    @Column(name = "employment_months", nullable = false, precision = 15, scale = 2)
+    private Integer employmentMonths;
+
     @Column(name = "interest_rate", nullable = false, precision = 15, scale = 2)
     private BigDecimal interestRate;
 

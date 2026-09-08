@@ -2,17 +2,19 @@ package ru.creditbank.credit.operations.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.creditbank.common.library.enums.UserRole;
-import ru.creditbank.common.library.jwt.JwtUserDetails;
-import ru.creditbank.common.library.service.SecurityService;
-import ru.creditbank.common.library.enums.CreditStatusEnum;
 import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
 import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
 import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.enums.CreditStatusEnum;
+import ru.creditbank.common.library.enums.UserRole;
+import ru.creditbank.common.library.jwt.JwtUserDetails;
+import ru.creditbank.common.library.service.SecurityService;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
+import ru.creditbank.credit.operations.event.CreditCreatedEvent;
 import ru.creditbank.credit.operations.exception.CreditNotFoundException;
 import ru.creditbank.credit.operations.exception.CreditStatusUpdateException;
 import ru.creditbank.credit.operations.mappers.CreditMapper;
@@ -32,11 +34,11 @@ import static ru.creditbank.common.library.enums.CreditStatusEnum.*;
 @Slf4j
 public class CreditService {
 
+    private static final Set<CreditStatusEnum> allowedStatusesToChange = EnumSet.of(APPROVED, REJECTED);
+    private final ApplicationEventPublisher applicationEventPublisher;
+
     private final NotificationService notificationService;
     private final SecurityService securityService;
-
-    private static final Set<CreditStatusEnum> allowedStatusesToChange = EnumSet.of(APPROVED, REJECTED);
-
     private final CreditRepository creditRepository;
     private final CreditMapper creditMapper;
 
@@ -55,6 +57,8 @@ public class CreditService {
         );
 
         creditRepository.save(credit);
+
+        applicationEventPublisher.publishEvent(new CreditCreatedEvent(credit.getId()));
 
         return creditMapper.mapEntityToCreateRsDto(credit);
     }
