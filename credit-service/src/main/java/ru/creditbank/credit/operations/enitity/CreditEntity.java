@@ -42,7 +42,7 @@ public class CreditEntity {
     @Column(name = "monthly_income", nullable = false, precision = 15, scale = 2)
     private BigDecimal monthlyIncome;
 
-    @Column(name = "employment_months", nullable = false, precision = 15, scale = 2)
+    @Column(name = "employment_months", nullable = false)
     private Integer employmentMonths;
 
     @Column(name = "interest_rate", nullable = false, precision = 15, scale = 2)
@@ -60,5 +60,8 @@ public class CreditEntity {
 
     @Column(name = "last_updated", nullable = false)
     private Instant lastUpdated;
+
+    @Column(name = "score")
+    private Long score;
 
 }

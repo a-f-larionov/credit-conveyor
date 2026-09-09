@@ -10,11 +10,11 @@ import ru.creditbank.common.library.jwt.JwtUserDetails;
 @RequiredArgsConstructor
 public class JwtSecurityContextService {
 
-    public void setSecurityContextAuthentication(JwtUserDetails userDetails) {
+    public void setSecurityContextAuthentication(JwtUserDetails userDetails, String jwtToken) {
 
         var auth = new UsernamePasswordAuthenticationToken(
                 userDetails,
-                null,
+                jwtToken,
                 userDetails.getAuthorities()
         );
 

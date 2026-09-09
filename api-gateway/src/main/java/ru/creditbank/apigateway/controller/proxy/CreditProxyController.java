@@ -8,6 +8,7 @@ import ru.creditbank.common.library.client.CreditServiceClient;
 import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
 import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
 import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.dto.credit.rs.StatusUpdateRsDto;
 
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class CreditProxyController {
     }
 
     @PatchMapping("/status/update/{creditId}")
-    public ResponseEntity<CreditCreateRsDto> statusUpdate(
+    public ResponseEntity<StatusUpdateRsDto> statusUpdate(
             @Valid @RequestBody StatusUpdateRqDto statusUpdateRqDto,
             @PathVariable(name = "creditId") UUID creditId) {
         return creditServiceClient.statusUpdate(statusUpdateRqDto, creditId);

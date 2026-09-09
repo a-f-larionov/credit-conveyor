@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
 import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
 import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.dto.credit.rs.StatusUpdateRsDto;
 
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public interface CreditServiceClient {
     ResponseEntity<CreditCreateRsDto> createCredit(@Valid @RequestBody CreditCreateRqDto rqDto);
 
     @PatchMapping("/status/update/{creditId}")
-    ResponseEntity<CreditCreateRsDto> statusUpdate(
+    ResponseEntity<StatusUpdateRsDto> statusUpdate(
             @Valid @RequestBody StatusUpdateRqDto rqDto,
             @PathVariable("creditId") UUID creditId
     );

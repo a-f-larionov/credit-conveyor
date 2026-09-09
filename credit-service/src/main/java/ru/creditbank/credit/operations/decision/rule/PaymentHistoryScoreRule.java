@@ -2,12 +2,9 @@ package ru.creditbank.credit.operations.decision.rule;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
-import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
+import ru.creditbank.credit.operations.dto.ScoringInputDto;
 
-import java.util.UUID;
-
-import static ru.creditbank.credit.operations.service.DecisionService.APPROVE_SCORES;
+import static ru.creditbank.credit.operations.service.AutoDecisionService.APPROVE_SCORES;
 
 @Component
 @Slf4j
@@ -16,15 +13,15 @@ public class PaymentHistoryScoreRule implements CreditScoreRule {
     private static final double MAX_OVERDUED_PAYMENTS_RATIO = 2;
 
     @Override
-    public Long evaluate(UUID creditId, CreditCreateRqDto request, ClientLoanPaymentsStatisticRsDto statistic) {
-        if (statistic == null || statistic.allOverduePayments() <= 0) {
-            log.debug("Scoring '{}': no history or no overdue, passed", getDescription());
+    public Long evaluate(ScoringInputDto scoringInputDto) {
+        if (scoringInputDto.allOverduePayments() == 0) {
+            log.info("Scoring '{}': no history or no overdue, passed", getDescription());
             return APPROVE_SCORES;
         }
 
-        double overdueRation = (double) statistic.allDonePayments() / statistic.allOverduePayments();
+        double overdueRatio = (double) scoringInputDto.allDonePayments() / (double) scoringInputDto.allOverduePayments();
 
-        return overdueRation < MAX_OVERDUED_PAYMENTS_RATIO ? 0L : APPROVE_SCORES;
+        return overdueRatio < MAX_OVERDUED_PAYMENTS_RATIO ? 0L : APPROVE_SCORES;
     }
 
     @Override

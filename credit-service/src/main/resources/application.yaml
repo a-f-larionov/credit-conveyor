@@ -36,9 +36,9 @@ jwt:
     expiration_sec: ${JWT_EXPIRATION_SEC}
 
 credit:
+  base-interest-rate: 10.0
   auto-decision:
     enabled: true
-    default-interest: 15.0
 
 services:
   loan-management-service:

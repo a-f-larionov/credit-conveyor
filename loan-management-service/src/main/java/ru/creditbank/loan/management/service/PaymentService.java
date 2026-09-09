@@ -87,6 +87,8 @@ public class PaymentService {
     public ClientLoanPaymentsStatisticRsDto clientStatistic(UUID userId) {
         log.info("Fetching client statistic for userId: {}", userId);
 
+        securityService.checkAccess(userId, ROLE_CREDIT_MANAGER);
+
         var allDonePayments = schedulePaymentRepository
                 .countByUserIdAndStatus(userId, DONE);
         var allDoneOverduePayments = schedulePaymentRepository

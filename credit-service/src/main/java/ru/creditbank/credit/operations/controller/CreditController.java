@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
 import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
 import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.dto.credit.rs.StatusUpdateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.service.CreditService;
 
@@ -31,9 +32,9 @@ public class CreditController {
     }
 
     @PatchMapping("/status/update/{creditId}")
-    public CreditCreateRsDto statusUpdate(
+    public StatusUpdateRsDto statusUpdate(
             @Valid @RequestBody StatusUpdateRqDto statusUpdateRqDto,
             @PathVariable("creditId") UUID creditId) {
-        return creditService.statusUpdate(statusUpdateRqDto, creditId);
+        return creditService.statusUpdate(creditId, statusUpdateRqDto);
     }
 }

@@ -69,6 +69,6 @@ public class JwtTrustedFilter extends OncePerRequestFilter {
 
         var userDetails = jwtService.extractUserDetailFromToken(jwtToken);
 
-        jwtSecurityContextService.setSecurityContextAuthentication(userDetails);
+        jwtSecurityContextService.setSecurityContextAuthentication(userDetails, jwtToken);
     }
 }

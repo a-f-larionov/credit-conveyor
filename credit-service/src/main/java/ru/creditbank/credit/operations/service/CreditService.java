@@ -3,15 +3,14 @@ package ru.creditbank.credit.operations.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
 import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
 import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
+import ru.creditbank.common.library.dto.credit.rs.StatusUpdateRsDto;
 import ru.creditbank.common.library.enums.CreditStatusEnum;
 import ru.creditbank.common.library.enums.UserRole;
-import ru.creditbank.common.library.jwt.JwtUserDetails;
 import ru.creditbank.common.library.service.SecurityService;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.event.CreditCreatedEvent;
@@ -39,13 +38,15 @@ public class CreditService {
 
     private final NotificationService notificationService;
     private final SecurityService securityService;
+    private final InterestRateService interestRateService;
     private final CreditRepository creditRepository;
     private final CreditMapper creditMapper;
 
     @Transactional
     public CreditCreateRsDto create(CreditCreateRqDto rqDto) {
         log.info("Create credit request: {}", rqDto.toString());
-        var userDetails = (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        var userDetails = securityService.getUserDetails();
 
         var credit = creditMapper.mapRqDtoToCreateEntity(
                 rqDto,
@@ -58,7 +59,7 @@ public class CreditService {
 
         creditRepository.save(credit);
 
-        applicationEventPublisher.publishEvent(new CreditCreatedEvent(credit.getId()));
+        applicationEventPublisher.publishEvent(new CreditCreatedEvent(credit.getId(), credit.getUserId()));
 
         return creditMapper.mapEntityToCreateRsDto(credit);
     }
@@ -74,22 +75,26 @@ public class CreditService {
     }
 
     @Transactional
-    public CreditCreateRsDto statusUpdate(StatusUpdateRqDto statusUpdateRqDto, UUID creditId) {
+    public StatusUpdateRsDto statusUpdate(UUID creditId, StatusUpdateRqDto statusUpdateRqDto) {
         log.info("Status Update for creditId: {}", creditId);
 
         var creditEntity = creditRepository.findById(creditId)
                 .orElseThrow(() -> new CreditNotFoundException(creditId));
-
-        validateCreditStatusMayChanged(creditEntity.getStatus());
-        validateStatusIsAllowedToChange(statusUpdateRqDto.status());
-
-        creditEntity.setStatus(statusUpdateRqDto.status());
         creditEntity.setManagerComment(statusUpdateRqDto.managerComment());
+
+        validateStatusIsAllowedToChange(statusUpdateRqDto.status());
+        validateCreditStatusMayChanged(creditEntity.getStatus());
+
+        if (creditEntity.getScore() != null && statusUpdateRqDto.status() == APPROVED) {
+            creditEntity.setInterestRate(interestRateService.calcInterestRate(creditEntity));
+        }
+        creditEntity.setStatus(statusUpdateRqDto.status());
+
+        creditRepository.save(creditEntity);
 
         notificationService.onCreditStatusChange(creditEntity);
 
-        creditRepository.save(creditEntity);
-        return creditMapper.mapEntityToCreateRsDto(creditEntity);
+        return creditMapper.mapEntityToStatusRsDto(creditEntity);
     }
 
     private void validateCreditStatusMayChanged(CreditStatusEnum status) {

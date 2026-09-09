@@ -2,12 +2,9 @@ package ru.creditbank.credit.operations.decision.rule;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
-import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
+import ru.creditbank.credit.operations.dto.ScoringInputDto;
 
-import java.util.UUID;
-
-import static ru.creditbank.credit.operations.service.DecisionService.APPROVE_SCORES;
+import static ru.creditbank.credit.operations.service.AutoDecisionService.APPROVE_SCORES;
 
 @Component
 @Slf4j
@@ -16,10 +13,10 @@ public class EmploymentStabilityScoreRule implements CreditScoreRule {
     private static final int MIN_EMPLOYMENT_MONTHS = 6;
 
     @Override
-    public Long evaluate(UUID creditId, CreditCreateRqDto request, ClientLoanPaymentsStatisticRsDto statistic) {
-        return request.employmentMonths() <= MIN_EMPLOYMENT_MONTHS ?
+    public Long evaluate(ScoringInputDto scoringInputDto) {
+        return scoringInputDto.employmentMonths() <= MIN_EMPLOYMENT_MONTHS ?
                 0 :
-                APPROVE_SCORES + calcBonusScore(request.employmentMonths());
+                APPROVE_SCORES + calcBonusScore(scoringInputDto.employmentMonths());
     }
 
     private int calcBonusScore(Integer employmentMonths) {

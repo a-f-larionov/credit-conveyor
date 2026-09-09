@@ -9,7 +9,8 @@ CREATE TABLE credit
     creation_date     TIMESTAMP WITH TIME ZONE NOT NULL,
     last_updated      TIMESTAMP WITH TIME ZONE NOT NULL,
     monthly_income    NUMERIC(15, 2)           NOT NULL,
-    employment_months INTEGER                  NOT NULL
+    employment_months INTEGER                  NOT NULL,
+    score             INTEGER
 );
 
 CREATE INDEX idx_credit_user_id ON credit (user_id);

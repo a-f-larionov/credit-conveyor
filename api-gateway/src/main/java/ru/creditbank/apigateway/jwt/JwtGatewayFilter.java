@@ -74,6 +74,6 @@ public class JwtGatewayFilter extends OncePerRequestFilter {
             throw new WrongOrInvalidJwtTokenException("Token invalid", UNAUTHORIZED);
         }
 
-        jwtSecurityContextService.setSecurityContextAuthentication(userDetails);
+        jwtSecurityContextService.setSecurityContextAuthentication(userDetails, jwtToken);
     }
 }

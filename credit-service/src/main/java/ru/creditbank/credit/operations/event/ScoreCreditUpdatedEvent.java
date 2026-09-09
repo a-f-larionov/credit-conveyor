@@ -5,13 +5,10 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Getter
-public class CreditCreatedEvent {
-
+public class ScoreCreditUpdatedEvent {
     private final UUID creditId;
-    private final UUID userId;
 
-    public CreditCreatedEvent(UUID creditId, UUID userId) {
+    public ScoreCreditUpdatedEvent(UUID creditId) {
         this.creditId = creditId;
-        this.userId = userId;
     }
 }

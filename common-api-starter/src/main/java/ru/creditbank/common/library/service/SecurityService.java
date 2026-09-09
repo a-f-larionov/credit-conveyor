@@ -25,17 +25,6 @@ public class SecurityService {
         }
     }
 
-    @NonNull
-    private static Authentication getAuthentication() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth == null || !auth.isAuthenticated()) {
-            throw new AuthenticationCredentialsNotFoundException("User not authenticated");
-        }
-        return auth;
-    }
-
-
     public void checkAccess(UUID userId, UserRole... roles) {
 
         var auth = getAuthentication();
@@ -54,6 +43,24 @@ public class SecurityService {
         }
     }
 
+    public JwtUserDetails getUserDetails() {
+        var userDetails = (JwtUserDetails) getAuthentication().getPrincipal();
+        if (userDetails == null) {
+            throw new AuthenticationCredentialsNotFoundException("User not authenticated");
+        }
+        return userDetails;
+    }
+
+    @NonNull
+    private Authentication getAuthentication() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new AuthenticationCredentialsNotFoundException("User not authenticated");
+        }
+        return auth;
+    }
+
     private boolean hasAnyRole(Authentication auth, UserRole... roles) {
         var authorityArray = authorityToStringArray(roles);
         var roleSet = Arrays.stream(authorityArray).collect(Collectors.toSet());
@@ -69,7 +76,7 @@ public class SecurityService {
         return ((JwtUserDetails) authentication.getPrincipal()).getId().equals(userId);
     }
 
-    public static String[] authorityToStringArray(UserRole... roles) {
+    private String[] authorityToStringArray(UserRole... roles) {
         return Arrays.stream(roles).map(Enum::toString).toArray(String[]::new);
     }
 }

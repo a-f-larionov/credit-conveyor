@@ -1,5 +1,6 @@
 package ru.creditbank.credit.operations.config;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.creditbank.common.library.config.ErrorResponseWriter;
@@ -34,6 +36,11 @@ public class SecurityConfig {
 
     public static boolean isPublicPath(HttpServletRequest request) {
         return SecurityConfig.PUBLIC_URLS.contains(request.getRequestURI());
+    }
+
+    @PostConstruct
+    public void initSecurityContextStrategy() {
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
     }
 
     @Bean

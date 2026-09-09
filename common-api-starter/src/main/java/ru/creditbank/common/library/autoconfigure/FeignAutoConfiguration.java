@@ -5,8 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.nio.charset.StandardCharsets;
 
@@ -15,14 +14,18 @@ import java.nio.charset.StandardCharsets;
 public class FeignAutoConfiguration {
 
     private static final String HEADER_AUTHORIZATION = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
 
     @Bean
     @ConditionalOnMissingBean
     public RequestInterceptor requestInterceptor() {
         return template -> {
-            var attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (attrs != null) {
-                template.header("Authorization", attrs.getRequest().getHeader(HEADER_AUTHORIZATION));
+            var context = SecurityContextHolder.getContext();
+            if (context != null) {
+                var jwtToken = context.getAuthentication().getCredentials();
+                if (jwtToken != null) {
+                    template.header(HEADER_AUTHORIZATION, BEARER_PREFIX + jwtToken);
+                }
             }
         };
     }
@@ -38,5 +41,4 @@ public class FeignAutoConfiguration {
             log.info("Feign request: {} {} {}", template.method(), template.url(), bodyString);
         };
     }
-
 }
