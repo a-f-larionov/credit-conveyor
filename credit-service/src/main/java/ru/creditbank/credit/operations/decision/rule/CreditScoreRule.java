@@ -4,7 +4,7 @@ import ru.creditbank.credit.operations.dto.ScoringInputDto;
 
 public interface CreditScoreRule {
 
-    Long evaluate(ScoringInputDto scoringInputDto);
-
     String getDescription();
+
+    Long evaluate(ScoringInputDto scoringInputDto);
 }

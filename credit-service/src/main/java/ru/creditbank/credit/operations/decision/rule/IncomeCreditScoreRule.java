@@ -27,6 +27,11 @@ public class IncomeCreditScoreRule implements CreditScoreRule {
     private final CreditCalculatorService creditCalculatorService;
 
     @Override
+    public String getDescription() {
+        return "Ежемесячный платёж не превышает " + MAX_PAYMENT_RATIO.multiply(new BigDecimal(100)) + "% от дохода";
+    }
+
+    @Override
     public Long evaluate(ScoringInputDto scoringInputDto) {
         var monthlyFactor = creditCalculatorService.getMonthlyFactor(baseInterestRate);
 
@@ -63,10 +68,5 @@ public class IncomeCreditScoreRule implements CreditScoreRule {
                         .divide(BONUS_SCORE_PER_EVERY_SALARY, 0, RoundingMode.HALF_UP)
                         .longValue()
         );
-    }
-
-    @Override
-    public String getDescription() {
-        return "Ежемесячный платёж не превышает " + MAX_PAYMENT_RATIO.multiply(new BigDecimal(100)) + "% от дохода";
     }
 }

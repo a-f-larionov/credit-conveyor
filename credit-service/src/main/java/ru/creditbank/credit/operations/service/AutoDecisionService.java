@@ -5,12 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.creditbank.credit.operations.exception.AutoDecisionException;
 import ru.creditbank.credit.operations.exception.CreditNotFoundException;
 import ru.creditbank.credit.operations.mappers.CreditMapper;
 import ru.creditbank.credit.operations.repository.CreditRepository;
 
 import java.util.UUID;
 
+import static java.lang.String.format;
 import static ru.creditbank.common.library.enums.CreditStatusEnum.*;
 
 @Service
@@ -31,29 +33,25 @@ public class AutoDecisionService {
     @Transactional
     public void processAutoDecision(UUID creditId) {
         if (isEnabled) {
-            log.info("Decide about creditId={}", creditId);
+            log.info("Auto decision: creditId={}", creditId);
             doDecide(creditId);
         } else {
-            log.info("Auto decision service is disabled. Skip decide: creditId={}", creditId);
+            log.warn("Auto decision service is disabled. Skip: creditId={}", creditId);
         }
     }
 
     private void doDecide(UUID creditId) {
-
-        var credit = creditRepository.findById(creditId)
+        var creditEntity = creditRepository.findById(creditId)
                 .orElseThrow(() -> new CreditNotFoundException(creditId));
 
-        if (!credit.getStatus().equals(PENDING)) {
-            log.info("Credit {} request must in status {} but status {}", creditId, PENDING, credit.getStatus());
-            return;
+        if (creditEntity.getStatus() != PENDING) {
+            throw new AutoDecisionException(format("Credit %s request must be in status %s but status %s", creditId, PENDING, creditEntity.getStatus()));
+        }
+        if (creditEntity.getScore() == null) {
+            throw new AutoDecisionException(format("Credit %s request must be scored.", creditEntity.getId()));
         }
 
-        if (credit.getScore() == null) {
-            log.info("Credit {} request must be scored.", credit.getId());
-            return;
-        }
-
-        var decidedStatus = credit.getScore() >= APPROVE_SCORES ? APPROVED : REJECTED;
+        var decidedStatus = creditEntity.getScore() >= APPROVE_SCORES ? APPROVED : REJECTED;
 
         creditService.statusUpdate(creditId, creditMapper.toStatusUpdateRqDto(decidedStatus, DEFAULT_MANAGER_COMMENT));
     }

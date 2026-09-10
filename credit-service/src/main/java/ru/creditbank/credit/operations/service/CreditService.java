@@ -76,12 +76,9 @@ public class CreditService {
 
     @Transactional
     public StatusUpdateRsDto statusUpdate(UUID creditId, StatusUpdateRqDto statusUpdateRqDto) {
-        log.info("Status Update for creditId: {}", creditId);
-
+        log.info("Status update for creditId: creditId={} rqDto={}", creditId, statusUpdateRqDto);
         var creditEntity = creditRepository.findById(creditId)
                 .orElseThrow(() -> new CreditNotFoundException(creditId));
-        creditEntity.setManagerComment(statusUpdateRqDto.managerComment());
-
         validateStatusIsAllowedToChange(statusUpdateRqDto.status());
         validateCreditStatusMayChanged(creditEntity.getStatus());
 
@@ -89,7 +86,7 @@ public class CreditService {
             creditEntity.setInterestRate(interestRateService.calcInterestRate(creditEntity));
         }
         creditEntity.setStatus(statusUpdateRqDto.status());
-
+        creditEntity.setManagerComment(statusUpdateRqDto.managerComment());
         creditRepository.save(creditEntity);
 
         notificationService.onCreditStatusChange(creditEntity);

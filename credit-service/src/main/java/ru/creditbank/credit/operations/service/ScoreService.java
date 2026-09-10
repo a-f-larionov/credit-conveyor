@@ -31,16 +31,18 @@ public class ScoreService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public void prepareCreditScoring(UUID userId, UUID creditId) {
+        log.info("Prepare credit scoring: userId={} creditId={}", userId, creditId);
         var stat = loanManagementPaymentsServiceClient.userStatistic(userId);
         applicationEventPublisher.publishEvent(new ScoringPreparedEvent(creditId, stat));
     }
 
     @Transactional
-    public void processCreditScoring(UUID creditId, UserLoanPaymentsStatisticRsDto statisic) {
+    public void processCreditScoring(UUID creditId, UserLoanPaymentsStatisticRsDto statistic) {
+        log.info("Process credit scoring: creditId={} statistic={}", creditId, statistic);
         var creditEntity = creditRepository.findById(creditId)
                 .orElseThrow(() -> new CreditNotFoundException(creditId));
 
-        var scoringDto = creditScoreMapper.toScoringInputDto(creditEntity, statisic);
+        var scoringDto = creditScoreMapper.toScoringInputDto(creditEntity, statistic);
         var score = calculateScore(scoringDto);
         creditEntity.setScore(score);
         creditRepository.save(creditEntity);

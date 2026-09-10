@@ -26,7 +26,7 @@ public class CreditEventListener {
         try {
             scoreService.prepareCreditScoring(event.userId(), event.creditId());
         } catch (Exception e) {
-            log.error("Event {} failed for userId={} creditId={}", event.getClass().getName(), event.userId(), event.creditId(), e);
+            log.error("Event {} failed msg={} for userId={} creditId={}", event.getClass().getName(), e.getMessage(), event.userId(), event.creditId(), e);
         }
     }
 
@@ -37,7 +37,7 @@ public class CreditEventListener {
         try {
             scoreService.processCreditScoring(event.creditId(), event.statisticRsDto());
         } catch (Exception e) {
-            log.error("Failed event {} creditId={} statistic={}", event.getClass().getName(), event.creditId(), event.statisticRsDto(), e);
+            log.error("Event {} failed msg={} creditId={} statistic={}", event.getClass().getName(), e.getMessage(), event.creditId(), event.statisticRsDto(), e);
         }
     }
 
@@ -48,7 +48,7 @@ public class CreditEventListener {
         try {
             autoDecisionService.processAutoDecision(event.creditId());
         } catch (Exception e) {
-            log.error("Failed event {} creditId={} ", event.getClass().getName(), event.creditId(), e);
+            log.error("Failed {} failed msg={} creditId={} ", event.getClass().getName(), e.getMessage(), event.creditId(), e);
         }
     }
 }

@@ -18,6 +18,7 @@ public class InterestRateService {
     private BigDecimal baseInterestRate;
 
     public BigDecimal calcInterestRate(CreditEntity creditEntity) {
+        log.info("Calculate interest rate: creditId={} score={}", creditEntity.getId(), creditEntity.getScore());
         return baseInterestRate
                 .add(riskBasedPricing(creditEntity));
     }

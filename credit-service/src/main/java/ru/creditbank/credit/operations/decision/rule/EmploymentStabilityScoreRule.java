@@ -13,6 +13,11 @@ public class EmploymentStabilityScoreRule implements CreditScoreRule {
     private static final int MIN_EMPLOYMENT_MONTHS = 6;
 
     @Override
+    public String getDescription() {
+        return "Стаж работы не менее 6 месяцев";
+    }
+
+    @Override
     public Long evaluate(ScoringInputDto scoringInputDto) {
         return scoringInputDto.employmentMonths() <= MIN_EMPLOYMENT_MONTHS ?
                 0 :
@@ -22,10 +27,5 @@ public class EmploymentStabilityScoreRule implements CreditScoreRule {
     private int calcBonusScore(Integer employmentMonths) {
         // за каждый месяц один балл
         return Math.max(0, employmentMonths - MIN_EMPLOYMENT_MONTHS);
-    }
-
-    @Override
-    public String getDescription() {
-        return "Стаж работы не менее 6 месяцев";
     }
 }
