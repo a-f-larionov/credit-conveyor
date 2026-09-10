@@ -1,5 +1,6 @@
 package ru.creditbank.credit.operations.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -36,6 +37,13 @@ public class ScoreService {
         applicationEventPublisher.publishEvent(new ScoringPreparedEvent(creditId, stat));
     }
 
+    @PostConstruct
+    public void postConstructor() {
+        if (creditScoreRuleList.isEmpty()) {
+            throw new IllegalArgumentException("No credit score rules. Disable auto decision or add some rules");
+        }
+    }
+
     @Transactional
     public void processCreditScoring(UUID creditId, UserLoanPaymentsStatisticRsDto statistic) {
         log.info("Process credit scoring: creditId={} statistic={}", creditId, statistic);
@@ -51,11 +59,7 @@ public class ScoreService {
     }
 
     private Long calculateScore(ScoringInputDto scoringInputDto) {
-        if (creditScoreRuleList.isEmpty()) {
-            throw new IllegalArgumentException("No credit score rules. Disable auto decision or add some rules");
-        }
         Long sumScore = 0L;
-
         for (var creditScoreRule : creditScoreRuleList) {
             var score = creditScoreRule.evaluate(scoringInputDto);
             sumScore += score;
