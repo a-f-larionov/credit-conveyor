@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class SpringBootMvcProxyBaseTest extends SpringBootMvcBaseTest {
 
-    public static MockWebServer mockWebServer;
+    public MockWebServer mockWebServer;
 
     @Autowired
     TestJwtGenerator jwtGenerator;
