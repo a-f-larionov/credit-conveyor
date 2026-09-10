@@ -160,7 +160,7 @@ public class PaymentControllerTest extends SpringBootMvcBaseTest {
         performPost("/loan-management-service/api/v1/payments/process", buildPaymentsRqDto(loanId, new BigDecimal("507512.44"), REGULAR), PaymentRsDto.class, userToken);
 
 
-        var statisticRsDto = performGet("/loan-management-service/api/v1/payments/user-statistic/" + userId, ClientLoanPaymentsStatisticRsDto.class, status().isOk(), userToken);
+        var statisticRsDto = performGet("/loan-management-service/api/v1/payments/user-statistic/" + userId, UserLoanPaymentsStatisticRsDto.class, status().isOk(), userToken);
 
         // then
         assertThat(statisticRsDto.allOverduePayments()).isEqualTo(1);

@@ -20,7 +20,7 @@ public interface SchedulePaymentRepository extends JpaRepository<SchedulePayment
 
     Integer countByUserIdAndStatus(UUID userId, SchedulePaymentStatusEnum status);
 
-    Integer countByUserIdAndOverdueDaysIsGreaterThan(UUID userId,  Long overdueDays);
+    Integer countByUserIdAndOverdueDaysIsGreaterThan(UUID userId, Long overdueDays);
 
     List<SchedulePaymentEntity> findByStatusNotInAndDateBefore(Set<SchedulePaymentStatusEnum> done, Instant now);
 }

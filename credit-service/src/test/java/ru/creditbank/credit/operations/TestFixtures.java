@@ -2,7 +2,7 @@ package ru.creditbank.credit.operations;
 
 import ru.creditbank.common.library.dto.credit.rq.CreditCreateRqDto;
 import ru.creditbank.common.library.dto.credit.rq.StatusUpdateRqDto;
-import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.UserLoanPaymentsStatisticRsDto;
 import ru.creditbank.common.library.enums.CreditStatusEnum;
 
 import java.math.BigDecimal;
@@ -38,10 +38,10 @@ public class TestFixtures {
                 .build();
     }
 
-    public static ClientLoanPaymentsStatisticRsDto buildClientLoanPaymentsStatisticRsDto(
+    public static UserLoanPaymentsStatisticRsDto buildClientLoanPaymentsStatisticRsDto(
             Integer allDonePayments,
             Integer allOverduePayments) {
-        return ClientLoanPaymentsStatisticRsDto
+        return UserLoanPaymentsStatisticRsDto
                 .builder()
                 .allDonePayments(allDonePayments)
                 .allOverduePayments(allOverduePayments)

@@ -1,17 +1,7 @@
 package ru.creditbank.credit.operations.event;
 
-import lombok.Getter;
-
 import java.util.UUID;
 
-@Getter
-public class CreditCreatedEvent {
+public record CreditCreatedEvent(UUID creditId, UUID userId) {
 
-    private final UUID creditId;
-    private final UUID userId;
-
-    public CreditCreatedEvent(UUID creditId, UUID userId) {
-        this.creditId = creditId;
-        this.userId = userId;
-    }
 }

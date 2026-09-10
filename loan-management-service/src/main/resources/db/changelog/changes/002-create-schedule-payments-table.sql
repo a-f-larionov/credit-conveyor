@@ -17,6 +17,7 @@ CREATE TABLE schedule_payments
 CREATE INDEX idx_schedule_payments_loan_id ON schedule_payments (loan_id);
 CREATE INDEX idx_schedule_payments_user_id ON schedule_payments (user_id);
 CREATE INDEX idx_schedule_payments_status ON schedule_payments (status);
+CREATE INDEX idx_schedule_payments_overdue_days ON schedule_payments (overdue_days);
 
 ALTER TABLE schedule_payments
     ADD CONSTRAINT chk_schedule_payments_status

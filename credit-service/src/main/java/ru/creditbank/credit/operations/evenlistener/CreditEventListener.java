@@ -3,8 +3,6 @@ package ru.creditbank.credit.operations.evenlistener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import ru.creditbank.credit.operations.event.CreditCreatedEvent;
@@ -22,38 +20,35 @@ public class CreditEventListener {
     private final AutoDecisionService autoDecisionService;
 
     @Async
-    @Retryable(retryFor = {Exception.class}, maxAttempts = 5, backoff = @Backoff(delay = 2000, multiplier = 2))
     @EventListener
     public void handleCreditCreated(CreditCreatedEvent event) {
-        log.info("Event raise {} userId={} creditId={}", event.getClass().getName(), event.getUserId(), event.getCreditId());
+        log.info("Event raise {} userId={} creditId={}", event.getClass().getName(), event.userId(), event.creditId());
         try {
-            scoreService.prepareCreditScoring(event.getUserId(), event.getCreditId());
+            scoreService.prepareCreditScoring(event.userId(), event.creditId());
         } catch (Exception e) {
-            log.error("Event {} failed for userId={} creditId={}", event.getClass().getName(), event.getUserId(), event.getCreditId(), e);
+            log.error("Event {} failed for userId={} creditId={}", event.getClass().getName(), event.userId(), event.creditId(), e);
         }
     }
 
     @Async
-    @Retryable(retryFor = {Exception.class}, maxAttempts = 5, backoff = @Backoff(delay = 2000, multiplier = 2))
     @EventListener
     public void handleScoringPrepared(ScoringPreparedEvent event) {
-        log.info("Raise event {} creditId={} statistic={}", event.getClass().getName(), event.getCreditId(), event.getStatisticRsDto());
+        log.info("Raise event {} creditId={} statistic={}", event.getClass().getName(), event.creditId(), event.statisticRsDto());
         try {
-            scoreService.processCreditScoring(event.getCreditId(), event.getStatisticRsDto());
+            scoreService.processCreditScoring(event.creditId(), event.statisticRsDto());
         } catch (Exception e) {
-            log.error("Failed event {} creditId={} statistic={}", event.getClass().getName(), event.getCreditId(), event.getStatisticRsDto(), e);
+            log.error("Failed event {} creditId={} statistic={}", event.getClass().getName(), event.creditId(), event.statisticRsDto(), e);
         }
     }
 
     @Async
-    @Retryable(retryFor = {Exception.class}, maxAttempts = 5, backoff = @Backoff(delay = 2000, multiplier = 2))
     @EventListener
     public void handleScoreCreditUpdatedEvent(ScoreCreditUpdatedEvent event) {
-        log.info("Raise event {} creditId={}", event.getClass().getName(), event.getCreditId());
+        log.info("Raise event {} creditId={}", event.getClass().getName(), event.creditId());
         try {
-            autoDecisionService.processAutoDecision(event.getCreditId());
+            autoDecisionService.processAutoDecision(event.creditId());
         } catch (Exception e) {
-            log.error("Failed event {} creditId={} ", event.getClass().getName(), event.getCreditId(), e);
+            log.error("Failed event {} creditId={} ", event.getClass().getName(), event.creditId(), e);
         }
     }
 }

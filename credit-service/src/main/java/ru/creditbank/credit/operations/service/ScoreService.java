@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.creditbank.common.library.client.LoanManagementPaymentsServiceClient;
-import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.UserLoanPaymentsStatisticRsDto;
 import ru.creditbank.credit.operations.decision.rule.CreditScoreRule;
 import ru.creditbank.credit.operations.dto.ScoringInputDto;
 import ru.creditbank.credit.operations.event.ScoreCreditUpdatedEvent;
@@ -36,7 +36,7 @@ public class ScoreService {
     }
 
     @Transactional
-    public void processCreditScoring(UUID creditId, ClientLoanPaymentsStatisticRsDto statisic) {
+    public void processCreditScoring(UUID creditId, UserLoanPaymentsStatisticRsDto statisic) {
         var creditEntity = creditRepository.findById(creditId)
                 .orElseThrow(() -> new CreditNotFoundException(creditId));
 

@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
-import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.UserLoanPaymentsStatisticRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
 import ru.creditbank.loan.management.service.PaymentService;
@@ -31,8 +31,8 @@ public class PaymentController {
     }
 
     @GetMapping("/user-statistic/{userId}")
-    public ClientLoanPaymentsStatisticRsDto userStatistic(@PathVariable("userId") UUID userId) {
+    public UserLoanPaymentsStatisticRsDto userStatistic(@PathVariable("userId") UUID userId) {
 
-        return paymentService.clientStatistic(userId);
+        return paymentService.userStatistic(userId);
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
-import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.UserLoanPaymentsStatisticRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryItemRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
@@ -84,8 +84,8 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
-    public ClientLoanPaymentsStatisticRsDto clientStatistic(UUID userId) {
-        log.info("Fetching client statistic for userId: {}", userId);
+    public UserLoanPaymentsStatisticRsDto userStatistic(UUID userId) {
+        log.info("Fetching user statistic for userId: {}", userId);
 
         securityService.checkAccess(userId, ROLE_CREDIT_MANAGER);
 

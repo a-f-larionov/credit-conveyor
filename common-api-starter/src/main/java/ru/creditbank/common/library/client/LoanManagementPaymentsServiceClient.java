@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
-import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.UserLoanPaymentsStatisticRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
 
@@ -28,5 +28,5 @@ public interface LoanManagementPaymentsServiceClient {
     ResponseEntity<PaymentHistoryRsDto> history(@PathVariable("loanId") UUID loanId);
 
     @GetMapping("/user-statistic/{userId}")
-    ClientLoanPaymentsStatisticRsDto userStatistic(@PathVariable("userId") UUID userId);
+    UserLoanPaymentsStatisticRsDto userStatistic(@PathVariable("userId") UUID userId);
 }

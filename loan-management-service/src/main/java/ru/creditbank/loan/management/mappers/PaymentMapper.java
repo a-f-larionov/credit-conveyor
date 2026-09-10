@@ -3,10 +3,7 @@ package ru.creditbank.loan.management.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
-import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
-import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryItemRsDto;
-import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
-import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.*;
 import ru.creditbank.loan.management.enitity.PaymentEntity;
 
 import java.math.BigDecimal;
@@ -46,5 +43,5 @@ public interface PaymentMapper {
 
     @Mapping(target = "allDonePayments", source = "allDonePayments")
     @Mapping(target = "allOverduePayments", source = "allDoneOverduePayments")
-    ClientLoanPaymentsStatisticRsDto statisticToRsDto(Integer allDonePayments, Integer allDoneOverduePayments);
+    UserLoanPaymentsStatisticRsDto statisticToRsDto(Integer allDonePayments, Integer allDoneOverduePayments);
 }

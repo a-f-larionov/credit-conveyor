@@ -2,7 +2,7 @@ package ru.creditbank.credit.operations.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.creditbank.common.library.dto.loan.management.rs.ClientLoanPaymentsStatisticRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.UserLoanPaymentsStatisticRsDto;
 import ru.creditbank.credit.operations.dto.ScoringInputDto;
 import ru.creditbank.credit.operations.enitity.CreditEntity;
 
@@ -17,5 +17,5 @@ public interface CreditScoreMapper {
     @Mapping(target = "monthlyIncome", source = "creditEntity.monthlyIncome")
     @Mapping(target = "allDonePayments", source = "statistic.allDonePayments")
     @Mapping(target = "allOverduePayments", source = "statistic.allOverduePayments")
-    ScoringInputDto toScoringInputDto(CreditEntity creditEntity, ClientLoanPaymentsStatisticRsDto statistic);
+    ScoringInputDto toScoringInputDto(CreditEntity creditEntity, UserLoanPaymentsStatisticRsDto statistic);
 }
