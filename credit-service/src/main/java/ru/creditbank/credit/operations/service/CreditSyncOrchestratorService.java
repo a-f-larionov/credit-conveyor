@@ -1,6 +1,5 @@
 package ru.creditbank.credit.operations.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class CreditSyncOrchestratorService {
     private final CreditRepository creditRepository;
 
     @Transactional
-    public CreditCreateRsDto createAndProcess(@Valid CreditCreateRqDto rqDto) {
+    public CreditCreateRsDto createAndProcess(CreditCreateRqDto rqDto) {
 
         // Stage 1: create credit request
         var createRsDto = creditService.create(rqDto);

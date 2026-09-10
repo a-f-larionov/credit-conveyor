@@ -34,9 +34,7 @@ public class ScoreService {
 
     @PostConstruct
     public void postConstructor() {
-        if (creditScoreRuleList.isEmpty()) {
-            throw new IllegalArgumentException("No credit score rules. Disable auto decision or add some rules");
-        }
+        validateRules();
     }
 
     @Transactional
@@ -61,5 +59,11 @@ public class ScoreService {
                     scoringInputDto.creditId(), scoringInputDto.userId());
         }
         return sumScore / creditScoreRuleList.size();
+    }
+
+    private void validateRules() {
+        if (creditScoreRuleList.isEmpty()) {
+            throw new IllegalArgumentException("No credit score rules. Disable auto decision or add some rules");
+        }
     }
 }
