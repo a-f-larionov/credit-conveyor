@@ -13,7 +13,6 @@ import ru.creditbank.common.library.enums.CreditStatusEnum;
 import ru.creditbank.common.library.enums.UserRole;
 import ru.creditbank.common.library.service.SecurityService;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
-import ru.creditbank.credit.operations.event.CreditCreatedEvent;
 import ru.creditbank.credit.operations.exception.CreditNotFoundException;
 import ru.creditbank.credit.operations.exception.CreditStatusUpdateException;
 import ru.creditbank.credit.operations.mappers.CreditMapper;
@@ -58,8 +57,6 @@ public class CreditService {
         );
 
         creditRepository.save(credit);
-
-        applicationEventPublisher.publishEvent(new CreditCreatedEvent(credit.getId(), credit.getUserId()));
 
         return creditMapper.mapEntityToCreateRsDto(credit);
     }

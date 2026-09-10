@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.creditbank.common.library.dto.loan.management.rq.PaymentRqDto;
-import ru.creditbank.common.library.dto.loan.management.rs.UserLoanPaymentsStatisticRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentHistoryRsDto;
 import ru.creditbank.common.library.dto.loan.management.rs.PaymentRsDto;
+import ru.creditbank.common.library.dto.loan.management.rs.UserLoanPaymentsStatisticRsDto;
 import ru.creditbank.loan.management.service.PaymentService;
 
 import java.util.UUID;

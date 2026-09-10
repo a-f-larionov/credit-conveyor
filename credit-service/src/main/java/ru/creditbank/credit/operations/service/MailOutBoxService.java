@@ -37,13 +37,16 @@ public class MailOutBoxService {
     @Scheduled(cron = "0 */1 * * * ?")
     @Transactional
     public void trySendOne() {
-        log.info("Try send one new mail");
-        mailOutboxRepository.findOneNew()
-                .ifPresent(this::sendNow);
+        log.info("Try to send emails");
+        mailOutboxRepository
+                .findOneNew()
+                .ifPresentOrElse(
+                        this::sendNow,
+                        () -> log.info("No emails found to send.")
+                );
     }
 
     private void sendNow(MailOutboxEntity email) {
-
         log.info("Try send mail with id: {}", email.getId());
 
         try {

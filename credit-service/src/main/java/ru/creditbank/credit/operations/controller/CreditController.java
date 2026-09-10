@@ -10,6 +10,7 @@ import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
 import ru.creditbank.common.library.dto.credit.rs.StatusUpdateRsDto;
 import ru.creditbank.credit.operations.dto.rs.CreditInfoRsDto;
 import ru.creditbank.credit.operations.service.CreditService;
+import ru.creditbank.credit.operations.service.CreditSyncOrchestratorService;
 
 import java.util.UUID;
 
@@ -20,10 +21,11 @@ import java.util.UUID;
 public class CreditController {
 
     private final CreditService creditService;
+    private final CreditSyncOrchestratorService creditSyncOrchestratorService;
 
     @PostMapping("/create")
     public CreditCreateRsDto create(@Valid @RequestBody CreditCreateRqDto rqDto) {
-        return creditService.create(rqDto);
+        return creditSyncOrchestratorService.createAndProcess(rqDto);
     }
 
     @GetMapping("/info/{creditId}")

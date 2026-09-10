@@ -49,10 +49,10 @@ public class TestJwtGenerator {
                 .userRoles(userRoles.stream().map(Enum::toString).collect(Collectors.toSet()))
                 .build();
 
-        return generateToken(userDetails, userDetails.getId().toString());
+        return generate(userDetails, userDetails.getId().toString());
     }
 
-    public String generateToken(UserDetails userDetails, String userId) {
+    public String generate(UserDetails userDetails, String userId) {
 
         return Jwts.builder()
                 .claims(generateClaims(userDetails, userId))

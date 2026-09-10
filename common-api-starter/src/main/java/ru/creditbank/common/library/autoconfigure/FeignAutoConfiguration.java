@@ -21,11 +21,9 @@ public class FeignAutoConfiguration {
     public RequestInterceptor requestInterceptor() {
         return template -> {
             var context = SecurityContextHolder.getContext();
-            if (context != null) {
-                var jwtToken = context.getAuthentication().getCredentials();
-                if (jwtToken != null) {
-                    template.header(HEADER_AUTHORIZATION, BEARER_PREFIX + jwtToken);
-                }
+            var auth = (context != null) ? context.getAuthentication() : null;
+            if (auth != null && auth.getCredentials() != null) {
+                template.header(HEADER_AUTHORIZATION, BEARER_PREFIX + auth.getCredentials());
             }
         };
     }

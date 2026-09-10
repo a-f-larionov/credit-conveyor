@@ -3,15 +3,12 @@ package ru.creditbank.credit.operations.service;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.creditbank.common.library.client.LoanManagementPaymentsServiceClient;
 import ru.creditbank.common.library.dto.loan.management.rs.UserLoanPaymentsStatisticRsDto;
 import ru.creditbank.credit.operations.decision.rule.CreditScoreRule;
 import ru.creditbank.credit.operations.dto.ScoringInputDto;
-import ru.creditbank.credit.operations.event.ScoreCreditUpdatedEvent;
-import ru.creditbank.credit.operations.event.ScoringPreparedEvent;
 import ru.creditbank.credit.operations.exception.CreditNotFoundException;
 import ru.creditbank.credit.operations.mappers.CreditScoreMapper;
 import ru.creditbank.credit.operations.repository.CreditRepository;
@@ -29,12 +26,10 @@ public class ScoreService {
     private final LoanManagementPaymentsServiceClient loanManagementPaymentsServiceClient;
     private final CreditScoreMapper creditScoreMapper;
     private final CreditRepository creditRepository;
-    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public void prepareCreditScoring(UUID userId, UUID creditId) {
+    public UserLoanPaymentsStatisticRsDto prepareCreditScoring(UUID userId, UUID creditId) {
         log.info("Prepare credit scoring: userId={} creditId={}", userId, creditId);
-        var stat = loanManagementPaymentsServiceClient.userStatistic(userId);
-        applicationEventPublisher.publishEvent(new ScoringPreparedEvent(creditId, stat));
+        return loanManagementPaymentsServiceClient.userStatistic(userId);
     }
 
     @PostConstruct
@@ -54,8 +49,6 @@ public class ScoreService {
         var score = calculateScore(scoringDto);
         creditEntity.setScore(score);
         creditRepository.save(creditEntity);
-
-        applicationEventPublisher.publishEvent(new ScoreCreditUpdatedEvent(scoringDto.creditId()));
     }
 
     private Long calculateScore(ScoringInputDto scoringInputDto) {

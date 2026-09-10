@@ -9,14 +9,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import ru.creditbank.common.library.dto.credit.rs.CreditCreateRsDto;
 import ru.creditbank.common.library.enums.CreditStatusEnum;
 import ru.creditbank.credit.operations.SpringBootMvcProxyBaseTest;
-import ru.creditbank.credit.operations.TestAsyncConfig;
 import ru.creditbank.credit.operations.TestJwtGenerator;
 import ru.creditbank.credit.operations.service.MailOutBoxService;
 
@@ -43,7 +41,6 @@ import static ru.creditbank.credit.operations.TestFixtures.buildCreditCreateRqDt
         "spring.mail.properties.mail.smtp.auth=false"
 })
 @TestPropertySource(properties = "credit.auto-decision.enabled=true")
-@Import(TestAsyncConfig.class)
 class CreditControllerEnabledAutoDecisionTest extends SpringBootMvcProxyBaseTest {
 
     @RegisterExtension
@@ -73,30 +70,31 @@ class CreditControllerEnabledAutoDecisionTest extends SpringBootMvcProxyBaseTest
             CreditStatusEnum expectedStatus
     ) {
         // given
+        var userId = UUID.randomUUID();
+        var userEmail = "userEmail" + userId + "@mail.mail";
+        var fullName = "Иванов Иван Иванович";
+        var token = jwtGenerator.generate(userId, userEmail);
+
         var rqDto = buildCreditCreateRqDto(
-                "Иванов Иван Иванович",
+                fullName,
                 employmentMonths,
                 new BigDecimal(monthlyIncome),
                 new BigDecimal(1_000_000)
         );
 
-        var userId = UUID.randomUUID();
-        var userEmail = "userEmail@mail.mail";
-        var token = jwtGenerator.generate(userId, userEmail);
-
         var statRsDto = buildClientLoanPaymentsStatisticRsDto(allDonePayments, allOverduePayments);
         enqueueResponse(statRsDto, HttpStatus.OK);
 
         // when
-        var rsDto = performPost("/credit-service/api/v1/credits/create", rqDto, CreditCreateRsDto.class, status().isOk(), token);
+        var createRsDto = performPost("/credit-service/api/v1/credits/create", rqDto, CreditCreateRsDto.class, status().isOk(), token);
+
+        // then: answer
+        assertThat(createRsDto.id()).isNotNull();
+        assertThat(createRsDto.createdAt()).isBetween(now().minus(10, MINUTES), now());
+        assertThat(createRsDto.status()).isEqualTo(expectedStatus);
 
         // then: call to loan-management-service
         testRequest("/loan-management-service/api/v1/payments/user-statistic/" + userId, null, token, HttpMethod.GET);
-
-        // then: answer
-        assertThat(rsDto.id()).isNotNull();
-        assertThat(rsDto.createdAt()).isBetween(now().minus(10, MINUTES), now());
-        assertThat(rsDto.status()).isEqualTo(expectedStatus);
 
         // then:mail notification
         mailOutBoxService.trySendOne();
@@ -105,8 +103,8 @@ class CreditControllerEnabledAutoDecisionTest extends SpringBootMvcProxyBaseTest
         MimeMessage message = messages[0];
 
         assertEquals(userEmail, message.getAllRecipients()[0].toString());
-        assertEquals("Ваша кредитная заявка #" + rsDto.id(), message.getSubject());
-        assertEquals("Уважаемый Иванов Иван Иванович, " +
+        assertEquals("Ваша кредитная заявка #" + createRsDto.id(), message.getSubject());
+        assertEquals("Уважаемый " + fullName + ", " +
                         "ваша заявка на кредит переведена в статус: " + expectedStatus.getDescription() + ".  \n" +
                         "Комментарий менеджера: Сработало авто принятие решения.",
                 message.getContent().toString());
