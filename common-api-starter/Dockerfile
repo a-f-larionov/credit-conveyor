@@ -9,10 +9,12 @@ COPY .mvn ./.mvn
 
 COPY pom.xml .
 
-RUN ./mvnw dependency:go-offline -B
+RUN --mount=type=cache,id=maven-repo,target=/root/.m2/repository \
+    ./mvnw dependency:go-offline -B
 
 COPY src ./src
 
-RUN ./mvnw clean install -DskipTests
+RUN --mount=type=cache,id=maven-repo,target=/root/.m2/repository \
+    ./mvnw clean install -DskipTests
 
 RUN touch /deps-ready
